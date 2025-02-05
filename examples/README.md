@@ -1,11 +1,5 @@
-# Adopting The Template to Make A New PPO Policy For Mujoco Go1 Tasks
+# Adopting The Template to Make A New MLPPolicy Policy For Mujoco Go1 Tasks
 
-## File Description
-- `ppo.py`: Implement a MLP network as well as the `Controller` interfaces based on the repo template.
-- `env_wrapper.py` A wrapper to mujoco env to the `Env` interface of the repo template.
-- `recovery_checker.py` Implement a falldown checker for the robot. Used for triggering the recovery (`Getup`) strategy.
-- `demo.py`: The demo script. Result is shown below.
-- `colab_demo.ipynb`: Another demosacript, which show more usage of design patterns (Factory, Strategy, and Adapter) in the context of Go1 control.
 
 ## Result
 ![](gifs/ppo_Go1JoystickFlatTerrain.gif) ![](gifs/ppo_Go1Handstand_Go1Getup_Go1Joystick_Go1Footstand.gif)
@@ -17,20 +11,13 @@ pip install mujoco mujoco_mjx brax playground mediapy
 
 ## Execution
 ### In colab (recommended)
-See [`colab_demo`](colab_demo.ipynb) notebook or [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/control_system_project_template/blob/main/examples/mujoco_Go1/colab_demo.ipynb)
+See [`colab demo`](locomotion.ipynb) notebook or [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_playground/blob/main/examples/colab_demo.ipynb)
 
-### Local
-```bash
-# navigate to root folder of the repo
-python3 examples/mujoco_Go1/demo.py  --env_name Go1Handstand
-# or
-python3 examples/mujoco_Go1/demo.py  --env_name Go1JoystickFlatTerrain
-```
 
 ## Architecture
 ```mermaid
 ---
-title: Go1 PPO Controller Class Hierarchy
+title: Go1 MLPPolicy Controller Class Hierarchy
 ---
 classDiagram
     class Controller {
@@ -47,20 +34,20 @@ classDiagram
         +build(config: Dict)*
     }
 
-    class PPOParams {
+    class MLPPolicy {
         +nn_num_layers: int
         +nn_params: Dict
         +algorithm_type: str
     }
 
-    class PPOParamsBuilder {
-        +build(config: Dict) PPOParams
+    class MLPPolicyBuilder {
+        +build(config: Dict) MLPPolicy
     }
 
-    class PPO {
-        -params: PPOParams
+    class MLPPolicy {
+        -params: MLPPolicy
         -_inference: Callable
-        +__init__(params: PPOParams)
+        +__init__(params: MLPPolicy)
         +control(state) np.ndarray
         +build_network()
         -forward(x: np.ndarray)
@@ -73,7 +60,7 @@ classDiagram
         FOOTSTAND
     }
 
-    class PPOJoystick2HandstandAdapter {
+    class MLPPolicyJoystick2HandstandAdapter {
         -_controller: Controller
         -_src_env: Go1Env
         -_tar_env: Go1Env
@@ -89,15 +76,15 @@ classDiagram
         +control(state) np.ndarray
     }
 
-    Controller <|-- PPOJoystick2HandstandAdapter
-    Controller <|-- PPO
-    PPOJoystick2HandstandAdapter o-- Controller
+    Controller <|-- MLPPolicyJoystick2HandstandAdapter
+    Controller <|-- MLPPolicy
+    MLPPolicyJoystick2HandstandAdapter o-- Controller
     Go1ControllerManager o-- "1..*" Controller
     Go1ControllerManager o-- Go1ControllerType
-    ControllerParams <|-- PPOParams
-    ControllerParamsBuilder <|-- PPOParamsBuilder
-    PPOParamsBuilder ..> PPOParams : creates
-    PPO o-- PPOParams
+    ControllerParams <|-- MLPPolicy
+    ControllerParamsBuilder <|-- MLPPolicyBuilder
+    MLPPolicyBuilder ..> MLPPolicy : creates
+    MLPPolicy o-- MLPPolicyParams
 ```
 
 

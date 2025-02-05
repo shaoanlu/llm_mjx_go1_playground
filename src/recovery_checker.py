@@ -1,7 +1,7 @@
 import jax
 from mujoco_playground._src import mjx_env
 
-from examples.mujoco_Go1.env_wrapper import Go1Env
+from src.environment.env_wrapper import Go1Env
 
 
 class RecoverState:

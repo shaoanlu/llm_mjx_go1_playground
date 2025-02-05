@@ -3,9 +3,8 @@
 The repository implements a modular robotics control system with four main components:
 
 1. Control (`/control`)
-2. Estimation (`/estimation`)
-3. Planning (`/planning`)
-4. Simulation environment (`/env`)
+2. Planning (`/planning`)
+3. Simulation environment (`/env`)
 
 ```mermaid
 graph TB
@@ -26,18 +25,6 @@ graph TB
         BC --> PID
     end
 
-    subgraph State Estimation
-        SE[State Estimator]
-        BF[Base Filter]
-        KF[Kalman Filter]
-        PF[Particle Filter]
-        CF2[Complementary Filter]
-        SE --> BF
-        BF --> KF
-        BF --> PF
-        BF --> CF2
-    end
-
     subgraph Path Planning
         BP[Base Planner]
         RRT[RRT Planner]
@@ -53,7 +40,6 @@ graph TB
     end
 
     Control --> Env
-    Estimation --> Control
     Planning --> Control
     Env --> Estimation
 ```
@@ -70,15 +56,6 @@ Factory Pattern
 
 Strategy Pattern
 - To be implemented. Enables runtime algorithm selection
-  
-### 2. Estimation
-Key templates:
-  - [StateEstimator](estimation/state_estimator.py) - Creates state estimator interface consisting of fileter algorithms
-  - [BaseFilter](estimation/algorithm/base.py) - Filter algorithm interface
-
-Observer pattern
-- Implemented in state estimation for sensor fusion
-- Allows multiple filters to update state independently
 
 ### 3. Planning
 - TBU

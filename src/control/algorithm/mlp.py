@@ -7,24 +7,24 @@ from src.control.algorithm.base import Controller, ControllerParams, ControllerP
 
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only
-class PPOParams(ControllerParams):
-    """Base dataclass for all PPO parameters."""
+class MLPPolicyParams(ControllerParams):
+    """Base dataclass for all MLPPolicy parameters."""
 
     nn_num_layers: int
     nn_params: Dict
     algorithm_type: str = field(default="ppo")
 
 
-class PPOParamsBuilder(ControllerParamsBuilder):
+class MLPPolicyParamsBuilder(ControllerParamsBuilder):
     """
     Mostly hard-coded build function, for simplicity.
     """
 
-    def build(self, config: Dict = None) -> PPOParams:
+    def build(self, config: Dict = None) -> MLPPolicyParams:
         if config is not None:
             npy_path = config["npy_path"]
         else:
-            npy_path = "examples/mujoco_Go1/nn_params/Go1Handstand"
+            npy_path = "src/control/nn_params/Go1Handstand"
         num_layers = 4
         nn_params = {}
         nn_params["norm_mean"] = np.load(f"{npy_path}/state_mean.npy")
@@ -33,12 +33,12 @@ class PPOParamsBuilder(ControllerParamsBuilder):
             nn_params[f"hidden_{i}"] = {}
             nn_params[f"hidden_{i}"]["kernel"] = np.load(f"{npy_path}/hidden_{i}_kernel.npy")
             nn_params[f"hidden_{i}"]["bias"] = np.load(f"{npy_path}/hidden_{i}_bias.npy")
-        return PPOParams(nn_num_layers=num_layers, nn_params=nn_params, algorithm_type="ppo")
+        return MLPPolicyParams(nn_num_layers=num_layers, nn_params=nn_params, algorithm_type="ppo")
 
 
-class PPO(Controller):
+class MLPPolicy(Controller):
     """
-    A PPO policy that has no dependency on jax library but simple numpy mat_mul.
+    A MLP policy that has no dependency on jax library but simple numpy mat_mul.
     The MLP was trained using locomotion tutorial of mujoco_playground
 
     NOTE:
@@ -49,7 +49,7 @@ class PPO(Controller):
     https://github.com/google/brax/blob/main/brax/training/agents/ppo/networks.py#L34
     """
 
-    def __init__(self, params: PPOParams):
+    def __init__(self, params: MLPPolicyParams):
         self.params = params
         self.build_network()
 
@@ -71,7 +71,7 @@ class PPO(Controller):
             for i in range(params.nn_num_layers):
                 x = params.nn_params[f"hidden_{i}"]["kernel"].T @ x + params.nn_params[f"hidden_{i}"]["bias"]
                 if i < (params.nn_num_layers - 1):
-                    x = x / (1 + np.exp(-1 * x))  # brax PPO defaults to swish as the activation func
+                    x = x / (1 + np.exp(-1 * x))  # brax PPO training defaults to swish as the activation func
 
             # output tanh activation
             x, _ = np.split(x, 2, axis=-1)  # split into loc and scale of a normal distribution

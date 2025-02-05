@@ -6,8 +6,8 @@ import numpy as np
 from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
-from examples.mujoco_Go1.env_wrapper import Go1Env
-from examples.mujoco_Go1.ppo import PPO, PPOParams, PPOParamsBuilder
+from src.environment.env_wrapper import Go1Env
+from src.control.algorithm.mlp import MLPPolicy, MLPPolicy, MLPPolicyBuilder
 from src.control.algorithm.base import Controller
 from src.control.controller_factory import ControllerFactory
 
@@ -21,9 +21,9 @@ class Go1ControllerType(Enum):
     GETUP = auto()
 
 
-class PPOJoystick2HandstandAdapter(Controller):
+class MLPPolicyJoystick2HandstandAdapter(Controller):
     """
-    PPO controller trained in Joystick env with necessary state and action adaptations to Handstand env
+    MLPPolicy controller trained in Joystick env with necessary state and action adaptations to Handstand env
     In Joystick env:
         # self._default_pose: Array([ 0.1,  0.9, -1.8, -0.1,  0.9, -1.8,  0.1,  0.9, -1.8, -0.1,  0.9, -1.8], dtype=float32)
         motor_targets = self._default_pose + action * 0.5
@@ -55,9 +55,9 @@ class PPOJoystick2HandstandAdapter(Controller):
         return action
 
 
-class PPOGetup2HandstandAdapter(Controller):
+class MLPPolicyGetup2HandstandAdapter(Controller):
     """
-    PPO controller trained in Getup env with necessary state and action adaptations to Handstand env
+    MLPPolicy controller trained in Getup env with necessary state and action adaptations to Handstand env
     In Getup env:
         motor_targets = state.data.qpos[7:] + action * 0.5
     In Handstand env:
@@ -117,9 +117,9 @@ class Go1ControllerManager:
         return controller.control(state.obs["state"])
 
 
-def create_go1_acrobat_controller_manager(
+def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
-    params_builder: PPOParamsBuilder,
+    params_builder: MLPPolicyBuilder,
     controller_configs: Dict[Go1ControllerType, Dict[str, Any]],
     joystick_env: Go1Env,
     handstand_env: Go1Env,
@@ -137,19 +137,19 @@ def create_go1_acrobat_controller_manager(
     controllers = {}
 
     # Create each controller
-    controller_factory.register_controller(PPOParams, PPO)
+    controller_factory.register_controller(MLPPolicy, MLPPolicy)
     for controller_type, config in controller_configs.items():
         params = params_builder.build(config=config)
         base_controller = controller_factory.build(params=params)
 
         # Wrap joystick and getup controller with adapter and leave others as is
-        # Regarding the adapter, refer to PPOEnvName2HandstandAdapter for more details
+        # Regarding the adapter, refer to MLPPolicyEnvName2HandstandAdapter for more details
         if controller_type == Go1ControllerType.JOYSTICK:
-            controllers[controller_type] = PPOJoystick2HandstandAdapter(
+            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
                 controller=base_controller, joystick_env=joystick_env, handstand_env=handstand_env
             )
         elif controller_type == Go1ControllerType.GETUP:
-            controllers[controller_type] = PPOGetup2HandstandAdapter(
+            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
                 controller=base_controller, getup_env=getup_env, handstand_env=handstand_env
             )
         else:
