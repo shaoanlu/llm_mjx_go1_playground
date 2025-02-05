@@ -1,7 +1,7 @@
 from typing import Any, Dict, Type
 
 from src.control.algorithm.base import Controller, ControllerParams, ControllerParamsBuilder
-from src.control.algorithm.mlp import MLPPolicyParams, MLPPolicyParamsBuilder, MLPPolicy
+from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
 
 
 class ConfigFactory:

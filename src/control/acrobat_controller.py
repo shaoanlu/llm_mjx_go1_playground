@@ -6,10 +6,10 @@ import numpy as np
 from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
-from src.environment.env_wrapper import Go1Env
-from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
 from src.control.algorithm.base import Controller
+from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
 from src.control.controller_factory import ControllerFactory
+from src.environment.env_wrapper import Go1Env
 
 
 class Go1ControllerType(Enum):
