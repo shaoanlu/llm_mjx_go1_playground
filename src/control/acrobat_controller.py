@@ -9,8 +9,12 @@ from mujoco_playground._src import mjx_env
 from src.control.algorithm.base import Controller
 from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
 from src.control.controller_factory import ControllerFactory
-from src.environment.env_wrapper import Go1Env
 
+
+JOYSTICK_ENV_ACTION_SCALE = 0.5
+HANDSTAND_ENV_ACTION_SCALE = 0.3
+GETUP_ENV_ACTION_SCALE = 0.5
+JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array([0.1,  0.9, -1.8, -0.1,  0.9, -1.8,  0.1,  0.9, -1.8, -0.1,  0.9, -1.8])
 
 class Go1ControllerType(Enum):
     """Available controller types."""
@@ -33,11 +37,11 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
     This controller performs the necessary adaptations in .control() to the state and action
     """
 
-    def __init__(self, controller: Controller, joystick_env: Any, handstand_env: Any):
+    def __init__(self, controller: Controller):
         self._controller = controller
-        self._src_env_action_scale = joystick_env.env_cfg.action_scale
-        self._tar_env_action_scale = handstand_env.env_cfg.action_scale
-        self._src_default_pose = joystick_env.env._default_pose
+        self._src_env_action_scale = JOYSTICK_ENV_ACTION_SCALE
+        self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
+        self._src_default_pose = JOYSTICK_ENV_DEFAULT_POSE
 
     def control(self, state: mjx_env.State, command: np.ndarray, data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
@@ -66,10 +70,10 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
     This controller performs the necessary adaptations in .control() to the state and action
     """
 
-    def __init__(self, controller: Controller, getup_env: Any, handstand_env: Any):
+    def __init__(self, controller: Controller):
         self._controller = controller
-        self._src_env_action_scale = getup_env.env_cfg.action_scale
-        self._tar_env_action_scale = handstand_env.env_cfg.action_scale
+        self._src_env_action_scale = GETUP_ENV_ACTION_SCALE
+        self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
 
     def control(self, state: mjx_env.State, command: np.ndarray, data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
@@ -120,10 +124,7 @@ class Go1ControllerManager:
 def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
     params_builder: MLPPolicyParamsBuilder,
-    controller_configs: Dict[Go1ControllerType, Dict[str, Any]],
-    joystick_env: Go1Env,
-    handstand_env: Go1Env,
-    getup_env: Go1Env,
+    controller_configs: Dict[Go1ControllerType, Dict[str, Any]]
 ) -> Go1ControllerManager:
     """
     Create a configured Go1ControllerManager.
@@ -145,13 +146,9 @@ def create_acrobat_controller_manager(
         # Wrap joystick and getup controller with adapter and leave others as is
         # Regarding the adapter, refer to MLPPolicyEnvName2HandstandAdapter for more details
         if controller_type == Go1ControllerType.JOYSTICK:
-            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
-                controller=base_controller, joystick_env=joystick_env, handstand_env=handstand_env
-            )
+            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(controller=base_controller)
         elif controller_type == Go1ControllerType.GETUP:
-            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
-                controller=base_controller, getup_env=getup_env, handstand_env=handstand_env
-            )
+            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(controller=base_controller)
         else:
             controllers[controller_type] = base_controller
 
