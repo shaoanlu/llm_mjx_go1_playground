@@ -7,7 +7,7 @@ from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
 from src.environment.env_wrapper import Go1Env
-from src.control.algorithm.mlp import MLPPolicy, MLPPolicy, MLPPolicyBuilder
+from src.control.algorithm.mlp import MLPPolicy, MLPPolicy, MLPPolicyParamsBuilder
 from src.control.algorithm.base import Controller
 from src.control.controller_factory import ControllerFactory
 
@@ -119,7 +119,7 @@ class Go1ControllerManager:
 
 def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
-    params_builder: MLPPolicyBuilder,
+    params_builder: MLPPolicyParamsBuilder,
     controller_configs: Dict[Go1ControllerType, Dict[str, Any]],
     joystick_env: Go1Env,
     handstand_env: Go1Env,

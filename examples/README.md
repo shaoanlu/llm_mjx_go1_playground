@@ -40,7 +40,7 @@ classDiagram
         +algorithm_type: str
     }
 
-    class MLPPolicyBuilder {
+    class MLPPolicyParamsBuilder {
         +build(config: Dict) MLPPolicy
     }
 
@@ -82,8 +82,8 @@ classDiagram
     Go1ControllerManager o-- "1..*" Controller
     Go1ControllerManager o-- Go1ControllerType
     ControllerParams <|-- MLPPolicy
-    ControllerParamsBuilder <|-- MLPPolicyBuilder
-    MLPPolicyBuilder ..> MLPPolicy : creates
+    ControllerParamsBuilder <|-- MLPPolicyParamsBuilder
+    MLPPolicyParamsBuilder ..> MLPPolicy : creates
     MLPPolicy o-- MLPPolicyParams
 ```
 
