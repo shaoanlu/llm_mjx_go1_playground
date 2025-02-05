@@ -7,7 +7,7 @@ from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
 from src.environment.env_wrapper import Go1Env
-from src.control.algorithm.mlp import MLPPolicy, MLPPolicy, MLPPolicyParamsBuilder
+from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
 from src.control.algorithm.base import Controller
 from src.control.controller_factory import ControllerFactory
 
@@ -137,7 +137,7 @@ def create_acrobat_controller_manager(
     controllers = {}
 
     # Create each controller
-    controller_factory.register_controller(MLPPolicy, MLPPolicy)
+    controller_factory.register_controller(MLPPolicyParams, MLPPolicy)
     for controller_type, config in controller_configs.items():
         params = params_builder.build(config=config)
         base_controller = controller_factory.build(params=params)

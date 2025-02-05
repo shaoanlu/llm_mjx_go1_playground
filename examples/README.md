@@ -83,7 +83,7 @@ classDiagram
     Go1ControllerManager o-- Go1ControllerType
     ControllerParams <|-- MLPPolicy
     ControllerParamsBuilder <|-- MLPPolicyParamsBuilder
-    MLPPolicyParamsBuilder ..> MLPPolicy : creates
+    MLPPolicyParamsBuilder ..> MLPPolicyParams : creates
     MLPPolicy o-- MLPPolicyParams
 ```
 
