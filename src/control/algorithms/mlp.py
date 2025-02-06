@@ -5,19 +5,27 @@ from pathlib import Path
 import numpy as np
 
 from src.control.algorithms.base import Controller, ControllerParams
+from src.utils import load_dataclass_from_dict
 
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only
 class MLPPolicyParams(ControllerParams):
     """Base dataclass for all MLPPolicy parameters."""
 
-    nn_num_layers: int
-    nn_params: Dict
+    nn_num_layers: int = field(default=4)
+    nn_params: Dict = field(default_factory=dict)
+    npy_path: str = field(default="src/control/nn_params/Go1Handstand")
     algorithm_type: str = field(default="mlp")
 
     def __post_init__(self):
         """Handle initialization processing after dataclass creation."""
         self._load_parameters()
+
+    @classmethod
+    def from_dict(cls, data: dict, convert_list_to_array=False):
+        data = load_dataclass_from_dict(cls, data, convert_list_to_array=convert_list_to_array)
+        data._load_parameters()
+        return data
 
     def _load_parameters(self) -> None:
         """Load all neural network parameters."""
@@ -67,14 +75,9 @@ class MLPPolicy(Controller):
 
             # forward pass
             for i in range(params.nn_num_layers):
-                x = (
-                    params.nn_params[f"hidden_{i}"]["kernel"].T @ x
-                    + params.nn_params[f"hidden_{i}"]["bias"]
-                )
+                x = params.nn_params[f"hidden_{i}"]["kernel"].T @ x + params.nn_params[f"hidden_{i}"]["bias"]
                 if i < (params.nn_num_layers - 1):
-                    x = x / (
-                        1 + np.exp(-1 * x)
-                    )  # brax PPO training defaults to swish as the activation func
+                    x = x / (1 + np.exp(-1 * x))  # brax PPO training defaults to swish as the activation func
 
             # output tanh activation
             x, _ = np.split(x, 2, axis=-1)  # split into loc and scale of a normal distribution
