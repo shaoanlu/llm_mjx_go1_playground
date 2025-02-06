@@ -23,7 +23,7 @@ class Go1State:
         return cls(position=position, yaw=yaw)
 
     def to_array(self) -> np.ndarray:
-        return np.array(self.position[0], self.position[1], self.yaw)
+        return np.array([self.position[0], self.position[1], self.yaw])
 
     def __add__(self, other):
         if not isinstance(other, Go1State):
