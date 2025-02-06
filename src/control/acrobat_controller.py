@@ -46,7 +46,9 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
         self._src_default_pose = JOYSTICK_ENV_DEFAULT_POSE
 
-    def control(self, state: mjx_env.State, command: np.ndarray, data: mjx.Data) -> np.ndarray:
+    def control(
+        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
+    ) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for joystick control
         state = jax.numpy.concat([state, command])
@@ -56,7 +58,7 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
 
         # Adapt action space
         action = (
-            self._src_env_action_scale * action - data.ctrl + self._src_default_pose
+            self._src_env_action_scale * action - mjx_state_data.ctrl + self._src_default_pose
         ) / self._tar_env_action_scale
 
         return action
@@ -78,7 +80,9 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
         self._src_env_action_scale = GETUP_ENV_ACTION_SCALE
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
 
-    def control(self, state: mjx_env.State, command: np.ndarray, data: mjx.Data) -> np.ndarray:
+    def control(
+        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
+    ) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for Getup control
         state = state[3:]  # remove first 3 linvel elements
@@ -88,7 +92,7 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
 
         # Adapt action space
         action = (
-            self._src_env_action_scale * action - data.ctrl + data.qpos[7:]
+            self._src_env_action_scale * action - mjx_state_data.ctrl + mjx_state_data.qpos[7:]
         ) / self._tar_env_action_scale
 
         return action
@@ -117,15 +121,9 @@ class Go1ControllerManager:
     def control(self, state: mjx_env.State) -> np.ndarray:
         """Get control action from current active controller."""
         controller = self._controllers[self._active_type]
-
-        if (self._active_type == Go1ControllerType.JOYSTICK) or (
-            self._active_type == Go1ControllerType.GETUP
-        ):
-            # Joystick controller requires command input
-            return controller.control(state.obs["state"], self._command, state.data)
-
-        # Other controllers use standard control
-        return controller.control(state.obs["state"])
+        return controller.control(
+            state.obs["state"], command=self._command, mjx_state_data=state.data
+        )
 
 
 def create_acrobat_controller_manager(
