@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-from typing import Callable, Dict
 from pathlib import Path
+from typing import Callable, Dict
 
 import numpy as np
 

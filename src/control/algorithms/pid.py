@@ -3,7 +3,6 @@ from dataclasses import dataclass, field
 import numpy as np
 
 from src.control.algorithms.base import Controller, ControllerParams
-from src.utils import load_dataclass_from_dict
 
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only

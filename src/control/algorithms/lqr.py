@@ -17,7 +17,7 @@ class LQRParams(ControllerParams):
 
 
 class LQR(Controller):
-    """
+    r"""
     A Linear Quadratic Regulator (LQR) controller that computes the optimal control input
     for a linear system with quadratic cost function.
 

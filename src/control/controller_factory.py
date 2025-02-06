@@ -1,9 +1,9 @@
 from typing import Any, Dict, Type
 
 from src.control.algorithms.base import Controller, ControllerParams
-from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParams
-from src.control.algorithms.pid import PID, PIDParams, PIDParams
-from src.control.algorithms.lqr import LQR, LQRParams, LQRParams
+from src.control.algorithms.lqr import LQR, LQRParams
+from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
+from src.control.algorithms.pid import PID, PIDParams
 
 
 class ConfigFactory:
