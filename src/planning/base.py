@@ -1,6 +1,6 @@
-from abc import Protocol, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Protocol
 
 
 @dataclass
@@ -11,8 +11,7 @@ class PlannerParams:
 
 
 class Planner(Protocol):
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, config): ...
 
     @abstractmethod
     def plan(self, **kwargs) -> Any: ...

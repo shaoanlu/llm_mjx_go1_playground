@@ -16,8 +16,8 @@ class TraversabilityMapConfig:
 class TraversabilityMap:
     def __init__(self, config: TraversabilityMapConfig):
         self.config = config
-        self.grid = np.empty(config.grid_size)
-        self.img2grid_scale = self._calculate_scale_factor()
+        self._grid = np.empty(config.grid_size)
+        self._scale_factor = self._calculate_scale_factor()
 
     def _calculate_scale_factor(self) -> int:
         """Calculate the scaling factor between image and grid spaces."""
@@ -41,7 +41,9 @@ class TraversabilityMap:
         """Validate image dimensions and format."""
         expected_shape = (self.config.image_size, self.config.image_size)
         if image.shape[:2] != expected_shape:
-            raise ValueError(f"Image dimensions {image.shape[:2]} do not match expected {expected_shape}")
+            raise ValueError(
+                f"Image dimensions {image.shape[:2]} do not match expected {expected_shape}"
+            )
 
     def load_from_image(self, image_path: str | Path) -> np.ndarray:
         """Load and process traversability grid from image.
@@ -72,7 +74,11 @@ class TraversabilityMap:
         # Process each grid cell using original coordinate transformation
         for x in range(self.config.grid_size[0]):
             for y in range(self.config.grid_size[1]):
-                img_x = self.config.image_size - self._scale_factor * x - int(np.ceil(self._scale_factor / 2))
+                img_x = (
+                    self.config.image_size
+                    - self._scale_factor * x
+                    - int(np.ceil(self._scale_factor / 2))
+                )
                 img_y = self._scale_factor * y + int(np.floor(self._scale_factor / 2))
 
                 color = image[img_x, img_y][0]

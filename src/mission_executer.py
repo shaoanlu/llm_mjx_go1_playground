@@ -8,22 +8,22 @@ from mujoco_playground._src import mjx_env
 from src.planning.llm_nagivator import GeminiThinkingNavigator
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(kw_only=True)
 class MissionConfig:
     goal: Tuple[int, int] = (4, 4)  # Target destination coordinates (x, y)
-    max_sim_steps: int = 30  # Maximum number of steps allowed per attempt
+    max_sim_steps: int = 1000  # Maximum number of steps allowed per attempt
     retry_delay_sec: int = 5  # elay between retry attempts to respect API limits
     max_attempts: int = 20  # Maximum number of mission retry attempts
 
     def __post_init__(self):
-        if self.max_steps <= 0 or self.max_attempts <= 0:
-            raise ValueError(f"Steps and attempts must be positive, {self.max_steps=}, {self.max_attempts=}")
-        if self.position_bounds[0] >= self.position_bounds[1]:
-            raise ValueError(f"Invalid position bounds, {self.position_bounds=}")
+        if self.max_sim_steps <= 0 or self.max_attempts <= 0:
+            raise ValueError(
+                f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}"
+            )
 
 
-@dataclass
-class MissionResult(frozen=True):
+@dataclass(kw_only=True, frozen=True)
+class MissionResult:
     """Represents the outcome of a mission execution."""
 
     status: Literal["Success", "Failed: Max attempts reached"]
@@ -33,7 +33,7 @@ class MissionResult(frozen=True):
     rollouts: List[mjx_env.State]
 
 
-@dataclass(frozen=True)
+@dataclass(kw_only=True, frozen=True)
 class EpisodeResult:
     """Result of a full episode."""
 
@@ -66,6 +66,9 @@ class MissionExecuter:
         """
         Execute complete navigation mission.
 
+        Args:
+            execute_single_attempt: A function that accept arguments waypoints and max_sim_steps
+
         Returns:
             str: Mission status
             List[np.ndarray]: List of traversed XY positions
@@ -85,31 +88,34 @@ class MissionExecuter:
                 waypoints=waypoints,
                 max_sim_steps=self.config.max_sim_steps,
             )
+            rollout_of_all_attempts.extend(result.rollout)
 
             # print debug information
-            print(f"[Trial {attempt + 1}]\n{prompt=}\n{waypoints=}\n{result=}\n")
+            print(
+                f"[Trial {attempt + 1}]\n{prompt=}\n{waypoints=}\n{result.status=}{tuple(result.position_history[-1])}",
+                f"\t{result.position_history=}\n",
+            )
 
             if result.status == "Success":
                 return MissionResult(
                     status=result.status,
                     position_history=result.position_history,
-                    message="",
+                    message=prompt,
                     waypoints=waypoints,
+                    rollouts=rollout_of_all_attempts,
                 )
 
             prompt = self._format_failure_message(result)
-            rollout_of_all_attempts.extend(result.rollout)
 
             # add a delay before retrying to avoid API rate limiting
             time.sleep(self.config.retry_delay_sec)
 
-        return self._create_failure_status(
-            MissionResult(
-                status="Max attempts reached",
-                position_history=result.position_history,
-                message="",
-                waypoints=waypoints,
-            )
+        return MissionResult(
+            status="Max attempts reached",
+            position_history=result.position_history,
+            message=prompt,
+            waypoints=waypoints,
+            rollouts=rollout_of_all_attempts,
         )
 
     def _validate_waypoints(self, waypoints: List[np.ndarray]) -> List[np.ndarray]:

@@ -32,7 +32,7 @@ class PolarCoordinateControllerParams(ControllerParams):
 class PositionControllerParams(ControllerParams):
     command_dim: int = field(default=3)
     primary_controller: ControllerParams = field(
-        default_factory=lambda: PolarCoordinateControllerParams()
+        default_factory=lambda: SequentialControllerParams()  # or PolarCoordinateControllerParams()
     )
     fallback_controller: ControllerParams = field(
         default_factory=lambda: SequentialControllerParams()
@@ -227,7 +227,9 @@ def create_position_controller(
     """
     Helper function to create PositionController
     """
-    controller_factory.register(SequentialControllerParams, SequentialController)
-    controller_factory.register(PolarCoordinateControllerParams, PolarCoordinateController)
+    controller_factory.register_controller(SequentialControllerParams, SequentialController)
+    controller_factory.register_controller(
+        PolarCoordinateControllerParams, PolarCoordinateController
+    )
 
     return PositionController(factory=controller_factory, config=config)
