@@ -58,7 +58,6 @@ class RecoverState:
 
     def _get_termination(self, data: mjx.Data):
         fall_termination = self._get_upvector(data)[-1] < -0.25
-        energy = jax.numpy.sum(jax.numpy.abs(data.actuator_force) * jax.numpy.abs(data.qvel[6:]))
         return fall_termination
 
     def _get_upvector(self, data: mjx.Data) -> jax.Array:
