@@ -17,9 +17,7 @@ class MissionConfig:
 
     def __post_init__(self):
         if self.max_sim_steps <= 0 or self.max_attempts <= 0:
-            raise ValueError(
-                f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}"
-            )
+            raise ValueError(f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}")
 
 
 @dataclass(kw_only=True, frozen=True)
