@@ -1,7 +1,9 @@
 from typing import Any, Dict, Type
 
-from src.control.algorithm.base import Controller, ControllerParams, ControllerParamsBuilder
-from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
+from src.control.algorithms.base import Controller, ControllerParams, ControllerParamsBuilder
+from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
+from src.control.algorithms.pid import PID, PIDParams, PIDParamsBuilder
+from src.control.algorithms.lqr import LQR, LQRParams, LQRParamsBuilder
 
 
 class ConfigFactory:
@@ -13,6 +15,8 @@ class ConfigFactory:
         # register parameter builders
         self.params_builder_map: Dict[str, Type[ControllerParams]] = {
             "mlp": MLPPolicyParamsBuilder,
+            "pid": PIDParamsBuilder,
+            "lqr": LQRParamsBuilder,
         }
 
     def register_config(self, key: str, value: Type[ControllerParams]) -> None:
@@ -44,6 +48,8 @@ class ControllerFactory:
         # register controller classes
         self.controller_map: Dict[Type[ControllerParams], Type[Controller]] = {
             MLPPolicyParams: MLPPolicy,
+            PIDParams: PID,
+            LQRParams: LQR,
         }
         self.config_factory: ConfigFactory | None = None
 

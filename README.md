@@ -8,7 +8,14 @@ The template aims to provide a maintainable and testable foundation for robotics
 - yaml
 - mujoco_playground
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_go1_playground/blob/main/examples/locomotion.ipynb)
+
+## Result
+![](examples/gifs/ppo_Go1JoystickFlatTerrain.gif) ![](examples/gifs/ppo_Go1Handstand_Go1Getup_Go1Joystick_Go1Footstand.gif)
+
+
+## Execution
+See [`colab demo`](locomotion.ipynb) notebook or [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_playground/blob/main/examples/colab_demo.ipynb)
+
 
 ## Memo
 - `ruff format`

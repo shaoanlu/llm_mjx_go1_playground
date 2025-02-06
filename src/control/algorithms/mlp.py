@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from typing import Callable, Dict
+from pathlib import Path
 
 import numpy as np
 
-from src.control.algorithm.base import Controller, ControllerParams, ControllerParamsBuilder
+from src.control.algorithms.base import Controller, ControllerParams
 
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only
@@ -12,28 +13,25 @@ class MLPPolicyParams(ControllerParams):
 
     nn_num_layers: int
     nn_params: Dict
-    algorithm_type: str = field(default="ppo")
+    algorithm_type: str = field(default="mlp")
 
+    def __post_init__(self):
+        """Handle initialization processing after dataclass creation."""
+        self._load_parameters()
 
-class MLPPolicyParamsBuilder(ControllerParamsBuilder):
-    """
-    Mostly hard-coded build function, for simplicity.
-    """
+    def _load_parameters(self) -> None:
+        """Load all neural network parameters."""
+        path = Path(self.npy_path)
+        # Load normalization params
+        self.nn_params["norm_mean"] = np.load(path / "state_mean.npy")
+        self.nn_params["norm_std"] = np.load(path / "state_std.npy")
 
-    def build(self, config: Dict = None) -> MLPPolicyParams:
-        if config is not None:
-            npy_path = config["npy_path"]
-        else:
-            npy_path = "src/control/nn_params/Go1Handstand"
-        num_layers = 4
-        nn_params = {}
-        nn_params["norm_mean"] = np.load(f"{npy_path}/state_mean.npy")
-        nn_params["norm_std"] = np.load(f"{npy_path}/state_std.npy")
-        for i in range(num_layers):  # [0, 1, 2, 3]
-            nn_params[f"hidden_{i}"] = {}
-            nn_params[f"hidden_{i}"]["kernel"] = np.load(f"{npy_path}/hidden_{i}_kernel.npy")
-            nn_params[f"hidden_{i}"]["bias"] = np.load(f"{npy_path}/hidden_{i}_bias.npy")
-        return MLPPolicyParams(nn_num_layers=num_layers, nn_params=nn_params, algorithm_type="ppo")
+        # Load layer params
+        for i in range(self.nn_num_layers):
+            self.nn_params[f"hidden_{i}"] = {
+                "kernel": np.load(path / f"hidden_{i}_kernel.npy"),
+                "bias": np.load(path / f"hidden_{i}_bias.npy"),
+            }
 
 
 class MLPPolicy(Controller):
@@ -69,9 +67,14 @@ class MLPPolicy(Controller):
 
             # forward pass
             for i in range(params.nn_num_layers):
-                x = params.nn_params[f"hidden_{i}"]["kernel"].T @ x + params.nn_params[f"hidden_{i}"]["bias"]
+                x = (
+                    params.nn_params[f"hidden_{i}"]["kernel"].T @ x
+                    + params.nn_params[f"hidden_{i}"]["bias"]
+                )
                 if i < (params.nn_num_layers - 1):
-                    x = x / (1 + np.exp(-1 * x))  # brax PPO training defaults to swish as the activation func
+                    x = x / (
+                        1 + np.exp(-1 * x)
+                    )  # brax PPO training defaults to swish as the activation func
 
             # output tanh activation
             x, _ = np.split(x, 2, axis=-1)  # split into loc and scale of a normal distribution

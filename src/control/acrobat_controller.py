@@ -6,15 +6,18 @@ import numpy as np
 from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
-from src.control.algorithm.base import Controller
-from src.control.algorithm.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
-from src.control.controller_factory import ControllerFactory
+from src.control.algorithms.base import Controller
+from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
+from src.control.controller_factory import ConfigFactory, ControllerFactory
 
 
 JOYSTICK_ENV_ACTION_SCALE = 0.5
 HANDSTAND_ENV_ACTION_SCALE = 0.3
 GETUP_ENV_ACTION_SCALE = 0.5
-JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array([0.1,  0.9, -1.8, -0.1,  0.9, -1.8,  0.1,  0.9, -1.8, -0.1,  0.9, -1.8])
+JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array(
+    [0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8]
+)
+
 
 class Go1ControllerType(Enum):
     """Available controller types."""
@@ -84,7 +87,9 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
         action: np.ndarray = self._controller.control(state)
 
         # Adapt action space
-        action = (self._src_env_action_scale * action - data.ctrl + data.qpos[7:]) / self._tar_env_action_scale
+        action = (
+            self._src_env_action_scale * action - data.ctrl + data.qpos[7:]
+        ) / self._tar_env_action_scale
 
         return action
 
@@ -113,7 +118,9 @@ class Go1ControllerManager:
         """Get control action from current active controller."""
         controller = self._controllers[self._active_type]
 
-        if (self._active_type == Go1ControllerType.JOYSTICK) or (self._active_type == Go1ControllerType.GETUP):
+        if (self._active_type == Go1ControllerType.JOYSTICK) or (
+            self._active_type == Go1ControllerType.GETUP
+        ):
             # Joystick controller requires command input
             return controller.control(state.obs["state"], self._command, state.data)
 
@@ -123,8 +130,8 @@ class Go1ControllerManager:
 
 def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
-    params_builder: MLPPolicyParamsBuilder,
-    controller_configs: Dict[Go1ControllerType, Dict[str, Any]]
+    config_factory: ConfigFactory,
+    controller_configs: Dict[Go1ControllerType, Dict[str, Any]],
 ) -> Go1ControllerManager:
     """
     Create a configured Go1ControllerManager.
@@ -138,17 +145,22 @@ def create_acrobat_controller_manager(
     controllers = {}
 
     # Create each controller
+    config_factory.register_config("mlp", MLPPolicyParams)
     controller_factory.register_controller(MLPPolicyParams, MLPPolicy)
     for controller_type, config in controller_configs.items():
-        params = params_builder.build(config=config)
+        params = config_factory.build(config)
         base_controller = controller_factory.build(params=params)
 
         # Wrap joystick and getup controller with adapter and leave others as is
         # Regarding the adapter, refer to MLPPolicyEnvName2HandstandAdapter for more details
         if controller_type == Go1ControllerType.JOYSTICK:
-            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(controller=base_controller)
+            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
+                controller=base_controller
+            )
         elif controller_type == Go1ControllerType.GETUP:
-            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(controller=base_controller)
+            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
+                controller=base_controller
+            )
         else:
             controllers[controller_type] = base_controller
 

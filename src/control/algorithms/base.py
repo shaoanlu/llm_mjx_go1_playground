@@ -4,6 +4,8 @@ from typing import Any, Dict
 
 import numpy as np
 
+from src.utils import load_dataclass_from_dict
+
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only
 class ControllerParams(ABC):
@@ -11,13 +13,9 @@ class ControllerParams(ABC):
 
     algorithm_type: str
 
-
-class ControllerParamsBuilder(ABC):
-    """Abstract base class for parameter builders."""
-
-    @abstractmethod
-    def build(self, config: Dict[str, Any]) -> ControllerParams:
-        pass
+    @classmethod
+    def from_dict(cls, data: dict, convert_list_to_array=False):
+        return load_dataclass_from_dict(cls, data, convert_list_to_array=convert_list_to_array)
 
 
 class Controller(ABC):
