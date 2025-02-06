@@ -18,7 +18,7 @@ The LLM is given only the map size (5x5). Throughout the iterations, it receives
 ## Result
 ### 1. Go1 locomotion [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_go1_playground/blob/main/examples/locomotion.ipynb)
 
-The model was trained using notebooks in [mujoco_playground](https://github.com/google-deepmind/mujoco_playground). It features a recover policy that ensure success transitions between movements (handstand -> spin -> footstand).
+The model was trained using notebooks in [mujoco_playground](https://github.com/google-deepmind/mujoco_playground). It features a recover policy that ensure success transitions between actions (handstand -> spin -> footstand).
 
 ![](examples/gifs/ppo_Go1JoystickFlatTerrain.gif) ![](examples/gifs/ppo_Go1Handstand_Go1Getup_Go1Joystick_Go1Footstand.gif)
 
