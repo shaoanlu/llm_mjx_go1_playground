@@ -24,9 +24,11 @@ The LLM is given only the map size (5x5). Throughout the iterations, it receives
 
 ## Execution
 ### 1. Go1 locomotion
+The model was trained using notebooks in ![mujoco_playground](https://github.com/google-deepmind/mujoco_playground)
 Refer to [`colab demo`](examples/locomotion.ipynb) notebook or [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_go1_playground/blob/main/examples/locomotion.ipynb)
 
-### 2. LLM navigation
+### 2. LLM navigation via trial-and-error
+Leveraging on the trained locomotion policy, this demo further enhance its autonomy by introducing navigation feature using LLM.
 Refer to [`colab demo`](llm_navigation.ipynb) notebook or [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_go1_playground/blob/main/examples/llm_navigation.ipynb)
 
 ## Memo
