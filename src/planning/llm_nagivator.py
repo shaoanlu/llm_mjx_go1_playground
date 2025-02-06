@@ -1,6 +1,7 @@
-from google import genai  # old and new API
 from typing import List, Tuple
+
 import numpy as np
+from google import genai  # old and new API
 
 from src.planning.base import Planner
 

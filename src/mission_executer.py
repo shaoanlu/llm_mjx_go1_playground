@@ -1,11 +1,10 @@
+import time
 from dataclasses import dataclass
-from typing import Callable, ClassVar, Tuple, List, Literal
+from typing import Callable, ClassVar, List, Literal, Tuple
+
 import numpy as np
 from mujoco_playground._src import mjx_env
-import time
 
-from src.environment.traversability_map import TraversabilityMap
-from src.environment.env_wrapper import Go1Env
 from src.planning.llm_nagivator import GeminiThinkingNavigator
 
 
@@ -18,9 +17,7 @@ class MissionConfig:
 
     def __post_init__(self):
         if self.max_steps <= 0 or self.max_attempts <= 0:
-            raise ValueError(
-                f"Steps and attempts must be positive, {self.max_steps=}, {self.max_attempts=}"
-            )
+            raise ValueError(f"Steps and attempts must be positive, {self.max_steps=}, {self.max_attempts=}")
         if self.position_bounds[0] >= self.position_bounds[1]:
             raise ValueError(f"Invalid position bounds, {self.position_bounds=}")
 
@@ -79,9 +76,7 @@ class MissionExecuter:
         for attempt in range(self.config.max_attempts):
             # Prompt the LLM to get waypoints suggestion
             if attempt == 0:
-                prompt: str = (
-                    self.instruction_prompt + f"\nStart. you are at somwwhere near (0, 0)."
-                )
+                prompt: str = self.instruction_prompt + "\nStart. you are at somwwhere near (0, 0)."
             waypoints = planner.plan(prompt=prompt)
             waypoints = self._validate_waypoints(waypoints)
 

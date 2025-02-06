@@ -48,9 +48,7 @@ class RecoverState:
         gravity = self._get_gravity(state.data)
         return self._is_upright(gravity)
 
-    def is_at_desired_height(
-        self, state: mjx_env.State, pos_tol: float = 0.005, z_des: float = 0.275
-    ) -> bool:
+    def is_at_desired_height(self, state: mjx_env.State, pos_tol: float = 0.005, z_des: float = 0.275) -> bool:
         torso_height = state.data.site_xpos[self.env.env._imu_site_id][2]
         height = jax.numpy.min(jax.numpy.array([torso_height, z_des]))
         height_error = z_des - height

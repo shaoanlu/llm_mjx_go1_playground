@@ -1,5 +1,5 @@
-from dataclasses import asdict, dataclass, field, fields
-from typing import Any, Dict, Tuple
+from dataclasses import dataclass, field, fields
+from typing import Tuple
 
 import jax
 import numpy as np
@@ -78,7 +78,7 @@ class PositionController:
         else, set the class attribute with the value.
         """
         for f in fields(config):
-            key, value = f.name, getattr(config, key)
+            key, value = f.name, getattr(config, f.name)
             if issubclass(type(value), ControllerParams):
                 self._controllers[key] = self.factory.build(value)
             else:

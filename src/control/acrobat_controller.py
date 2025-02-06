@@ -14,9 +14,7 @@ from src.control.controller_factory import ConfigFactory, ControllerFactory
 JOYSTICK_ENV_ACTION_SCALE = 0.5
 HANDSTAND_ENV_ACTION_SCALE = 0.3
 GETUP_ENV_ACTION_SCALE = 0.5
-JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array(
-    [0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8]
-)
+JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array([0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8])
 
 
 class Go1ControllerType(Enum):
@@ -46,9 +44,7 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
         self._src_default_pose = JOYSTICK_ENV_DEFAULT_POSE
 
-    def control(
-        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
-    ) -> np.ndarray:
+    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for joystick control
         state = jax.numpy.concat([state, command])
@@ -80,9 +76,7 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
         self._src_env_action_scale = GETUP_ENV_ACTION_SCALE
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
 
-    def control(
-        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
-    ) -> np.ndarray:
+    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for Getup control
         state = state[3:]  # remove first 3 linvel elements
@@ -121,9 +115,7 @@ class Go1ControllerManager:
     def control(self, state: mjx_env.State) -> np.ndarray:
         """Get control action from current active controller."""
         controller = self._controllers[self._active_type]
-        return controller.control(
-            state.obs["state"], command=self._command, mjx_state_data=state.data
-        )
+        return controller.control(state.obs["state"], command=self._command, mjx_state_data=state.data)
 
 
 def create_acrobat_controller_manager(
@@ -152,13 +144,9 @@ def create_acrobat_controller_manager(
         # Wrap joystick and getup controller with adapter and leave others as is
         # Regarding the adapter, refer to MLPPolicyEnvName2HandstandAdapter for more details
         if controller_type == Go1ControllerType.JOYSTICK:
-            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
-                controller=base_controller
-            )
+            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(controller=base_controller)
         elif controller_type == Go1ControllerType.GETUP:
-            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
-                controller=base_controller
-            )
+            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(controller=base_controller)
         else:
             controllers[controller_type] = base_controller
 
