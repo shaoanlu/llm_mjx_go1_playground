@@ -1,9 +1,9 @@
 from typing import Any, Dict, Type
 
-from src.control.algorithms.base import Controller, ControllerParams, ControllerParamsBuilder
-from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParamsBuilder
-from src.control.algorithms.pid import PID, PIDParams, PIDParamsBuilder
-from src.control.algorithms.lqr import LQR, LQRParams, LQRParamsBuilder
+from src.control.algorithms.base import Controller, ControllerParams
+from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams, MLPPolicyParams
+from src.control.algorithms.pid import PID, PIDParams, PIDParams
+from src.control.algorithms.lqr import LQR, LQRParams, LQRParams
 
 
 class ConfigFactory:
@@ -12,26 +12,26 @@ class ConfigFactory:
     """
 
     def __init__(self):
-        # register parameter builders
-        self.params_builder_map: Dict[str, Type[ControllerParams]] = {
-            "mlp": MLPPolicyParamsBuilder,
-            "pid": PIDParamsBuilder,
-            "lqr": LQRParamsBuilder,
+        # register parameter
+        self.params_map: Dict[str, Type[ControllerParams]] = {
+            "mlp": MLPPolicyParams,
+            "pid": PIDParams,
+            "lqr": LQRParams,
         }
 
     def register_config(self, key: str, value: Type[ControllerParams]) -> None:
-        self.params_builder_map[key] = value
+        self.params_map[key] = value
 
     def build(self, config: Dict[str, Any]) -> ControllerParams:
         algorithm_type: str = config.get("algorithm_type", "algorithm_type_not_defined").lower()
-        params_builder: Type[ControllerParamsBuilder] | None = self.params_builder_map.get(algorithm_type)
+        params_builder: Type[ControllerParams] | None = self.params_map.get(algorithm_type)
         if params_builder is None:
             raise ValueError(
-                f"Invalid algorithm type: {algorithm_type}. Valid types are: {list(self.params_builder_map.keys())}"
+                f"Invalid algorithm type: {algorithm_type}. Valid types are: {list(self.params_map.keys())}"
                 "\n config: {config}"
             )
         else:
-            return params_builder().build(config)
+            return params_builder.from_dict(config)
 
 
 class ControllerFactory:
