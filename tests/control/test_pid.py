@@ -35,7 +35,7 @@ class TestPID(unittest.TestCase):
         # Test with missing required parameters
         invalid_config = {"algorithm_type": "pid", "kp": 1.0}  # missing ki and kd
         with self.assertRaises(Exception):
-            builder.build(invalid_config)
+            PIDParams.from_dict(invalid_config)
 
     def test_pid_control(self):
         """Test first control step (when prev_error is None)"""

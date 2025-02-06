@@ -1,12 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict
 
-import jax
 import numpy as np
 import scipy.linalg
 
 from src.control.algorithms.base import Controller, ControllerParams
-from src.utils import load_dataclass_from_dict
 
 
 @dataclass(kw_only=True)  # Make all following fields keyword-only
