@@ -1,5 +1,6 @@
-from abc import ABC, abstractmethod
+from abc import Protocol, abstractmethod
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -9,10 +10,9 @@ class PlannerParams:
     planner_type: str
 
 
-class Planner(ABC):
+class Planner(Protocol):
     def __init__(self, config):
         self.config = config
 
     @abstractmethod
-    def plan(self, env, start, goal):
-        raise NotImplementedError
+    def plan(self, **kwargs) -> Any: ...
