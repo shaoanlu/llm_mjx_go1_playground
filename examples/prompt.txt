@@ -5,7 +5,6 @@ Environment specifications:
 - Start position: (0,0)
 - Goal position: (4,4)
 - Some cells are not traversable, but their status is only revealed when the robot attempts to traverse them
-- The traversability of a cell is probabilistic - failed attempts don't guarantee the cell is completely untraversable
 
 Path planning constraints:
 1. Maximum 10 waypoints allowed per path
