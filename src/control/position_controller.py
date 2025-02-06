@@ -177,7 +177,7 @@ class SequentialController(Controller):
         if yaw_error > self.params.yaw_control_threshold:
             return np.array([0.0, 0.0, self.params.yaw_control_gain * yaw_error])
         else:
-            return np.array([self._linear_control_gain * dist, 0.0, 0.0])
+            return np.array([self.params.linear_control_gain * dist, 0.0, 0.0])
 
 
 class PolarCoordinateController(Controller):
