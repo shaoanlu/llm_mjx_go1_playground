@@ -1,20 +1,22 @@
+from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict
+from typing import Dict
 
 import jax
 import numpy as np
 from mujoco import mjx
 from mujoco_playground._src import mjx_env
 
-from src.control.algorithms.base import Controller
-from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
-from src.control.controller_factory import ConfigFactory, ControllerFactory
+from src.control.algorithms.base import Controller, ControllerParams
+from src.control.controller_factory import ControllerFactory
 
 
 JOYSTICK_ENV_ACTION_SCALE = 0.5
 HANDSTAND_ENV_ACTION_SCALE = 0.3
 GETUP_ENV_ACTION_SCALE = 0.5
-JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array([0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8])
+JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array(
+    [0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8]
+)
 
 
 class Go1ControllerType(Enum):
@@ -24,6 +26,14 @@ class Go1ControllerType(Enum):
     HANDSTAND = auto()
     FOOTSTAND = auto()
     GETUP = auto()
+
+
+@dataclass(kw_only=True)
+class Go1ControllerManagerParams(ControllerParams):
+    controllers: Dict[Go1ControllerType, ControllerParams]
+    default_controller_type: Go1ControllerType = field(default=Go1ControllerType.FOOTSTAND)
+    command_dim: int = field(default=3)
+    algorithm_type: str = field(default="go1_controller_manager")
 
 
 class MLPPolicyJoystick2HandstandAdapter(Controller):
@@ -44,7 +54,9 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
         self._src_default_pose = JOYSTICK_ENV_DEFAULT_POSE
 
-    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
+    def control(
+        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
+    ) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for joystick control
         state = jax.numpy.concat([state, command])
@@ -76,7 +88,9 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
         self._src_env_action_scale = GETUP_ENV_ACTION_SCALE
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
 
-    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
+    def control(
+        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
+    ) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for Getup control
         state = state[3:]  # remove first 3 linvel elements
@@ -95,10 +109,26 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
 class Go1ControllerManager:
     """Manages multiple controllers and handles transitions between them."""
 
-    def __init__(self, controllers: Dict[Go1ControllerType, Controller]):
-        self._controllers = controllers
-        self._active_type = Go1ControllerType.FOOTSTAND  # default controller
-        self._command = jax.numpy.zeros(3)  # joystick command (vel_x, vel_y, vel_yaw)
+    def __init__(self, factory: ControllerFactory, config: Go1ControllerManagerParams):
+        self.factory = factory
+        self._controllers = {}
+        self._active_type: Go1ControllerType = config.default_controller_type
+        self._command = jax.numpy.zeros(config.command_dim)
+        self.build_controller(config)
+
+    def build_controller(self, config: Go1ControllerManagerParams) -> None:
+        for controller_type, controller_config in config.controllers.items():
+            base_controller = self.factory.build(controller_config)
+            if controller_type == Go1ControllerType.JOYSTICK:
+                self._controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
+                    base_controller
+                )
+            elif controller_type == Go1ControllerType.GETUP:
+                self._controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
+                    base_controller
+                )
+            else:
+                self._controllers[controller_type] = base_controller
 
     def set_command(self, command: jax.Array | np.ndarray):
         """Set the current command for joystick controller."""
@@ -115,39 +145,13 @@ class Go1ControllerManager:
     def control(self, state: mjx_env.State) -> np.ndarray:
         """Get control action from current active controller."""
         controller = self._controllers[self._active_type]
-        return controller.control(state.obs["state"], command=self._command, mjx_state_data=state.data)
+        return controller.control(
+            state.obs["state"], command=self._command, mjx_state_data=state.data
+        )
 
 
 def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
-    config_factory: ConfigFactory,
-    controller_configs: Dict[Go1ControllerType, Dict[str, Any]],
+    config: Go1ControllerManagerParams,
 ) -> Go1ControllerManager:
-    """
-    Create a configured Go1ControllerManager.
-
-    NOTE:
-    given the use case for the acrobatic controller being quite flexible
-    It feels more confortable to have the creation of controller manager
-    defined in a funciton instead of from a config file
-    """
-
-    controllers = {}
-
-    # Create each controller
-    config_factory.register_config("mlp", MLPPolicyParams)
-    controller_factory.register_controller(MLPPolicyParams, MLPPolicy)
-    for controller_type, config in controller_configs.items():
-        params = config_factory.build(config)
-        base_controller = controller_factory.build(params=params)
-
-        # Wrap joystick and getup controller with adapter and leave others as is
-        # Regarding the adapter, refer to MLPPolicyEnvName2HandstandAdapter for more details
-        if controller_type == Go1ControllerType.JOYSTICK:
-            controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(controller=base_controller)
-        elif controller_type == Go1ControllerType.GETUP:
-            controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(controller=base_controller)
-        else:
-            controllers[controller_type] = base_controller
-
-    return Go1ControllerManager(controllers)
+    return Go1ControllerManager(factory=controller_factory, config=config)

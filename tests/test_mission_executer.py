@@ -149,7 +149,9 @@ class TestMissionExecuter(unittest.TestCase):
             status="Success", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt)
+        result = self.executer.execute_mission(
+            self.mock_planner, self.mock_execute_single_attempt, print_result=False
+        )
 
         self.assertEqual(result.status, "Success", msg=f"{result.status=}")
         self.assertEqual(len(result.position_history), 2, msg=f"{result.position_history=}")
@@ -168,7 +170,9 @@ class TestMissionExecuter(unittest.TestCase):
             status="Stop", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt)
+        result = self.executer.execute_mission(
+            self.mock_planner, self.mock_execute_single_attempt, print_result=False
+        )
 
         self.assertEqual(result.status, "Failed: Max attempts reached", msg=f"{result.status=}")
         self.assertEqual(
@@ -184,8 +188,8 @@ class TestMissionExecuter(unittest.TestCase):
 
     def test_waypoint_validation(self):
         """Test waypoint validation logic"""
-        waypoints = [np.array([0, 0]), np.array([2, 2])]
-        validated = self.executer._validate_waypoints(list(waypoints))  # input a copy of waypoints
+        waypoints = [np.array([0, 0]), np.array([2, 2])]  # Does not contain goal position (4, 4)
+        validated = self.executer._validate_waypoints(list(waypoints))  # Input a copy of waypoints
 
         self.assertEqual(len(validated), len(waypoints) + 1, msg=f"{validated=}")
         np.testing.assert_array_equal(

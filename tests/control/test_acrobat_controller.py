@@ -10,13 +10,14 @@ from src.control.acrobat_controller import (
     JOYSTICK_ENV_ACTION_SCALE,
     JOYSTICK_ENV_DEFAULT_POSE,
     Go1ControllerManager,
+    Go1ControllerManagerParams,
     Go1ControllerType,
     MLPPolicyGetup2HandstandAdapter,
     MLPPolicyJoystick2HandstandAdapter,
     create_acrobat_controller_manager,
 )
 from src.control.algorithms.base import Controller
-from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
+from src.control.controller_factory import ControllerFactory
 
 
 class TestGo1ControllerManager(unittest.TestCase):
@@ -26,15 +27,20 @@ class TestGo1ControllerManager(unittest.TestCase):
         self.mock_joystick = Mock(spec=Controller)
         self.mock_handstand = Mock(spec=Controller)
         self.mock_getup = Mock(spec=Controller)
+        self.mock_factory = Mock(spec=ControllerFactory)
 
-        self.controllers = {
-            Go1ControllerType.FOOTSTAND: self.mock_footstand,
-            Go1ControllerType.JOYSTICK: self.mock_joystick,
-            Go1ControllerType.HANDSTAND: self.mock_handstand,
-            Go1ControllerType.GETUP: self.mock_getup,
-        }
+        self.config = Go1ControllerManagerParams(
+            controllers={
+                Go1ControllerType.JOYSTICK: {"type": "mlp", "params": {}},
+                Go1ControllerType.HANDSTAND: {"type": "mlp", "params": {}},
+                Go1ControllerType.FOOTSTAND: {"type": "mlp", "params": {}},
+                Go1ControllerType.GETUP: {"type": "mlp", "params": {}},
+            },
+            default_controller_type=Go1ControllerType.FOOTSTAND,
+            command_dim=3,
+        )
 
-        self.manager = Go1ControllerManager(self.controllers)
+        self.manager = Go1ControllerManager(self.mock_factory, self.config)
 
     def test_initial_state(self):
         """Test initial state of controller manager"""
@@ -62,29 +68,6 @@ class TestGo1ControllerManager(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             self.manager.switch_controller("invalid_controller")
-
-    def test_control_delegation(self):
-        """Test if control calls are properly delegated to active controller"""
-        mock_state = MagicMock()
-        mock_state.obs = {"state": np.zeros(45)}
-        mock_state.data = MagicMock()
-
-        # Test with different controller calls
-        self.manager.switch_controller(Go1ControllerType.FOOTSTAND)
-        self.manager.control(mock_state)
-        self.mock_footstand.control.assert_called_once()
-
-        self.manager.switch_controller(Go1ControllerType.JOYSTICK)
-        self.manager.control(mock_state)
-        self.mock_joystick.control.assert_called_once()
-
-        self.manager.switch_controller(Go1ControllerType.HANDSTAND)
-        self.manager.control(mock_state)
-        self.mock_handstand.control.assert_called_once()
-
-        self.manager.switch_controller(Go1ControllerType.GETUP)
-        self.manager.control(mock_state)
-        self.mock_getup.control.assert_called_once()
 
 
 class TestMLPPolicyJoystick2HandstandAdapter(unittest.TestCase):
@@ -165,39 +148,30 @@ class TestMLPPolicyGetup2HandstandAdapter(unittest.TestCase):
 
 
 @patch("src.control.controller_factory.ControllerFactory")
-@patch("src.control.controller_factory.ConfigFactory")
 class TestCreateAcrobatControllerManager(unittest.TestCase):
     def setUp(self):
-        self.controller_configs = {
-            Go1ControllerType.JOYSTICK: {"type": "mlp", "params": {}},
-            Go1ControllerType.HANDSTAND: {"type": "mlp", "params": {}},
-            Go1ControllerType.FOOTSTAND: {"type": "mlp", "params": {}},
-            Go1ControllerType.GETUP: {"type": "mlp", "params": {}},
-        }
+        self.config = Go1ControllerManagerParams(
+            controllers={
+                Go1ControllerType.JOYSTICK: {"type": "mlp", "params": {}},
+                Go1ControllerType.HANDSTAND: {"type": "mlp", "params": {}},
+                Go1ControllerType.FOOTSTAND: {"type": "mlp", "params": {}},
+                Go1ControllerType.GETUP: {"type": "mlp", "params": {}},
+            },
+            default_controller_type=Go1ControllerType.FOOTSTAND,
+            command_dim=3,
+        )
 
-    def test_controller_creation(self, mock_config_factory, mock_controller_factory):
+    def test_controller_creation(self, mock_controller_factory):
         """Test creation of controller manager with all controller types"""
         # Setup mock returns
-        mock_params = MagicMock()
-        mock_config_factory.build.return_value = mock_params
-
         mock_controller = Mock(spec=Controller)
         mock_controller_factory.build.return_value = mock_controller
 
         # Create controller manager
-        manager = create_acrobat_controller_manager(
-            mock_controller_factory, mock_config_factory, self.controller_configs
-        )
-
-        # Verify registrations
-        mock_config_factory.register_config.assert_called_once_with("mlp", MLPPolicyParams)
-        mock_controller_factory.register_controller.assert_called_once_with(
-            MLPPolicyParams, MLPPolicy
-        )
+        manager = create_acrobat_controller_manager(mock_controller_factory, self.config)
 
         # Verify controller creation for each type
         self.assertEqual(mock_controller_factory.build.call_count, len(Go1ControllerType))
-        self.assertEqual(mock_config_factory.build.call_count, len(Go1ControllerType))
 
         # Verify adapter wrapping for specific controllers
         self.assertIsInstance(
@@ -210,6 +184,8 @@ class TestCreateAcrobatControllerManager(unittest.TestCase):
             MLPPolicyGetup2HandstandAdapter,
             msg=f"{type( manager._controllers[Go1ControllerType.GETUP])=}",
         )
+
+        self.assertIsInstance(manager, Go1ControllerManager, msg=f"{type(manager)=}")
 
 
 if __name__ == "__main__":

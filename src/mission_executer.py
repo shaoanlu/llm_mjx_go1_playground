@@ -63,6 +63,7 @@ class MissionExecuter:
         self,
         planner: GeminiThinkingNavigator,
         execute_single_attempt: Callable,
+        print_result: bool = True,
     ) -> Tuple[str, List[np.ndarray]]:
         """
         Execute complete navigation mission.
@@ -92,10 +93,11 @@ class MissionExecuter:
             rollout_of_all_attempts.extend(result.rollout)
 
             # print debug information
-            print(
-                f"[Trial {attempt + 1}]\n{prompt=}\n{waypoints=}\n{result.status=}{tuple(result.position_history[-1])}",
-                f"\t{result.position_history=}\n",
-            )
+            if print_result:
+                print(
+                    f"[Trial {attempt + 1}]\n{prompt=}\n{waypoints=}\n{result.status=}{tuple(result.position_history[-1])}",
+                    f"\t{result.position_history=}\n",
+                )
 
             if result.status in self.SUCCESS_TYPES:
                 return MissionResult(
