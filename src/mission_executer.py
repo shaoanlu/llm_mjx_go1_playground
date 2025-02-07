@@ -69,7 +69,8 @@ class MissionExecuter:
         Execute complete navigation mission.
 
         Args:
-            execute_single_attempt: A function that accept arguments waypoints and max_sim_steps
+            execute_single_attempt: A function that accepts arguments waypoints, max_sim_steps,
+                and a random key as input and return an object of EpisodeResult.
 
         Returns:
             str: Mission status
