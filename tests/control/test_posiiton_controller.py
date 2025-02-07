@@ -87,10 +87,17 @@ class TestSequentialController(unittest.TestCase):
     def test_yaw_control(self):
         """Test yaw control when yaw error is above threshold"""
         state = Go1State(position=np.array([0, 0, 0]), yaw=0)
-        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=np.pi / 2)
 
+        # Case 1: large positive yaw error
+        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=np.pi / 2)
         control = self.controller.control(state, ref_state)
         expected_control = np.array([0.0, 0.0, self.config.yaw_control_gain * np.pi / 2])
+        np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
+
+        # Case 2: large negative yaw error
+        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=-np.pi / 3)
+        control = self.controller.control(state, ref_state)
+        expected_control = np.array([0.0, 0.0, self.config.yaw_control_gain * -np.pi / 3])
         np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
 
     def test_linear_control(self):
