@@ -123,9 +123,7 @@ class TestTraversabilityMap(unittest.TestCase):
         # Verify grid properties
         self.assertEqual(grid.shape, (5, 5), msg=f"{grid.shape=}")
         self.assertTrue(np.all(grid[:3, :3]), msg=f"{grid=}")  # Top-left should be traversable
-        self.assertFalse(
-            np.all(grid[3:, 3:]), msg=f"{grid=}"
-        )  # Bottom-right should be non-traversable
+        self.assertFalse(np.all(grid[3:, 3:]), msg=f"{grid=}")  # Bottom-right should be non-traversable
 
     def test_load_from_nonexistent_image(self):
         """Test loading from non-existent image file"""
@@ -156,9 +154,7 @@ class TestTraversabilityMap(unittest.TestCase):
             np.array([2, 5]),  # Partial out of bounds
         ]
         for pos in invalid_positions:
-            self.assertFalse(
-                self.trav_map.is_valid_position(pos), f"Position {pos} should be invalid"
-            )
+            self.assertFalse(self.trav_map.is_valid_position(pos), f"Position {pos} should be invalid")
 
     def test_grid_property(self):
         """Test grid property returns copy"""
@@ -171,9 +167,7 @@ class TestTraversabilityMap(unittest.TestCase):
 
         # Verify original grid is unchanged
         self.assertEqual(self.trav_map._grid[0, 0], 1, msg=f"{self.trav_map._grid=}")
-        np.testing.assert_array_equal(
-            self.trav_map._grid, original_grid, err_msg=f"{self.trav_map._grid=}"
-        )
+        np.testing.assert_array_equal(self.trav_map._grid, original_grid, err_msg=f"{self.trav_map._grid=}")
 
 
 if __name__ == "__main__":

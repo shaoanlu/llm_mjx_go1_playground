@@ -14,9 +14,7 @@ from src.control.controller_factory import ControllerFactory
 JOYSTICK_ENV_ACTION_SCALE = 0.5
 HANDSTAND_ENV_ACTION_SCALE = 0.3
 GETUP_ENV_ACTION_SCALE = 0.5
-JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array(
-    [0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8]
-)
+JOYSTICK_ENV_DEFAULT_POSE = jax.numpy.array([0.1, 0.9, -1.8, -0.1, 0.9, -1.8, 0.1, 0.9, -1.8, -0.1, 0.9, -1.8])
 
 
 class Go1ControllerType(Enum):
@@ -54,9 +52,7 @@ class MLPPolicyJoystick2HandstandAdapter(Controller):
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
         self._src_default_pose = JOYSTICK_ENV_DEFAULT_POSE
 
-    def control(
-        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
-    ) -> np.ndarray:
+    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for joystick control
         state = jax.numpy.concat([state, command])
@@ -88,9 +84,7 @@ class MLPPolicyGetup2HandstandAdapter(Controller):
         self._src_env_action_scale = GETUP_ENV_ACTION_SCALE
         self._tar_env_action_scale = HANDSTAND_ENV_ACTION_SCALE
 
-    def control(
-        self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data
-    ) -> np.ndarray:
+    def control(self, state: mjx_env.State, command: np.ndarray, mjx_state_data: mjx.Data) -> np.ndarray:
         """Control with state and action space adaptation."""
         # Adapt state for Getup control
         state = state[3:]  # remove first 3 linvel elements
@@ -120,13 +114,9 @@ class Go1ControllerManager:
         for controller_type, controller_config in config.controllers.items():
             base_controller = self.factory.build(controller_config)
             if controller_type == Go1ControllerType.JOYSTICK:
-                self._controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(
-                    base_controller
-                )
+                self._controllers[controller_type] = MLPPolicyJoystick2HandstandAdapter(base_controller)
             elif controller_type == Go1ControllerType.GETUP:
-                self._controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(
-                    base_controller
-                )
+                self._controllers[controller_type] = MLPPolicyGetup2HandstandAdapter(base_controller)
             else:
                 self._controllers[controller_type] = base_controller
 
@@ -145,13 +135,30 @@ class Go1ControllerManager:
     def control(self, state: mjx_env.State) -> np.ndarray:
         """Get control action from current active controller."""
         controller = self._controllers[self._active_type]
-        return controller.control(
-            state.obs["state"], command=self._command, mjx_state_data=state.data
-        )
+        return controller.control(state.obs["state"], command=self._command, mjx_state_data=state.data)
 
 
 def create_acrobat_controller_manager(
     controller_factory: ControllerFactory,
     config: Go1ControllerManagerParams,
 ) -> Go1ControllerManager:
+    """
+    Helper function to create Go1ControllerManager
+
+    Usage:
+        # Create controller manager configuration
+        config = Go1ControllerManagerParams(
+            controllers={
+                Go1ControllerType.JOYSTICK: MLPPolicyParams.from_dict({"npy_path": "src/control/nn_params/Go1JoystickFlatTerrain"}),
+                Go1ControllerType.FOOTSTAND: MLPPolicyParams.from_dict({"npy_path": "src/control/nn_params/Go1Footstand"}),
+                Go1ControllerType.HANDSTAND: MLPPolicyParams.from_dict({"npy_path": "src/control/nn_params/Go1Handstand"}),
+                Go1ControllerType.GETUP: MLPPolicyParams.from_dict({"npy_path": "src/control/nn_params/Go1Getup"}),
+            },
+            default_controller_type=Go1ControllerType.FOOTSTAND,
+            command_dim=3
+        )
+
+        # Create controller manager
+        controller_manager = create_acrobat_controller_manager(controller_factory=ControllerFactory(), config=config)
+    """
     return Go1ControllerManager(factory=controller_factory, config=config)

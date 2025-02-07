@@ -45,17 +45,13 @@ class TestGo1ControllerManager(unittest.TestCase):
     def test_initial_state(self):
         """Test initial state of controller manager"""
         self.assertEqual(self.manager._active_type, Go1ControllerType.FOOTSTAND)
-        np.testing.assert_array_equal(
-            self.manager._command, jnp.zeros(3), err_msg=f"{self.manager._command=}"
-        )
+        np.testing.assert_array_equal(self.manager._command, jnp.zeros(3), err_msg=f"{self.manager._command=}")
 
     def test_set_command(self):
         """Test setting command with valid and invalid inputs"""
         valid_command = np.array([1.0, -0.5, 0.2])
         self.manager.set_command(valid_command)
-        np.testing.assert_array_equal(
-            self.manager._command, valid_command, err_msg=f"{self.manager._command=}"
-        )
+        np.testing.assert_array_equal(self.manager._command, valid_command, err_msg=f"{self.manager._command=}")
 
         invalid_command = np.array([1.0, -0.5])  # invalid shape
         with self.assertRaises(ValueError):
@@ -101,9 +97,7 @@ class TestMLPPolicyJoystick2HandstandAdapter(unittest.TestCase):
 
         # Verify action adaptation
         expected_action = (
-            JOYSTICK_ENV_ACTION_SCALE * mock_action
-            - mjx_state_data.ctrl
-            + JOYSTICK_ENV_DEFAULT_POSE
+            JOYSTICK_ENV_ACTION_SCALE * mock_action - mjx_state_data.ctrl + JOYSTICK_ENV_DEFAULT_POSE
         ) / HANDSTAND_ENV_ACTION_SCALE
         np.testing.assert_array_equal(result, expected_action, err_msg=f"{result=}")
 
@@ -119,9 +113,7 @@ class TestMLPPolicyGetup2HandstandAdapter(unittest.TestCase):
         state = jnp.array([1.0, 2.0, 3.0, 4.0, 5.0, 6.0])  # First 3 elements are linvel
         mjx_state_data = MagicMock()
         mjx_state_data.ctrl = jnp.zeros(12)
-        mjx_state_data.qpos = jnp.concatenate(
-            [jnp.zeros(7), jnp.ones(12)]
-        )  # 7 base DOFs + 12 actuated DOFs
+        mjx_state_data.qpos = jnp.concatenate([jnp.zeros(7), jnp.ones(12)])  # 7 base DOFs + 12 actuated DOFs
         command = jnp.zeros(3)  # Unused in this adapter
 
         # Mock controller response

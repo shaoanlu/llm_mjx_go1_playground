@@ -184,9 +184,7 @@ class TestPositionController(unittest.TestCase):
         result = self.controller.compute_command(state, target_position)
 
         self.assertTrue(mock_primary.called)
-        np.testing.assert_array_almost_equal(
-            result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}"
-        )
+        np.testing.assert_array_almost_equal(result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}")
 
     @patch.object(PositionController, "_primary_control", side_effect=Exception)
     @patch.object(PositionController, "_fallback_control")
@@ -203,9 +201,7 @@ class TestPositionController(unittest.TestCase):
 
         self.assertTrue(mock_primary.called)
         self.assertTrue(mock_fallback.called)
-        np.testing.assert_array_almost_equal(
-            result.command, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.command=}"
-        )
+        np.testing.assert_array_almost_equal(result.command, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.command=}")
 
     def test_post_process_command(self):
         """Test command post-processing (clipping)"""
@@ -213,7 +209,8 @@ class TestPositionController(unittest.TestCase):
         processed = self.controller._post_process_command(command)
 
         np.testing.assert_array_almost_equal(
-            processed, jnp.array([1.5, 0.0, np.pi / 2])  # Should be clipped to max values
+            processed,
+            jnp.array([1.5, 0.0, np.pi / 2]),  # Should be clipped to max values
         )
 
 
@@ -228,12 +225,8 @@ class TestCreatePositionController(unittest.TestCase):
         controller = create_position_controller(factory, config)
 
         # Verify controller registrations
-        factory.register_controller.assert_any_call(
-            SequentialControllerParams, SequentialController
-        )
-        factory.register_controller.assert_any_call(
-            PolarCoordinateControllerParams, PolarCoordinateController
-        )
+        factory.register_controller.assert_any_call(SequentialControllerParams, SequentialController)
+        factory.register_controller.assert_any_call(PolarCoordinateControllerParams, PolarCoordinateController)
 
         self.assertIsInstance(controller, PositionController, msg=f"{type(controller)=}")
 

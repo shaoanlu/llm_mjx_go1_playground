@@ -95,16 +95,12 @@ class TestEpisodeResult(unittest.TestCase):
         """Test creation with valid status values"""
         valid_statuses = ["Stop", "Timeout", "Success"]
         for status in valid_statuses:
-            result = EpisodeResult(
-                status=status, position_history=self.position_history, rollout=self.rollout
-            )
+            result = EpisodeResult(status=status, position_history=self.position_history, rollout=self.rollout)
             self.assertEqual(result.status, status, msg=f"{result.status=}")
 
     def test_immutability(self):
         """Test that EpisodeResult is immutable"""
-        result = EpisodeResult(
-            status="Success", position_history=self.position_history, rollout=self.rollout
-        )
+        result = EpisodeResult(status="Success", position_history=self.position_history, rollout=self.rollout)
         with self.assertRaises(FrozenInstanceError):
             result.status = "Stop"
 
@@ -133,9 +129,7 @@ class TestMissionExecuter(unittest.TestCase):
         )
         self.assertIsNone(self.executer.current_position, msg=f"{self.executer.current_position=}")
         self.assertEqual(self.executer.waypoints, [], msg=f"{self.executer.waypoints=}")
-        self.assertEqual(
-            self.executer.position_history, [], msg=f"{self.executer.position_history=}"
-        )
+        self.assertEqual(self.executer.position_history, [], msg=f"{self.executer.position_history=}")
 
     @patch("time.sleep")  # Mock sleep to speed up tests
     def test_successful_mission_execution(self, mock_sleep):
@@ -149,9 +143,7 @@ class TestMissionExecuter(unittest.TestCase):
             status="Success", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(
-            self.mock_planner, self.mock_execute_single_attempt, print_result=False
-        )
+        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt, print_result=False)
 
         self.assertEqual(result.status, "Success", msg=f"{result.status=}")
         self.assertEqual(len(result.position_history), 2, msg=f"{result.position_history=}")
@@ -170,9 +162,7 @@ class TestMissionExecuter(unittest.TestCase):
             status="Stop", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(
-            self.mock_planner, self.mock_execute_single_attempt, print_result=False
-        )
+        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt, print_result=False)
 
         self.assertEqual(result.status, "Failed: Max attempts reached", msg=f"{result.status=}")
         self.assertEqual(
@@ -192,16 +182,12 @@ class TestMissionExecuter(unittest.TestCase):
         validated = self.executer._validate_waypoints(list(waypoints))  # Input a copy of waypoints
 
         self.assertEqual(len(validated), len(waypoints) + 1, msg=f"{validated=}")
-        np.testing.assert_array_equal(
-            validated[-1], np.array(self.config.goal), err_msg=f"{validated[-1]=}"
-        )
+        np.testing.assert_array_equal(validated[-1], np.array(self.config.goal), err_msg=f"{validated[-1]=}")
 
     def test_failure_message_formatting(self):
         """Test failure message formatting"""
         position_history = [np.array([0, 0]), np.array([1, 1])]
-        result = EpisodeResult(
-            status="Stop", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
-        )
+        result = EpisodeResult(status="Stop", position_history=position_history, rollout=[Mock(spec=mjx_env.State)])
 
         message = self.executer._format_failure_message(result)
         self.assertIn("Failed: Stop", message, msg=f"{message=}")

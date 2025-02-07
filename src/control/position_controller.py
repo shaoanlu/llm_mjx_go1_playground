@@ -34,9 +34,7 @@ class PositionControllerParams(ControllerParams):
     primary_controller: ControllerParams = field(
         default_factory=lambda: SequentialControllerParams()  # or PolarCoordinateControllerParams()
     )
-    fallback_controller: ControllerParams = field(
-        default_factory=lambda: SequentialControllerParams()
-    )
+    fallback_controller: ControllerParams = field(default_factory=lambda: SequentialControllerParams())
     arrival_threshold: float = field(default=0.1)
     max_linear_velocity: float = field(default=1.5)
     max_angular_velocity: float = field(default=np.pi / 2)
@@ -148,17 +146,11 @@ class PositionController:
             is_arrived=is_arrived,
         )
 
-    def _calculate_reference_state(
-        self, state: Go1State, target_pos: np.ndarray
-    ) -> Tuple[Go1State, Go1State]:
+    def _calculate_reference_state(self, state: Go1State, target_pos: np.ndarray) -> Tuple[Go1State, Go1State]:
         target_yaw = self._compute_target_yaw(state, target_pos)
-        target_yaw, current_yaw = np.unwrap(
-            [target_yaw, state.yaw]
-        )  # Unwrap angles to handle discontinuity
+        target_yaw, current_yaw = np.unwrap([target_yaw, state.yaw])  # Unwrap angles to handle discontinuity
         state.yaw = current_yaw
-        return state, Go1State(
-            position=np.array([target_pos[0], target_pos[1], state.position[2]]), yaw=target_yaw
-        )
+        return state, Go1State(position=np.array([target_pos[0], target_pos[1], state.position[2]]), yaw=target_yaw)
 
     def _post_process_command(self, command: np.ndarray) -> jax.numpy.array:
         return jax.numpy.array(
@@ -226,10 +218,15 @@ def create_position_controller(
 ) -> PositionController:
     """
     Helper function to create PositionController
+
+    Usage:
+        config = PositionControllerParams(
+            primary_controller=PolarCoordinateControllerParams(),
+            fallback_controller=SequentialControllerParams(),
+        )
+        command_generator = create_position_controller(controller_factory=ControllerFactory(), config=config)
     """
     controller_factory.register_controller(SequentialControllerParams, SequentialController)
-    controller_factory.register_controller(
-        PolarCoordinateControllerParams, PolarCoordinateController
-    )
+    controller_factory.register_controller(PolarCoordinateControllerParams, PolarCoordinateController)
 
     return PositionController(factory=controller_factory, config=config)
