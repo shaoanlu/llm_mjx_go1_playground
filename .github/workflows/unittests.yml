@@ -30,7 +30,9 @@ jobs:
       - name: "Install dependencies"
         run: |
           python -m pip install --upgrade pip
-          python -m pip install tox tox-gh-actions
+          pip install tox tox-gh-actions uv
+          uv pip install --system numpy==1.26.4 scipy==1.13.1 mujoco==3.2.7 mujoco_mjx==3.2.7
+          uv pip install --system brax==0.12.1 playground==0.0.3 pyyaml
 
       - name: "Test with tox for ${{ matrix.os }}"
         run: |
