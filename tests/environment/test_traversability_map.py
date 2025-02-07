@@ -1,9 +1,10 @@
-import unittest
-from unittest.mock import patch, Mock
-import numpy as np
-from pathlib import Path
-import tempfile
 import os
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+import numpy as np
 
 from src.environment.traversability_map import TraversabilityMap, TraversabilityMapConfig
 

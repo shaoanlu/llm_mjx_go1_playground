@@ -1,22 +1,23 @@
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-import numpy as np
-import jax.numpy as jnp
 from dataclasses import FrozenInstanceError
+from unittest.mock import MagicMock, Mock, patch
+
+import jax.numpy as jnp
+import numpy as np
 
 from src.control.algorithms.base import Controller, ControllerParams
 from src.control.controller_factory import ControllerFactory
-from src.control.state import Go1State
 from src.control.position_controller import (
-    SequentialControllerParams,
-    SequentialController,
     PolarCoordinateController,
     PolarCoordinateControllerParams,
-    PositionControllerParams,
-    PositionController,
     PositionCommandInfo,
+    PositionController,
+    PositionControllerParams,
+    SequentialController,
+    SequentialControllerParams,
     create_position_controller,
 )
+from src.control.state import Go1State
 
 
 class TestControllerParams(unittest.TestCase):

@@ -1,21 +1,22 @@
 import unittest
-from unittest.mock import Mock, patch, MagicMock
-import numpy as np
-import jax.numpy as jnp
+from unittest.mock import MagicMock, Mock, patch
 
-from src.control.algorithms.base import Controller
-from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
+import jax.numpy as jnp
+import numpy as np
+
 from src.control.acrobat_controller import (
-    Go1ControllerType,
+    GETUP_ENV_ACTION_SCALE,
+    HANDSTAND_ENV_ACTION_SCALE,
+    JOYSTICK_ENV_ACTION_SCALE,
+    JOYSTICK_ENV_DEFAULT_POSE,
     Go1ControllerManager,
+    Go1ControllerType,
     MLPPolicyGetup2HandstandAdapter,
     MLPPolicyJoystick2HandstandAdapter,
-    JOYSTICK_ENV_ACTION_SCALE,
-    HANDSTAND_ENV_ACTION_SCALE,
-    GETUP_ENV_ACTION_SCALE,
-    JOYSTICK_ENV_DEFAULT_POSE,
     create_acrobat_controller_manager,
 )
+from src.control.algorithms.base import Controller
+from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
 
 
 class TestGo1ControllerManager(unittest.TestCase):
