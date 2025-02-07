@@ -34,7 +34,9 @@ class PositionControllerParams(ControllerParams):
     primary_controller: ControllerParams = field(
         default_factory=lambda: SequentialControllerParams()  # or PolarCoordinateControllerParams()
     )
-    fallback_controller: ControllerParams = field(default_factory=lambda: SequentialControllerParams())
+    fallback_controller: ControllerParams = field(
+        default_factory=lambda: SequentialControllerParams()
+    )
     arrival_threshold: float = field(default=0.1)
     max_linear_velocity: float = field(default=1.5)
     max_angular_velocity: float = field(default=np.pi / 2)
@@ -45,7 +47,6 @@ class PositionControllerParams(ControllerParams):
 class PositionCommandInfo:
     pos: np.ndarray
     target_pos: np.ndarray
-    dist: float
     is_arrived: bool
 
 
@@ -72,7 +73,7 @@ class PositionController:
     def build_controller(self, config: PositionControllerParams) -> None:
         """
         Build controllers from configuration.
-        If the item belongs to ControllerParams, build the controller using the factory.
+        If the item belongs to ControllerParams, build the controller using the factory and config.
         else, set the class attribute with the value.
         """
         for f in fields(config):
@@ -80,7 +81,7 @@ class PositionController:
             if issubclass(type(value), ControllerParams):
                 self._controllers[key] = self.factory.build(value)
             else:
-                # Simple but unsafe dynamic attributiuon. No type safety adn validation
+                # Simple but unsafe dynamic attributiuon. No type safety and validation
                 setattr(self, key, value)
 
     def compute_command(self, state: mjx_env.State, target_position: np.ndarray) -> PositionCommand:
@@ -104,19 +105,22 @@ class PositionController:
 
         if self._check_arrival(dist):
             command = jax.numpy.zeros(self.command_dim)
-            info = self._create_return_info(state, ref_state, dist, is_arrived=True)
+            info = self._create_return_info(state, ref_state, is_arrived=True)
             return PositionCommand(command=command, info=info)
 
         try:
-            command = self._controllers["primary_controller"].control(state, ref_state)
+            command = self._primary_control(state, ref_state)
         except Exception:
             command = self._fallback_control(state, ref_state)
 
         command = self._post_process_command(command)
-        info = self._create_return_info(state, ref_state, dist, is_arrived=False)
+        info = self._create_return_info(state, ref_state, is_arrived=False)
         return PositionCommand(command=command, info=info)
 
-    def _fallback_control(self, state: Go1State, ref_state: Go1State) -> np.array:
+    def _primary_control(self, state: Go1State, ref_state: Go1State) -> np.ndarray:
+        return self._controllers["primary_controller"].control(state, ref_state)
+
+    def _fallback_control(self, state: Go1State, ref_state: Go1State) -> np.ndarray:
         return self._controllers["fallback_controller"].control(state, ref_state)
 
     def _compute_target_yaw(self, state: Go1State, target_pos: np.ndarray) -> float:
@@ -135,22 +139,26 @@ class PositionController:
         self,
         state: Go1State,
         ref_state: Go1State,
-        dist: float,
         is_arrived: bool,
     ) -> PositionCommandInfo:
         """Get additional information for the return value."""
         return PositionCommandInfo(
             pos=state.position,
             target_pos=ref_state.position,
-            dist=dist,
             is_arrived=is_arrived,
         )
 
-    def _calculate_reference_state(self, state: Go1State, target_pos: np.ndarray) -> Tuple[Go1State, Go1State]:
+    def _calculate_reference_state(
+        self, state: Go1State, target_pos: np.ndarray
+    ) -> Tuple[Go1State, Go1State]:
         target_yaw = self._compute_target_yaw(state, target_pos)
-        target_yaw, current_yaw = np.unwrap([target_yaw, state.yaw])  # Unwrap angles to handle discontinuity
+        target_yaw, current_yaw = np.unwrap(
+            [target_yaw, state.yaw]
+        )  # Unwrap angles to handle discontinuity
         state.yaw = current_yaw
-        return state, Go1State(position=np.array([target_pos[0], target_pos[1], state.position[2]]), yaw=target_yaw)
+        return state, Go1State(
+            position=np.array([target_pos[0], target_pos[1], state.position[2]]), yaw=target_yaw
+        )
 
     def _post_process_command(self, command: np.ndarray) -> jax.numpy.array:
         return jax.numpy.array(
@@ -220,6 +228,8 @@ def create_position_controller(
     Helper function to create PositionController
     """
     controller_factory.register_controller(SequentialControllerParams, SequentialController)
-    controller_factory.register_controller(PolarCoordinateControllerParams, PolarCoordinateController)
+    controller_factory.register_controller(
+        PolarCoordinateControllerParams, PolarCoordinateController
+    )
 
     return PositionController(factory=controller_factory, config=config)

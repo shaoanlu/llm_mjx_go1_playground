@@ -17,7 +17,9 @@ class MissionConfig:
 
     def __post_init__(self):
         if self.max_sim_steps <= 0 or self.max_attempts <= 0:
-            raise ValueError(f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}")
+            raise ValueError(
+                f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}"
+            )
 
 
 @dataclass(kw_only=True, frozen=True)
@@ -37,7 +39,7 @@ class EpisodeResult:
 
     status: Literal["Stop", "Timeout", "Success"]
     position_history: List[np.ndarray]
-    rollout: List
+    rollout: List[mjx_env.State]
 
 
 class MissionExecuter:
@@ -47,6 +49,7 @@ class MissionExecuter:
     complete navigation missions with retry logic and position tracking.
     """
 
+    SUCCESS_TYPES: ClassVar[tuple[str, ...]] = ("Success",)
     FAILURE_TYPES: ClassVar[tuple[str, ...]] = ("Stop", "Timeout", "Max attempts reached")
 
     def __init__(self, config: MissionConfig, instruciton_prompt: str):
@@ -94,7 +97,7 @@ class MissionExecuter:
                 f"\t{result.position_history=}\n",
             )
 
-            if result.status == "Success":
+            if result.status in self.SUCCESS_TYPES:
                 return MissionResult(
                     status=result.status,
                     position_history=result.position_history,
@@ -109,7 +112,7 @@ class MissionExecuter:
             time.sleep(self.config.retry_delay_sec)
 
         return MissionResult(
-            status="Max attempts reached",
+            status="Failed: Max attempts reached",
             position_history=result.position_history,
             message=prompt,
             waypoints=waypoints,
@@ -118,20 +121,9 @@ class MissionExecuter:
 
     def _validate_waypoints(self, waypoints: List[np.ndarray]) -> List[np.ndarray]:
         goal_position = np.array(self.config.goal)
-        if np.array_equal(waypoints[-1], goal_position):
+        if not np.array_equal(waypoints[-1], goal_position):
             waypoints.append(goal_position)
         return waypoints
-
-    def _create_failure_status(self, result: EpisodeResult) -> MissionResult:
-        """Create formatted failure status with position information."""
-
-        message = self._format_failure_message(result)
-
-        return MissionResult(
-            status=f"Failed: {result.status}",
-            position_history=result.position_history,
-            message=message,
-        )
 
     def _format_failure_message(self, result: EpisodeResult) -> str:
         """Format failure message with position history."""
