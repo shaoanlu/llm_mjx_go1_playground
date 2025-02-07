@@ -116,8 +116,8 @@ class TestMissionExecuter(unittest.TestCase):
         self.config = MissionConfig(
             goal=(4, 4),
             max_sim_steps=1000,
-            retry_delay_sec=5,
-            max_attempts=20,
+            retry_delay_sec=0.001,
+            max_attempts=3,
         )
         self.instruction_prompt = "Navigate to goal"
         self.executer = MissionExecuter(self.config, self.instruction_prompt)
