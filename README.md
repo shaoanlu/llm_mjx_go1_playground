@@ -7,12 +7,7 @@ The LLM is given only the map size (5x5). Throughout the iterations, it receives
 
 ## Requirements
 - Python 3.10+
-- numpy
-- scipy
-- yaml
-- mujoco_playground
-- jax
-- mujoco
+- Refer to [tox.ini](tox.ini) for other dependencies 
 
 
 ## Result
