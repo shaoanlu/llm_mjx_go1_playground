@@ -2,6 +2,7 @@ import time
 from dataclasses import dataclass
 from typing import Callable, ClassVar, List, Literal, Tuple
 
+import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
@@ -61,6 +62,7 @@ class MissionExecuter:
         self,
         planner: GeminiThinkingNavigator,
         execute_single_attempt: Callable,
+        rng: jax.Array,
         print_result: bool = True,
     ) -> Tuple[str, List[np.ndarray]]:
         """
@@ -84,9 +86,11 @@ class MissionExecuter:
             waypoints = self._validate_waypoints(waypoints)
 
             # run the mission (simulation)
+            _, rng = jax.random.split(rng)
             result: EpisodeResult = execute_single_attempt(
                 waypoints=waypoints,
                 max_sim_steps=self.config.max_sim_steps,
+                rng=rng,
             )
             rollout_of_all_attempts.extend(result.rollout)
 

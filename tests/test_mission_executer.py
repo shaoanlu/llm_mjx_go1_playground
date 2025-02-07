@@ -2,6 +2,7 @@ import unittest
 from dataclasses import FrozenInstanceError
 from unittest.mock import Mock, patch
 
+import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
@@ -119,6 +120,7 @@ class TestMissionExecuter(unittest.TestCase):
         self.executer = MissionExecuter(self.config, self.instruction_prompt)
         self.mock_planner = Mock(spec=GeminiThinkingNavigator)
         self.mock_execute_single_attempt = Mock()
+        self.rng = jax.random.PRNGKey(0)
 
     def test_initialization(self):
         """Test MissionExecuter initialization"""
@@ -143,7 +145,9 @@ class TestMissionExecuter(unittest.TestCase):
             status="Success", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt, print_result=False)
+        result = self.executer.execute_mission(
+            self.mock_planner, self.mock_execute_single_attempt, rng=self.rng, print_result=False
+        )
 
         self.assertEqual(result.status, "Success", msg=f"{result.status=}")
         self.assertEqual(len(result.position_history), 2, msg=f"{result.position_history=}")
@@ -162,7 +166,9 @@ class TestMissionExecuter(unittest.TestCase):
             status="Stop", position_history=position_history, rollout=[Mock(spec=mjx_env.State)]
         )
 
-        result = self.executer.execute_mission(self.mock_planner, self.mock_execute_single_attempt, print_result=False)
+        result = self.executer.execute_mission(
+            self.mock_planner, self.mock_execute_single_attempt, rng=self.rng, print_result=False
+        )
 
         self.assertEqual(result.status, "Failed: Max attempts reached", msg=f"{result.status=}")
         self.assertEqual(
