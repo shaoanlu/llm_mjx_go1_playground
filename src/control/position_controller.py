@@ -174,7 +174,7 @@ class SequentialController(Controller):
         x_error, y_error, yaw_error = (ref_state - state).to_array()
         dist = np.linalg.norm([x_error, y_error])
 
-        if yaw_error > self.params.yaw_control_threshold:
+        if abs(yaw_error) > self.params.yaw_control_threshold:
             return np.array([0.0, 0.0, self.params.yaw_control_gain * yaw_error])
         else:
             return np.array([self.params.linear_control_gain * dist, 0.0, 0.0])
