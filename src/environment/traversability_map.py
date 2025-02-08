@@ -19,6 +19,11 @@ class TraversabilityMap:
         self._grid = np.empty(config.grid_size)
         self._scale_factor = self._calculate_scale_factor()
 
+    def load_from_grid(self, grid: np.ndarray) -> np.ndarray:
+        """Load a 2D binary grid"""
+        self._grid = grid
+        return self._grid.copy()
+
     def _calculate_scale_factor(self) -> int:
         """Calculate the scaling factor between image and grid spaces."""
         return self.config.image_size // self.config.grid_size[0]
