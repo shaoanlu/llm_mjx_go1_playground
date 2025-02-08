@@ -24,7 +24,7 @@ class PID(Controller):
         self.integral = 0.0
         self.prev_error = None
 
-    def control(self, state: np.ndarray, ref_state: np.array, error: float) -> np.ndarray:
+    def control(self, state: np.ndarray, ref_state: np.ndarray, error: float) -> np.ndarray:
         if self.prev_error is None:
             self.prev_error = error
         error_diff = (error - self.prev_error) / self.dt
