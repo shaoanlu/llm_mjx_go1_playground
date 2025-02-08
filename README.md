@@ -22,6 +22,8 @@ Leveraging the trained locomotion policy, this demo further enhance its autonomy
 
 ![](examples/gifs/go1_LLM_Navigation.gif)
 
+![](examples/gifs/Go1_LLM_Navigation_fog.gif)
+
 ## Memo
 - `ruff format`
 - `ruff check` or `ruff check --fix`
