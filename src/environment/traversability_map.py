@@ -20,7 +20,10 @@ class TraversabilityMap:
         self._scale_factor = self._calculate_scale_factor()
 
     def load_from_grid(self, grid: np.ndarray) -> np.ndarray:
-        """Load a 2D binary grid"""
+        """
+        The grid is expected to be a binary 2D grid where 1 represents a valid position and 0 an invalid one.
+        The indexing of the grid is (x, y) corresponds to the robot XY position in the scene.
+        """
         self._grid = grid
         return self._grid.copy()
 
