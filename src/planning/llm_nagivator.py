@@ -15,7 +15,7 @@ class GeminiThinkingNavigator(Planner):
         self.model = model
         self.chat = self.model.chats.create(model=model_name)
 
-    def plan(self, prompt: str) -> List[np.ndarray]:
+    def plan(self, prompt: str, **kwargs) -> List[np.ndarray]:
         response = self.chat.send_message([prompt])
         waypoints = eval(_clean_instruction(response.text))  # Convert string to list
         return _convert_to_list_of_numpy_arrays(waypoints)
