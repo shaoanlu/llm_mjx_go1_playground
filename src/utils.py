@@ -47,6 +47,22 @@ class DisjointSet:
 
 
 class MazeGenerator:
+    """
+    A maze generator that creates a maze with a given width and height.
+    The maze is generated using a recursive backtracking algorithm.
+    The maze is represented as a 2D list of characters, where '0' represents a wall and '1' represents a cell.
+
+    Args:
+        width (int): The width of the maze.
+        height (int): The height of the maze.
+
+    Raises:
+        ValueError: If the width or height is less than 1.
+
+    Returns:
+        list: A 2D list representing the maze.
+    """
+
     def __init__(self, width, height):
         if width < 1 or height < 1:
             raise ValueError("Maze dimensions must be positive")

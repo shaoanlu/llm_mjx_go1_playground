@@ -125,6 +125,7 @@ class MissionExecuter:
         )
 
     def _validate_waypoints(self, waypoints: List[np.ndarray]) -> List[np.ndarray]:
+        """Validate waypoints by ensuring the last waypoint is the goal position."""
         goal_position = np.array(self.config.goal)
         if not np.array_equal(waypoints[-1], goal_position):
             waypoints.append(goal_position)

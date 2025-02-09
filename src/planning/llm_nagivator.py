@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 import numpy as np
-from google import genai  # old and new API
+from google import genai
 
 from src.planning.base import Planner
 
