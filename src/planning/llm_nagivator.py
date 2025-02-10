@@ -7,7 +7,7 @@ from google import genai
 from src.planning.base import NavigationPlan, Planner
 
 
-@dataclass
+@dataclass(kw_only=True, frozen=True)
 class LLMNavigationPlan(NavigationPlan):
     waypoints: List[np.ndarray]
     trajectory: List[Any]
