@@ -7,7 +7,6 @@ from typing import Any, List, Protocol
 class NavigationPlan:
     waypoints: List[Any]
     trajectory: List[Any]
-    prompt: str
 
 
 @dataclass

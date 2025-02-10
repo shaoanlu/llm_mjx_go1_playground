@@ -1,5 +1,4 @@
 import logging
-import os
 import unittest
 from pathlib import Path
 from typing import List
@@ -34,34 +33,15 @@ class DummyPlanner:
         return NavigationPlan(
             waypoints=[np.array([0, 0]), np.array([1, 0]), np.array([1, 3]), np.array([4, 3]), np.array([4, 4])],
             trajectory=[],
-            prompt="",
         )
-
-
-class NavigationEnvironment:
-    """Wraps environment setup and cleanup"""
-
-    def __init__(self):
-        self.env = None
-        self.maze_grid = None
-
-    def setup(self):
-        """Initialize environment and generate maze"""
-        os.environ["MUJOCO_GL"] = "egl"
-
-        # Initialize environment
-        self.env = Go1Env(env_name="Go1JoystickFlatTerrain")
-        self.maze_grid = np.ones((5, 5), dtype=np.int32)
-
-        return self.env, self.maze_grid
 
 
 class TestQuadrupedNavigation(unittest.TestCase):
     """End-to-end test for LLM-guided quadruped navigation"""
 
     def setUp(self):
-        self.nav_env = NavigationEnvironment()
-        self.env, self.maze_grid = self.nav_env.setup()
+        self.env = Go1Env(env_name="Go1JoystickFlatTerrain")
+        self.maze_grid = np.ones((5, 5), dtype=np.int32)
         self.config = MissionConfig(goal=(4, 4), max_sim_steps=1000, retry_delay_sec=0.001, max_attempts=1)
 
         # Initialize navigation components

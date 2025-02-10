@@ -1,9 +1,17 @@
-from typing import List, Tuple
+from dataclasses import dataclass
+from typing import Any, List, Tuple
 
 import numpy as np
 from google import genai
 
 from src.planning.base import NavigationPlan, Planner
+
+
+@dataclass
+class LLMNavigationPlan(NavigationPlan):
+    waypoints: List[np.ndarray]
+    trajectory: List[Any]
+    prompt: str
 
 
 class GeminiThinkingNavigator(Planner):
