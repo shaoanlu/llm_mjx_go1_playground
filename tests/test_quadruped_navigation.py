@@ -71,7 +71,7 @@ class TestQuadrupedNavigation(unittest.TestCase):
     def test_navigation_success(self):
         """Test that robot can successfully navigate to goal"""
 
-        mission = MissionExecuter(config=self.config, instruction_prompt=Path("examples/prompt.txt").read_text())
+        mission = MissionExecuter(config=self.config, instruction_prompt="Dummy instruction for integration test.")
 
         # Run navigation mission
         result = mission.execute_mission(
