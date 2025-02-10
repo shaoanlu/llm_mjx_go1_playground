@@ -54,9 +54,9 @@ class MissionExecuter:
     SUCCESS_TYPES: ClassVar[tuple[str, ...]] = ("Success",)
     FAILURE_TYPES: ClassVar[tuple[str, ...]] = ("Stop", "Timeout", "Max attempts reached")
 
-    def __init__(self, config: MissionConfig, instruciton_prompt: str):
+    def __init__(self, config: MissionConfig, instruction_prompt: str):
         self.config = config
-        self.instruction_prompt: str = instruciton_prompt
+        self.instruction_prompt: str = instruction_prompt
         self.current_position: np.ndarray | None = None
         self.waypoints: List[Tuple] = []
         self.position_history = []
