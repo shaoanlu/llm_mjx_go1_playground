@@ -3,7 +3,7 @@ from typing import List, Tuple
 import numpy as np
 from google import genai
 
-from src.planning.base import Planner
+from src.planning.base import NavigationPlan, Planner
 
 
 class GeminiThinkingNavigator(Planner):
@@ -18,7 +18,11 @@ class GeminiThinkingNavigator(Planner):
     def plan(self, prompt: str, **kwargs) -> List[np.ndarray]:
         response = self.chat.send_message([prompt])
         waypoints = eval(_clean_instruction(response.text))  # Convert string to list
-        return _convert_to_list_of_numpy_arrays(waypoints)
+        waypoints = _convert_to_list_of_numpy_arrays(waypoints)
+        return self._create_navigation_plan(waypoints=waypoints, prompt=prompt)
+
+    def _create_navigation_plan(self, waypoints: List[np.ndarray], prompt: str, **kwargs) -> NavigationPlan:
+        return NavigationPlan(waypoints=waypoints, trajectory=[], prompt=prompt)
 
     def reset_chat(self):
         self.chat = self.model.chats.create(model=self.model_name)

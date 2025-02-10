@@ -1,6 +1,13 @@
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Any, Protocol
+from typing import Any, List, Protocol
+
+
+@dataclass(kw_only=True, frozen=True)
+class NavigationPlan:
+    waypoints: List[Any]
+    trajectory: List[Any]
+    prompt: str
 
 
 @dataclass

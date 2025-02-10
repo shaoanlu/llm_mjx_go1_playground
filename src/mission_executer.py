@@ -6,6 +6,7 @@ import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
+from src.planning.base import NavigationPlan
 from src.planning.llm_nagivator import GeminiThinkingNavigator
 
 
@@ -43,9 +44,11 @@ class EpisodeResult:
 
 class MissionExecuter:
     """Controls the execution of navigation missions using LLM-guided waypoints.
-
     Coordinates between grid management, navigation, and LLM components to execute
     complete navigation missions with retry logic and position tracking.
+
+    This class is responsible for interactions with the LLM navigation planner,
+    while keeping itself agnostic to the specifics of the navigation mission.
     """
 
     SUCCESS_TYPES: ClassVar[tuple[str, ...]] = ("Success",)
@@ -83,7 +86,8 @@ class MissionExecuter:
             # Prompt the LLM to get waypoints suggestion
             if attempt == 0:
                 prompt: str = self.instruction_prompt + "\nStart. you are at somwwhere near (0, 0)."
-            waypoints = planner.plan(prompt=prompt)
+            nav_plan: NavigationPlan = planner.plan(prompt=prompt)
+            waypoints = list(nav_plan.waypoints)
             waypoints = self._validate_waypoints(waypoints)
 
             # run the mission (simulation)

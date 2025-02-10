@@ -7,6 +7,7 @@ import numpy as np
 from mujoco_playground._src import mjx_env
 
 from src.mission_executer import EpisodeResult, MissionConfig, MissionExecuter, MissionResult
+from src.planning.base import NavigationPlan
 from src.planning.llm_nagivator import GeminiThinkingNavigator
 
 
@@ -138,7 +139,7 @@ class TestMissionExecuter(unittest.TestCase):
         """Test successful mission execution"""
         # Setup mock returns
         waypoints = [np.array([0, 0]), np.array([2, 2]), np.array([4, 4])]
-        self.mock_planner.plan.return_value = waypoints
+        self.mock_planner.plan.return_value = NavigationPlan(waypoints=waypoints, trajectory=[], prompt="")
 
         position_history = [np.array([0, 0]), np.array([4, 4])]
         self.mock_execute_single_attempt.return_value = EpisodeResult(
@@ -158,8 +159,8 @@ class TestMissionExecuter(unittest.TestCase):
     def test_failed_mission_execution(self, mock_sleep):
         """Test failed mission execution (max attempts reached)"""
         # Setup mock returns
-        waypoints = [np.array([0, 0]), np.array([2, 2])]
-        self.mock_planner.plan.return_value = waypoints
+        waypoints = [np.array([0, 0]), np.array([2, 2]), np.array([4, 4])]
+        self.mock_planner.plan.return_value = NavigationPlan(waypoints=waypoints, trajectory=[], prompt="")
 
         position_history = [np.array([0, 0]), np.array([1, 1])]
         self.mock_execute_single_attempt.return_value = EpisodeResult(

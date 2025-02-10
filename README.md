@@ -24,6 +24,14 @@ Leveraging the trained locomotion policy, this demo further enhance its autonomy
 
 ![](examples/gifs/Go1_LLM_Navigation_fog.gif)
 
+
+## Learning Notes
+- Each Go robot task uses a different environmental configuration (including noise parameters, mojoco model, initial poses, randomization settings, actuation calculations, etc.). Policies trained for one task generally don't perform well when applied to different task environments.
+  - I was a little bit surprised as I expect RL policies be more robust.
+  - Joystick XML: `FEET_ONLY_FLAT_TERRAIN_XML` (only feet-ground collision is enabled, also diff trunk collision geometry)
+  - Handstand XML: `FULL_FLAT_TERRAIN_XML`
+- AI generates much better test scripts when the code is  modularized and have clearly defined interface
+
 ## Memo
 - `ruff format`
 - `ruff check` or `ruff check --fix`
