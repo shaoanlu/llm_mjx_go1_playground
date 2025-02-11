@@ -21,6 +21,7 @@ class GeminiThinkingNavigator(Planner):
         model_name: str = "gemini-2.0-flash-thinking-exp",
     ):
         self.model = model
+        self.model_name = model_name
         self.chat = self.model.chats.create(model=model_name)
 
     def plan(self, prompt: str, **kwargs) -> List[np.ndarray]:
