@@ -1,4 +1,7 @@
-import logging
+"""
+This file contains an end-to-end test for LLM-guided quadruped navigation.
+"""
+
 import unittest
 from typing import List
 
@@ -15,11 +18,6 @@ from src.control.position_controller import (
 from src.environment.env_wrapper import Go1Env
 from src.mission_executer import EpisodeResult, MissionConfig, MissionExecuter
 from src.planning.base import NavigationPlan
-
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 class DummyPlanner:
@@ -39,8 +37,9 @@ class TestQuadrupedNavigation(unittest.TestCase):
     """End-to-end test for LLM-guided quadruped navigation"""
 
     def setUp(self):
+        # Initialize environment
         self.env = Go1Env(env_name="Go1JoystickFlatTerrain")
-        self.maze_grid = np.ones((5, 5), dtype=np.int32)
+        self.maze_grid = np.ones((5, 5), dtype=np.int32)  # Create a 5x5 maze that has all cells traversable
         self.config = MissionConfig(goal=(4, 4), max_sim_steps=1000, retry_delay_sec=0.001, max_attempts=1)
 
         # Initialize navigation components
