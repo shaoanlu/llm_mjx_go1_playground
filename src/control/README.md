@@ -74,7 +74,7 @@ To add a new controller type (e.g., MPPI):
 4. Add/Update unit tests
 
 ## Configuration
-Controllers are configured via YAML files:
+Controllers can be configured via YAML files:
 ```yaml
 algorithm_type: "mppi"
 Q: [1.0, 1.0, 1.0, 1.0, 1.0]

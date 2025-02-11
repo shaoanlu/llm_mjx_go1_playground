@@ -4,7 +4,7 @@ The repository implements a modular robotics control system with four main compo
 
 1. Control (`/control`)
 2. Planning (`/planning`)
-3. Simulation environment (`/env`)
+3. Simulation environment (`/environment`)
 
 ## Core Components
 ### 1. Control
@@ -23,7 +23,7 @@ Strategy Pattern
 - [Planner](planning/base.py) - Planning interface
 
 ### 4. Simulation Environment
-- [Environment](env/base.py) - Environment interface
+- [Environment](environment/base.py) - Environment interface
 
 
 ## Configuration
