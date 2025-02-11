@@ -30,7 +30,7 @@ class GeminiThinkingNavigator(Planner):
         return self._create_navigation_plan(waypoints=waypoints, prompt=prompt)
 
     def _create_navigation_plan(self, waypoints: List[np.ndarray], prompt: str, **kwargs) -> NavigationPlan:
-        return NavigationPlan(waypoints=waypoints, trajectory=[], prompt=prompt)
+        return LLMNavigationPlan(waypoints=waypoints, trajectory=[], prompt=prompt)
 
     def reset_chat(self):
         self.chat = self.model.chats.create(model=self.model_name)
