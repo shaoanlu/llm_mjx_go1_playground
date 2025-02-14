@@ -1,6 +1,89 @@
 # Control System Architecture
 This folder implements a flexible control system architecture that supports multiple control algorithms (PID, MPC, etc.) through a modular, extensible design. The architecture follows factory design patterns to ensure maintainability, testability, and ease of extension.
 
+```mermaid
+classDiagram
+    %% Base Classes
+    class Controller {
+        <<abstract>>
+        +control(state: ndarray) ndarray
+        +reset()
+    }
+    class ControllerParams {
+        <<abstract>>
+        +algorithm_type: str
+        +from_dict(data: dict)*
+    }
+
+    %% Factory Classes
+    class ControllerFactory {
+        -controller_map: Dict
+        -config_factory: ConfigFactory
+        +build(params: ControllerParams)
+        +build_from_dict(params: Dict)
+        +register_controller()
+    }
+    class ConfigFactory {
+        -params_map: Dict
+        +build(config: Dict)
+        +register_config()
+    }
+
+    %% Controller Implementations
+    class PID {
+        -kp: float
+        -ki: float
+        -kd: float
+        +control()
+    }
+    class LQR {
+        -A: ndarray
+        -B: ndarray
+        -Q: ndarray
+        -R: ndarray
+        +control()
+        +update_model()
+        +update_cost()
+    }
+    class MLPPolicy {
+        -params: MLPPolicyParams
+        +control()
+        +build_network()
+    }
+
+    %% Manager and Position Controllers
+    class Go1ControllerManager {
+        -controllers: Dict
+        -active_type: Go1ControllerType
+        +set_command()
+        +switch_controller()
+        +control()
+    }
+    class PositionController {
+        -controllers: Dict
+        -command_dim: int
+        +compute_command()
+        +build_controller()
+    }
+
+    %% State & Parameter Classes
+    class Go1State {
+        +position: ndarray
+        +yaw: float
+        +from_mjx_state()
+        +to_array()
+    }
+
+    %% Relationships
+    Controller <|-- PID
+    Controller <|-- LQR
+    Controller <|-- MLPPolicy
+    ControllerFactory --> Controller
+    ConfigFactory --> ControllerParams
+    Go1ControllerManager --> Controller
+    PositionController --> Controller
+```
+
 ## Design Decisions
 ### Factory Pattern Implementation
 We use the Factory pattern for several key reasons:
