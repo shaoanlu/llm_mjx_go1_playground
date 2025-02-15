@@ -1,34 +1,32 @@
 ```mermaid
 classDiagram
-    %% Base Classes
     class Planner {
-        <<Protocol>>
-        +plan()**
+        <<Interface>>
+        +plan(**kwargs)
     }
+
     class NavigationPlan {
-        +waypoints: List
-        +trajectory: List
-    }
-    class PlannerParams {
-        +planner_type: str
+      <<Interface>>
+        +waypoints : List
+        +trajectory : List
     }
 
-    %% LLM Navigation Classes
     class GeminiThinkingNavigator {
-        -model: genai.Client
-        -model_name: str
-        -chat: Chat
-        +plan(prompt: str)
+        -model : genai.Client
+        -model_name : str
+        -chat : Chat
+        +plan(prompt: str, **kwargs) : NavigationPlan
         +reset_chat()
-        -create_navigation_plan()
-    }
-    class LLMNavigationPlan {
-        +waypoints: List[ndarray]
-        +trajectory: List
-        +prompt: str
+        -_create_navigation_plan(waypoints, prompt, **kwargs)
     }
 
-    %% Relationships
-    Planner <|-- GeminiThinkingNavigator
-    NavigationPlan <|-- LLMNavigationPlan
+    class LLMNavigationPlan {
+        +waypoints : List[ndarray]
+        +trajectory : List
+        +prompt : str
+    }
+
+    Planner <|.. GeminiThinkingNavigator
+    NavigationPlan <|.. LLMNavigationPlan
+    GeminiThinkingNavigator --> LLMNavigationPlan : creates
 ```

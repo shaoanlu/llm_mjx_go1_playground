@@ -1,49 +1,57 @@
 ```mermaid
 classDiagram
-    %% Base Classes
     class Env {
-        <<abstract>>
-        +config: Dict
-        +step(action: ndarray)*
-        -_init()*
+        <<Interface>>
+        +config : Dict
+        +step(action: ndarray)
+        -_init()
     }
 
-    %% Environment Implementation
     class Go1Env {
-        +go1_env_names: List[str]
-        +env_cfg: Dict
-        +env: mjx_env
-        +step()
-        +reset()
-        +load_config()
+        +go1_env_names : List[str]
+        +env_cfg : Dict
+        +env : mjx_env
+        +step(state, action)
+        +reset(rng)
+        +load_config(env_name)
         +render()
-        +dt: float
+        +dt : float
+        +get_global_linvel
+        +get_gyro
     }
 
-    %% Map and Maze Classes
     class TraversabilityMap {
-        -grid: ndarray
-        -scale_factor: int
-        +load_from_grid()
-        +load_from_image()
-        +is_valid_position()
+        -config : TraversabilityMapConfig
+        -_grid : ndarray
+        -_scale_factor : int
+        -_image: ndarray
+        +load_from_grid(grid)
+        -_calculate_scale_factor()
+        -_convert_image_to_grid_coords(x, y)
+        -_validate_image(image)
+        +load_from_image(image_path)
+        +is_valid_position(position)
+        +grid
     }
+
     class TraversabilityMapConfig {
-        +grid_size: Tuple
-        +image_size: int
-        +threshold: int
+      +grid_size
+      +image_size
+      +threshold
     }
-    class MazeGenerator {
+
+    class MazeGenerator{
         -width: int
         -height: int
         -maze: List[List]
         +generate()
-        -validate_path()
-        -convert_maze()
+        -_validate_path()
+        -_convert_maze()
     }
 
-    %% Relationships
     Env <|-- Go1Env
-    TraversabilityMap --> TraversabilityMapConfig
+    TraversabilityMap *-- TraversabilityMapConfig : has
+    Go1Env --> mjx_env : uses
+    generate_maze_scene_xml ..> MazeGenerator
     MazeGenerator ..> TraversabilityMap : generates maze for
 ```
