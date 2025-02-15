@@ -8,6 +8,7 @@ from mujoco_playground._src import mjx_env
 
 from src.planning.base import NavigationPlan
 from src.planning.llm_nagivator import GeminiThinkingNavigator
+from src.utils import load_dataclass_from_dict
 
 
 @dataclass(kw_only=True)
@@ -20,6 +21,10 @@ class MissionConfig:
     def __post_init__(self):
         if self.max_sim_steps <= 0 or self.max_attempts <= 0:
             raise ValueError(f"Steps and attempts must be positive, {self.max_sim_steps=}, {self.max_attempts=}")
+
+    @classmethod
+    def from_dict(cls, data: dict, convert_list_to_array=False):
+        return load_dataclass_from_dict(cls, data, convert_list_to_array=convert_list_to_array)
 
 
 @dataclass(kw_only=True, frozen=True)

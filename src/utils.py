@@ -1,11 +1,29 @@
 import numpy as np
 import yaml
+from jinja2 import Template
 
 
 def load_yaml(path: str) -> dict:
     with open(path, "r") as f:
         config = yaml.safe_load(f)
     return config
+
+
+def load_yaml_with_jinja(path: str) -> dict:
+    with open(path, "r") as f:
+        yaml_content = f.read()
+
+    # Load YAML first to extract variables as a dictionary
+    initial_config = yaml.safe_load(yaml_content)
+
+    # Flatten the dictionary for Jinja2
+    context = {**initial_config}  # Ensures all top-level keys are accessible
+
+    # Render Jinja2 template with extracted variables
+    rendered_yaml = Template(yaml_content).render(context)
+
+    # Load final YAML after substitution
+    return yaml.safe_load(rendered_yaml)
 
 
 def load_dataclass_from_dict(dataclass, data_dict, convert_list_to_array=False):

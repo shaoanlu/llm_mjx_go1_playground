@@ -1,0 +1,41 @@
+mission:
+  goal: [4, 4]
+  max_sim_steps: 1000
+  retry_delay_sec: 5
+  max_attempts: 20
+
+control:
+  position_controller:
+    algorithm_type: "position_controller"
+    command_dim: 3
+    arrival_threshold: 0.1
+    max_linear_velocity: 1.5
+    max_angular_velocity: 1.57 # pi/2
+    primary_controller:
+      algorithm_type: "seq_controller"
+      yaw_control_threshold: 0.175 # pi/18
+      yaw_control_gain: 7.0
+      linear_control_gain: 2.0
+    fallback_controller:
+      algorithm_type: "seq_controller"
+      yaw_control_threshold: 0.175 # pi/18
+      yaw_control_gain: 7.0
+      linear_control_gain: 2.0
+
+  locomotion_controller:
+    algorithm_type: "mlp"
+    nn_num_layers: 4
+    npy_path: "src/control/nn_params/{{ environment.mujoco_playground.name }}"
+
+environment:
+  mujoco_playground:
+    name: "Go1JoystickFlatTerrain"
+    random_key: 0
+  map:
+    grid_size: [5, 5]
+    image_size: 50
+    threshold: 125
+
+planning:
+  llm_navigator:
+    model_name: "gemini-2.0-flash-thinking-exp"

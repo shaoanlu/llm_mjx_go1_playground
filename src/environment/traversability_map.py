@@ -5,12 +5,18 @@ from typing import Tuple
 import numpy as np
 from matplotlib import pyplot as plt
 
+from src.utils import load_dataclass_from_dict
+
 
 @dataclass
 class TraversabilityMapConfig:
     grid_size: Tuple[int, int] = (5, 5)
     image_size: int = 50  # 50x50 RGB image representing traversibility of a 5x5 maze
     threshold: int = 125  # White color
+
+    @classmethod
+    def from_dict(cls, data: dict, convert_list_to_array=False):
+        return load_dataclass_from_dict(cls, data, convert_list_to_array=convert_list_to_array)
 
 
 class TraversabilityMap:
