@@ -57,3 +57,7 @@ class TestSequentialController(unittest.TestCase):
         control = self.controller.control(state, ref_state)
         expected_control = np.array([self.config.linear_control_gain * 1.0, 0.0, 0.0])
         np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
+
+
+if __name__ == "__main__":
+    unittest.main()

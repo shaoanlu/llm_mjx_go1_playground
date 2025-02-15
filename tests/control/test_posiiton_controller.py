@@ -6,13 +6,13 @@ import jax.numpy as jnp
 import numpy as np
 
 from src.control.algorithms.base import Controller, ControllerParams
+from src.control.algorithms.polar_coord_control import PolarCoordinateControllerParams
+from src.control.algorithms.seq_pos_control import SequentialControllerParams
 from src.control.controller_factory import ControllerFactory
 from src.control.position_controller import (
-    PolarCoordinateControllerParams,
     PositionCommandInfo,
     PositionController,
     PositionControllerParams,
-    SequentialControllerParams,
 )
 from src.utils import load_yaml
 

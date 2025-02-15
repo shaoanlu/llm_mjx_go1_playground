@@ -41,3 +41,7 @@ class TestPolarCoordinateController(unittest.TestCase):
         control = self.controller.control(state, ref_state)
         self.assertEqual(len(control), 3, msg=f"{len(control)=}")
         self.assertNotEqual(control[2], 0, msg=f"{control=}")  # Should rotate to target yaw
+
+
+if __name__ == "__main__":
+    unittest.main()
