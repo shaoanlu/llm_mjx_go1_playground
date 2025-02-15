@@ -154,3 +154,20 @@ class PositionController:
                 np.clip(command[2], -self.max_angular_velocity, self.max_angular_velocity),
             ]
         )
+
+
+def create_position_controller(
+    controller_factory: ControllerFactory, config: PositionControllerParams
+) -> PositionController:
+    """
+    Helper function to create PositionController
+
+    Usage:
+        config = PositionControllerParams(
+            primary_controller=PolarCoordinateControllerParams(),
+            fallback_controller=SequentialControllerParams(),
+        )
+        command_generator = create_position_controller(controller_factory=ControllerFactory(), config=config)
+    """
+
+    return PositionController(factory=controller_factory, config=config)
