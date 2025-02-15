@@ -8,46 +8,16 @@ import numpy as np
 from src.control.algorithms.base import Controller, ControllerParams
 from src.control.controller_factory import ControllerFactory
 from src.control.position_controller import (
-    PolarCoordinateController,
     PolarCoordinateControllerParams,
     PositionCommandInfo,
     PositionController,
     PositionControllerParams,
-    SequentialController,
     SequentialControllerParams,
-    create_position_controller,
 )
-from src.control.state import Go1State
+from src.utils import load_yaml
 
 
 class TestControllerParams(unittest.TestCase):
-    """Test parameter dataclasses"""
-
-    def test_sequential_controller_params(self):
-        """Test SequentialControllerParams initialization and defaults"""
-        params = SequentialControllerParams()
-        self.assertEqual(params.yaw_control_threshold, np.pi / 18)
-        self.assertEqual(params.yaw_control_gain, 7.0)
-        self.assertEqual(params.linear_control_gain, 2.0)
-        self.assertEqual(params.algorithm_type, "seq_controller")
-
-        # Test custom values
-        custom_params = SequentialControllerParams(
-            yaw_control_threshold=0.5, yaw_control_gain=5.0, linear_control_gain=3.0
-        )
-        self.assertEqual(custom_params.yaw_control_threshold, 0.5)
-        self.assertEqual(custom_params.yaw_control_gain, 5.0)
-        self.assertEqual(custom_params.linear_control_gain, 3.0)
-
-    def test_polar_coordinate_controller_params(self):
-        """Test PolarCoordinateControllerParams initialization and defaults"""
-        params = PolarCoordinateControllerParams()
-        self.assertEqual(params.linear_control_gain, 2.0)
-        self.assertEqual(params.yaw_control_gain1, 7.0)
-        self.assertEqual(params.yaw_control_gain2, 1.0)
-        self.assertEqual(params.rho_threshold, 0.1)
-        self.assertEqual(params.algorithm_type, "polar_coord_controller")
-
     def test_position_controller_params(self):
         """Test PositionControllerParams initialization and defaults"""
         params = PositionControllerParams()
@@ -57,6 +27,40 @@ class TestControllerParams(unittest.TestCase):
         self.assertEqual(params.max_angular_velocity, np.pi / 2)
         self.assertIsInstance(params.primary_controller, SequentialControllerParams)
         self.assertIsInstance(params.fallback_controller, SequentialControllerParams)
+
+    def test_position_controller_params_from_dict(self):
+        """Test PositionControllerParams initialization from dictionary"""
+        # Test with custom values and nested controllers
+        config_dict = load_yaml("tests/control/fixtures/position_controller.yaml")
+
+        params = PositionControllerParams.from_dict(config_dict)
+
+        # Verify all parameters were set correctly
+        self.assertEqual(params.command_dim, 1)
+        self.assertEqual(params.arrival_threshold, 1.2)
+        self.assertEqual(params.max_linear_velocity, 3.4)
+        self.assertEqual(params.max_angular_velocity, 5.6)
+        self.assertEqual(params.algorithm_type, "position_controller")
+
+        # Verify nested controllers were instantiated correctly
+        self.assertIsInstance(params.primary_controller, SequentialControllerParams)
+        self.assertEqual(params.primary_controller.yaw_control_threshold, 0.123)
+        self.assertEqual(params.primary_controller.yaw_control_gain, 0.456)
+        self.assertEqual(params.primary_controller.linear_control_gain, 0.789)
+        self.assertEqual(params.primary_controller.algorithm_type, "seq_controller")
+
+        self.assertIsInstance(params.fallback_controller, PolarCoordinateControllerParams)
+        self.assertEqual(params.fallback_controller.linear_control_gain, 123.0)
+        self.assertEqual(params.fallback_controller.yaw_control_gain1, 456.0)
+        self.assertEqual(params.fallback_controller.yaw_control_gain2, 789.0)
+        self.assertEqual(params.fallback_controller.rho_threshold, 10.0)
+        self.assertEqual(params.fallback_controller.algorithm_type, "polar_coord_controller")
+
+        # Test that original dict was not modified
+        original_dict = load_yaml("tests/control/fixtures/position_controller.yaml")
+        params = PositionControllerParams.from_dict(original_dict)
+        self.assertEqual(original_dict["primary_controller"]["algorithm_type"], "seq_controller")
+        self.assertEqual(original_dict["fallback_controller"]["algorithm_type"], "polar_coord_controller")
 
 
 class TestPositionCommandInfo(unittest.TestCase):
@@ -75,65 +79,6 @@ class TestPositionCommandInfo(unittest.TestCase):
         # Test immutability
         with self.assertRaises(FrozenInstanceError):
             info.is_arrived = True
-
-
-class TestSequentialController(unittest.TestCase):
-    """Test SequentialController behavior"""
-
-    def setUp(self):
-        self.config = SequentialControllerParams()
-        self.controller = SequentialController(self.config)
-
-    def test_yaw_control(self):
-        """Test yaw control when yaw error is above threshold"""
-        state = Go1State(position=np.array([0, 0, 0]), yaw=0)
-
-        # Case 1: large positive yaw error
-        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=np.pi / 2)
-        control = self.controller.control(state, ref_state)
-        expected_control = np.array([0.0, 0.0, self.config.yaw_control_gain * np.pi / 2])
-        np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
-
-        # Case 2: large negative yaw error
-        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=-np.pi / 3)
-        control = self.controller.control(state, ref_state)
-        expected_control = np.array([0.0, 0.0, self.config.yaw_control_gain * -np.pi / 3])
-        np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
-
-    def test_linear_control(self):
-        """Test linear control when yaw error is below threshold"""
-        state = Go1State(position=np.array([0, 0, 0]), yaw=0)
-        ref_state = Go1State(position=np.array([1, 0, 0]), yaw=0)
-
-        control = self.controller.control(state, ref_state)
-        expected_control = np.array([self.config.linear_control_gain * 1.0, 0.0, 0.0])
-        np.testing.assert_array_almost_equal(control, expected_control, err_msg=f"{control=}")
-
-
-class TestPolarCoordinateController(unittest.TestCase):
-    """Test PolarCoordinateController behavior"""
-
-    def setUp(self):
-        self.config = PolarCoordinateControllerParams()
-        self.controller = PolarCoordinateController(self.config)
-
-    def test_far_control(self):
-        """Test control when robot is far from target (rho > threshold)"""
-        state = Go1State(position=np.array([0, 0, 0]), yaw=0)
-        ref_state = Go1State(position=np.array([1, 1, 0]), yaw=0)
-
-        control = self.controller.control(state, ref_state)
-        self.assertEqual(len(control), 3)
-        self.assertGreater(control[0], 0)  # Should move forward
-
-    def test_near_control(self):
-        """Test control when robot is near target (rho < threshold)"""
-        state = Go1State(position=np.array([0, 0, 0]), yaw=0)
-        ref_state = Go1State(position=np.array([0.05, 0, 0]), yaw=np.pi / 4)
-
-        control = self.controller.control(state, ref_state)
-        self.assertEqual(len(control), 3, msg=f"{len(control)=}")
-        self.assertNotEqual(control[2], 0, msg=f"{control=}")  # Should rotate to target yaw
 
 
 class TestPositionController(unittest.TestCase):
@@ -219,23 +164,6 @@ class TestPositionController(unittest.TestCase):
             processed,
             jnp.array([1.5, 0.0, np.pi / 2]),  # Should be clipped to max values
         )
-
-
-class TestCreatePositionController(unittest.TestCase):
-    """Test position controller factory function"""
-
-    def test_controller_creation(self):
-        """Test creation of position controller with factory"""
-        factory = Mock(spec=ControllerFactory)
-        config = PositionControllerParams()
-
-        controller = create_position_controller(factory, config)
-
-        # Verify controller registrations
-        factory.register_controller.assert_any_call(SequentialControllerParams, SequentialController)
-        factory.register_controller.assert_any_call(PolarCoordinateControllerParams, PolarCoordinateController)
-
-        self.assertIsInstance(controller, PositionController, msg=f"{type(controller)=}")
 
 
 if __name__ == "__main__":

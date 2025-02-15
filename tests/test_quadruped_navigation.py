@@ -9,12 +9,9 @@ import jax
 import numpy as np
 
 from src.control.algorithms.mlp import MLPPolicyParams
+from src.control.algorithms.seq_pos_control import SequentialControllerParams
 from src.control.controller_factory import ControllerFactory
-from src.control.position_controller import (
-    PositionControllerParams,
-    SequentialControllerParams,
-    create_position_controller,
-)
+from src.control.position_controller import PositionController, PositionControllerParams
 from src.environment.env_wrapper import Go1Env
 from src.mission_executer import EpisodeResult, MissionConfig, MissionExecuter
 from src.planning.base import NavigationPlan
@@ -56,7 +53,7 @@ class TestQuadrupedNavigation(unittest.TestCase):
             primary_controller=SequentialControllerParams(),
             fallback_controller=SequentialControllerParams(),
         )
-        return create_position_controller(factory, config)
+        return PositionController(factory, config)
 
     def _setup_command_follower(self):
         """Initialize MLP policy controller"""

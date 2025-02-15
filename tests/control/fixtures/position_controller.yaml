@@ -1,0 +1,16 @@
+algorithm_type: "position_controller"
+command_dim: 1
+arrival_threshold: 1.2
+max_linear_velocity: 3.4
+max_angular_velocity: 5.6
+primary_controller:
+  algorithm_type: "seq_controller"
+  yaw_control_threshold: 0.123
+  yaw_control_gain: 0.456
+  linear_control_gain: 0.789
+fallback_controller:
+  algorithm_type: "polar_coord_controller"
+  linear_control_gain: 123.0
+  yaw_control_gain1: 456.0
+  yaw_control_gain2: 789.0
+  rho_threshold: 10.0

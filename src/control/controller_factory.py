@@ -4,6 +4,8 @@ from src.control.algorithms.base import Controller, ControllerParams
 from src.control.algorithms.lqr import LQR, LQRParams
 from src.control.algorithms.mlp import MLPPolicy, MLPPolicyParams
 from src.control.algorithms.pid import PID, PIDParams
+from src.control.algorithms.polar_coord_control import PolarCoordinateController, PolarCoordinateControllerParams
+from src.control.algorithms.seq_pos_control import SequentialController, SequentialControllerParams
 
 
 class ConfigFactory:
@@ -17,6 +19,8 @@ class ConfigFactory:
             "mlp": MLPPolicyParams,
             "pid": PIDParams,
             "lqr": LQRParams,
+            "seq_controller": SequentialControllerParams,
+            "polar_coord_controller": PolarCoordinateControllerParams,
         }
 
     def register_config(self, key: str, value: Type[ControllerParams]) -> None:
@@ -50,6 +54,8 @@ class ControllerFactory:
             MLPPolicyParams: MLPPolicy,
             PIDParams: PID,
             LQRParams: LQR,
+            SequentialControllerParams: SequentialController,
+            PolarCoordinateControllerParams: PolarCoordinateController,
         }
         self.config_factory: ConfigFactory | None = None
 

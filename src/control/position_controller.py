@@ -5,27 +5,11 @@ import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
-from src.control.algorithms.base import Controller, ControllerParams
-from src.control.controller_factory import ControllerFactory
+from src.control.algorithms.base import ControllerParams
+from src.control.algorithms.seq_pos_control import SequentialControllerParams
+from src.control.controller_factory import ConfigFactory, ControllerFactory
 from src.control.state import Go1State
-
-
-@dataclass(kw_only=True)
-class SequentialControllerParams(ControllerParams):
-    yaw_control_threshold: float = field(default=np.pi / 18)
-    yaw_control_gain: float = field(default=7.0)
-    linear_control_gain: float = field(default=2.0)
-    algorithm_type: str = field(default="seq_controller")
-
-
-@dataclass(kw_only=True)
-class PolarCoordinateControllerParams(ControllerParams):
-    # make sure yaw_control_gain1 - linear_control_gain > yaw_control_gain2 for local stability
-    linear_control_gain: float = field(default=2.0)
-    yaw_control_gain1: float = field(default=7.0)
-    yaw_control_gain2: float = field(default=1.0)
-    rho_threshold: float = field(default=0.1)
-    algorithm_type: str = field(default="polar_coord_controller")
+from src.utils import load_dataclass_from_dict
 
 
 @dataclass(kw_only=True)
@@ -39,6 +23,16 @@ class PositionControllerParams(ControllerParams):
     max_linear_velocity: float = field(default=1.5)
     max_angular_velocity: float = field(default=np.pi / 2)
     algorithm_type: str = field(default="position_controller")
+
+    @classmethod
+    def from_dict(cls, data: dict, convert_list_to_array=False):
+        import copy
+
+        config_factory = ConfigFactory()
+        new_data = copy.deepcopy(data)  # Prevent modifying the original data
+        new_data["primary_controller"] = config_factory.build(new_data["primary_controller"])
+        new_data["fallback_controller"] = config_factory.build(new_data["fallback_controller"])
+        return load_dataclass_from_dict(cls, new_data, convert_list_to_array=convert_list_to_array)
 
 
 @dataclass(kw_only=True, frozen=True)
@@ -160,73 +154,3 @@ class PositionController:
                 np.clip(command[2], -self.max_angular_velocity, self.max_angular_velocity),
             ]
         )
-
-
-class SequentialController(Controller):
-    """
-    Simple rule-based proportional control
-    """
-
-    def __init__(self, config: SequentialControllerParams):
-        self.params = config
-
-    def control(self, state: Go1State, ref_state: Go1State, **kwargs) -> np.ndarray:
-        x_error, y_error, yaw_error = (ref_state - state).to_array()
-        dist = np.linalg.norm([x_error, y_error])
-
-        if abs(yaw_error) > self.params.yaw_control_threshold:
-            return np.array([0.0, 0.0, self.params.yaw_control_gain * yaw_error])
-        else:
-            return np.array([self.params.linear_control_gain * dist, 0.0, 0.0])
-
-
-class PolarCoordinateController(Controller):
-    """
-    http://www.cs.cmu.edu/~rasc/Download/AMRobots3.pdf
-    https://doi.org/10.1177/1729881418806435
-    """
-
-    def __init__(self, config: PolarCoordinateControllerParams):
-        self.params = config
-
-    def control(self, state: Go1State, ref_state: Go1State, **kwargs) -> np.ndarray:
-        # Error calculation
-        tar_yaw, yaw = np.unwrap([ref_state.yaw, state.yaw])
-        error_x = ref_state.position[0] - state.position[0]
-        error_y = ref_state.position[1] - state.position[1]
-        error_yaw = tar_yaw - yaw
-
-        # Polar coordinate transformation
-        rho = np.sqrt(error_x**2 + error_y**2)
-        alpha = np.arctan2(error_y, error_x) - yaw
-        beta = alpha + yaw
-
-        # Control inputs
-        k1 = self.params.linear_control_gain
-        k2 = self.params.yaw_control_gain1
-        k3 = self.params.yaw_control_gain2
-        v = k1 * rho * np.cos(alpha)
-        if rho >= self.params.rho_threshold:  # prevent sigularity
-            omega = k2 * alpha + k1 * (np.sin(alpha) * np.cos(alpha) / alpha) * (alpha + k3 * beta)
-        else:
-            omega = k2 * error_yaw
-        return np.array([v, 0.0, omega])
-
-
-def create_position_controller(
-    controller_factory: ControllerFactory, config: PositionControllerParams
-) -> PositionController:
-    """
-    Helper function to create PositionController
-
-    Usage:
-        config = PositionControllerParams(
-            primary_controller=PolarCoordinateControllerParams(),
-            fallback_controller=SequentialControllerParams(),
-        )
-        command_generator = create_position_controller(controller_factory=ControllerFactory(), config=config)
-    """
-    controller_factory.register_controller(SequentialControllerParams, SequentialController)
-    controller_factory.register_controller(PolarCoordinateControllerParams, PolarCoordinateController)
-
-    return PositionController(factory=controller_factory, config=config)
