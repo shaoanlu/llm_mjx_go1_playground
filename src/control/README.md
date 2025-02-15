@@ -78,10 +78,10 @@ classDiagram
     Controller <|-- PID
     Controller <|-- LQR
     Controller <|-- MLPPolicy
-    ControllerFactory --> Controller
-    ConfigFactory --> ControllerParams
-    Go1ControllerManager --> Controller
-    PositionController --> Controller
+    ControllerFactory "creates" --> Controller
+    ConfigFactory "creates" --> ControllerParams
+    Go1ControllerManager "contains & uses" --> Controller
+    PositionController "contains & uses" --> Controller
 ```
 
 ## Design Decisions
