@@ -54,6 +54,9 @@ def download_go1_assets_from_mujoco_menagerie():
     for fn in STL_FNS:
         file_url = BASE_URL + fn
         output_path = BASE_OUTPUT_PATH + fn
+        if os.path.exists(output_path):
+            continue
+
         response = requests.get(file_url)
         if response.status_code == 200:
             with open(output_path, "wb") as f:
