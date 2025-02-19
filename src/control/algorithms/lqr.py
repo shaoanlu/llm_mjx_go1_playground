@@ -40,7 +40,7 @@ class LQR(Controller):
         self.Q = params.Q
         self.R = params.R
 
-    def control(self, state: np.ndarray, ref_state: np.array, **kwargs) -> np.ndarray:
+    def control(self, state: np.ndarray, ref_state: np.ndarray, **kwargs) -> np.ndarray:
         # Solve the continuous-time Algebraic Riccati Equation (ARE)
         P = scipy.linalg.solve_continuous_are(self.A, self.B, self.Q, self.R)
 

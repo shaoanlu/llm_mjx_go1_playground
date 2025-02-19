@@ -27,3 +27,19 @@ class Controller(ABC):
 
     def reset(self, **kwargs):
         return self.init_control_params
+
+
+class HighLevelController(ABC):
+    """
+    Interface for a high-level controller that generates a command for a low-level command follower.
+    The instance of this class usually contains one or more low-level controllers.
+    """
+
+    def __init__(self, config: ControllerParams, **kwargs):
+        pass
+
+    def build_controller(self, **kwargs) -> None:
+        raise NotImplementedError
+
+    def compute_command(self, state: np.ndarray, **kwargs) -> np.ndarray:
+        raise NotImplementedError
