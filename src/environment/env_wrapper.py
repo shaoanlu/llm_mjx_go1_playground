@@ -16,13 +16,29 @@ class Go1Env(Env):
     Go1JoystickFlatTerrain environment has observation size of 48 (45 + 3 commands)
     """
 
-    go1_env_names = ["Go1Handstand", "Go1JoystickFlatTerrain", "Go1Getup", "Go1Footstand"]
+    GO1_ENV_NAMES = ["Go1Handstand", "Go1JoystickFlatTerrain", "Go1Getup", "Go1Footstand"]
 
-    def __init__(self, env_name: str):
-        if env_name not in self.go1_env_names:
-            raise ValueError(f"Unsupported Go1 environment {env_name}Supported environment are: {self.go1_env_names}")
-        self.env_cfg = self.load_config(env_name)
-        self.env = registry.load(env_name, config=self.env_cfg)
+    def __init__(
+        self, env_name: str | None = GO1_ENV_NAMES[1], env: mjx_env.MjxEnv | None = None, env_cfg: dict | None = None
+    ):
+        """
+        Initialize Go1 environment
+        If both env and env_cfg are provided it directly assigns them to self.env and self.env_cfg, and env_name is ignored
+        If both env and env_cfg are None but env_name is provided, it loads the environment from mujoco_playground registry
+        If all env_name, env and env_cfg are not provided, raise an error
+        """
+        if env_cfg and env:
+            self.env = env
+            self.env_cfg = env_cfg
+        elif env is not None:
+            if env_name not in self.GO1_ENV_NAMES:
+                raise ValueError(
+                    f"Unsupported Go1 environment {env_name}Supported environment are: {self.GO1_ENV_NAMES}"
+                )
+            self.env_cfg = self.load_config(env_name)
+            self.env = registry.load(env_name, config=self.env_cfg)
+        else:
+            raise ValueError("Failed to initialize Go1Env. Please check the arguments.")
 
     @partial(jax.jit, static_argnums=(0,))
     def step(self, state: mjx_env.State, action: np.ndarray) -> mjx_env.State:
