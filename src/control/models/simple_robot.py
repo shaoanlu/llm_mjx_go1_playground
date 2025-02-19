@@ -8,8 +8,8 @@ from src.control.models.base import ControlAffineSystem, ControlAffineSystemPara
 
 @dataclass(kw_only=True)
 class Simple2DRobotConfig(ControlAffineSystemParams):
-    a: float = field(default=24.0)  # ellipse param approximating robot collision region in XY plane
-    b: float = field(default=41.0)  # ellipse param approximating robot collision region in XY plane
+    a: float = field(default=41.0)  # ellipse param approximating robot collision region in XY plane
+    b: float = field(default=24.0)  # ellipse param approximating robot collision region in XY plane
     x_dim: int = field(default=2)  # dimension of the state space
     u_dim: int = field(default=2)  # dimension of the control space
 
@@ -63,6 +63,7 @@ def _calculate_ellipse_closest_point(center: Tuple | np.ndarray, a: float, b: fl
         The closest points on the ellipse to the input points. shape=(N, 2)
     """
     assert len(center) == 2, "Center must be a tuple or array of shape (2,) representing XY position of the ellipse"
+    assert a > 0 and b > 0, f"Ellipse must have positive semi-major and semi-minor axes, {a=}, {b=}"
     c1, c2 = center  # Ellipse center
     x1, x2 = x[:, 0] - c1, x[:, 1] - c2  # Transform to ellipse-centered coordinates
 
