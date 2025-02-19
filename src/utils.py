@@ -1,4 +1,7 @@
+import os
+
 import numpy as np
+import requests
 import yaml
 from jinja2 import Template
 
@@ -40,6 +43,24 @@ def load_dataclass_from_dict(dataclass, data_dict, convert_list_to_array=False):
             if isinstance(value, list):
                 kwargs[key] = np.array(value)
     return dataclass(**kwargs)
+
+
+def download_go1_assets_from_mujoco_menagerie():
+    BASE_URL = "https://raw.githubusercontent.com/google-deepmind/mujoco_menagerie/refs/heads/main/unitree_go1/assets/"
+    STL_FNS = ["calf.stl", "hip.stl", "thigh.stl", "thigh_mirror.stl", "trunk.stl"]
+    BASE_OUTPUT_PATH = "examples/xmls/assets/"
+    os.makedirs(os.path.dirname(BASE_OUTPUT_PATH), exist_ok=True)  # Ensure directory exists
+
+    for fn in STL_FNS:
+        file_url = BASE_URL + fn
+        output_path = BASE_OUTPUT_PATH + fn
+        response = requests.get(file_url)
+        if response.status_code == 200:
+            with open(output_path, "wb") as f:
+                f.write(response.content)
+            print(f"Downloaded: {output_path}")
+        else:
+            print(f"Failed to download {file_url}")
 
 
 class DisjointSet:
