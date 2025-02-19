@@ -18,9 +18,7 @@ class Go1Env(Env):
 
     GO1_ENV_NAMES = ["Go1Handstand", "Go1JoystickFlatTerrain", "Go1Getup", "Go1Footstand"]
 
-    def __init__(
-        self, env_name: str | None = GO1_ENV_NAMES[1], env: mjx_env.MjxEnv | None = None, env_cfg: dict | None = None
-    ):
+    def __init__(self, env_name: str | None = None, env: mjx_env.MjxEnv | None = None, env_cfg: dict | None = None):
         """
         Initialize Go1 environment
         If both env and env_cfg are provided it directly assigns them to self.env and self.env_cfg, and env_name is ignored
@@ -30,7 +28,7 @@ class Go1Env(Env):
         if env_cfg and env:
             self.env = env
             self.env_cfg = env_cfg
-        elif env is not None:
+        elif env_name:
             if env_name not in self.GO1_ENV_NAMES:
                 raise ValueError(
                     f"Unsupported Go1 environment {env_name}Supported environment are: {self.GO1_ENV_NAMES}"
