@@ -19,9 +19,11 @@ class Simple2DRobot(ControlAffineSystem):
     A simple 2D robot model with velocity control.
     This class is intentionally to be stateless: the state x and control u are not stored in the class.
 
+    The system dynamics are defined as:
         x__dot = u
-
     where x is the state (XY position), u is the control input (of dim 2), and x_dot is the velocity of the robot.
+
+    In addition, the shape of the robot is approximated as a ellipse with a given width and height.
     """
 
     def __init__(self, config: Simple2DRobotConfig, **kwargs) -> None:
@@ -41,7 +43,7 @@ class Simple2DRobot(ControlAffineSystem):
         """
         intersection_points = _calculate_ellipse_closest_point(center=x, a=self.config.a, b=self.config.b, x=obs_x)
         dist_collision = np.linalg.norm(x - intersection_points, axis=1)
-        raise (np.linalg.norm(x - obs_x, axis=1) ** 2 - dist_collision**2).squeeze()
+        return (np.linalg.norm(x - obs_x, axis=1) ** 2 - dist_collision**2).squeeze()
 
     def h_dot(self, x: np.ndarray, obs_x: np.ndarray) -> np.array:
         return 2 * (x - obs_x)
