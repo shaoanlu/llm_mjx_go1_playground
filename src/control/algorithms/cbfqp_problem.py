@@ -210,9 +210,9 @@ class CBFQPProblem:
         cbf_alpha: float,
         slack_penalty: float,
     ):
-        assert (
-            len(h) == self.nh
-        ), f"Barrier function values must match the number of barrier functions, {h=}, {self.nh=}"
+        assert len(h) == self.nh, (
+            f"Barrier function values must match the number of barrier functions, {h=}, {self.nh=}"
+        )
         assert len(coeffs_dhdx) == self.nh, (
             f"Barrier function derivative coefficients must match the number of barrier functions, "
             f"{coeffs_dhdx=}, {self.nh=}"
@@ -222,14 +222,14 @@ class CBFQPProblem:
                 f"Barrier function derivative coefficients must match the number of states and slack variables, "
                 f"{coeffs_dhdx=}, {self.nx=}"
             )
-        assert nominal_control.shape == (
-            self.nx,
-        ), f"Nominal control input must have shape (nx,), {nominal_control.shape=}, {self.nx=}"
-        assert max_control.shape == (
-            self.nx,
-        ), f"Maximum control input must have shape (nx,), {max_control.shape=}, {self.nx=}"
-        assert min_control.shape == (
-            self.nx,
-        ), f"Minimum control input must have shape (nx,), {min_control.shape=}, {self.nx=}"
+        assert nominal_control.shape == (self.nx,), (
+            f"Nominal control input must have shape (nx,), {nominal_control.shape=}, {self.nx=}"
+        )
+        assert max_control.shape == (self.nx,), (
+            f"Maximum control input must have shape (nx,), {max_control.shape=}, {self.nx=}"
+        )
+        assert min_control.shape == (self.nx,), (
+            f"Minimum control input must have shape (nx,), {min_control.shape=}, {self.nx=}"
+        )
         assert cbf_alpha > 0, f"CBF constraint parameter must be positive, {cbf_alpha=}"
         assert slack_penalty >= 0, f"Slack penalty must be non-negative, {slack_penalty=}"

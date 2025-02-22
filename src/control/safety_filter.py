@@ -26,12 +26,12 @@ class SafetyFilterParams(ControllerParams):
         assert self.cbf_alpha > 0, f"CBF alpha must be positive, {self.cbf_alpha=}"
         assert self.cbf_kappa > 0, f"CBF kappa must be positive, {self.cbf_kappa=}"
         assert self.cbf_slack_penalty > 0, f"CBF slack penalty must be positive, {self.cbf_slack_penalty=}"
-        assert len(self.max_output) == len(
-            self.min_output
-        ), f"Max output and min output must have the same dimensions, {self.max_output=}, {self.min_output=}"
-        assert np.all(
-            self.min_output <= self.max_output
-        ), f"Min output must be less than max output, {self.min_output=}, {self.max_output=}"
+        assert len(self.max_output) == len(self.min_output), (
+            f"Max output and min output must have the same dimensions, {self.max_output=}, {self.min_output=}"
+        )
+        assert np.all(self.min_output <= self.max_output), (
+            f"Min output must be less than max output, {self.min_output=}, {self.max_output=}"
+        )
 
 
 @dataclass(kw_only=True)
@@ -109,15 +109,15 @@ class SafetyFilter(HighLevelController):
         return SafeCommand(command=sol.u, info=sol)
 
     def _validate_input(self, state: np.ndarray, command: np.ndarray, obstacle_positions: np.ndarray):
-        assert state.shape == (
-            self.model.x_dim,
-        ), f"current position pos shape must match the state dimension, {state.shape=}, {self.model.x_dim=}"
-        assert command.shape == (
-            self.model.u_dim,
-        ), f"command shape must match the control dimension, {command.shape=}, {self.model.u_dim=}"
-        assert state.shape == (
-            obstacle_positions.shape[1],
-        ), f"obs_pos shape must match the state dimension, {obstacle_positions.shape=}, {state.shape=}"
+        assert state.shape == (self.model.x_dim,), (
+            f"current position pos shape must match the state dimension, {state.shape=}, {self.model.x_dim=}"
+        )
+        assert command.shape == (self.model.u_dim,), (
+            f"command shape must match the control dimension, {command.shape=}, {self.model.u_dim=}"
+        )
+        assert state.shape == (obstacle_positions.shape[1],), (
+            f"obs_pos shape must match the state dimension, {obstacle_positions.shape=}, {state.shape=}"
+        )
 
     def _calculate_composite_cbf_coeffs(
         self, pos: np.ndarray, obs_pos: np.ndarray
@@ -141,15 +141,16 @@ class SafetyFilter(HighLevelController):
 
         # Calculate the barrier term
         # safety filter introduces an extra buffer to the barrier to avoid collision
-        hi_x = self.model.h(x=pos, obs_x=obs_pos) - self.config.cbf_dist_buffer**2
-        h_x = -1 / self.config.cbf_kappa * logsumexp(-self.config.cbf_kappa * hi_x)  # the compisite barrier term.
-        assert hi_x.shape == (
-            len(obs_pos),
-        ), f"hi_x shape must match the number of lidar points, {hi_x=}, {pos=}, {obs_pos=}"
+        hi_x = self.model.h(x=pos, obs_x=obs_pos) - self.config.cbf_dist_buffer**2  # shape=(nh,)
+        h_x = -1 / self.config.cbf_kappa * logsumexp(-self.config.cbf_kappa * hi_x)  # compisite hi(x) to shape=(1,)
+        assert hi_x.shape == (len(obs_pos),), (
+            f"hi_x shape must match the number of obstacles, {hi_x.shape=}, {obs_pos.shape=}"
+        )
 
         # Calculate the derivative of the composite barrier term
-        composite_weights = np.exp(-self.config.cbf_kappa * (hi_x - h_x))[..., None]
-        dhdx = np.sum(composite_weights * self.model.h_dot(x=pos, obs_x=obs_pos), axis=0).squeeze()
+        composite_weights = np.exp(-self.config.cbf_kappa * (hi_x - h_x)).reshape(-1, 1)  # shape=(nh, 1)
+        h_dot = self.model.h_dot(x=pos, obs_x=obs_pos)  # shape=(nh, nx)
+        dhdx = np.sum(composite_weights * h_dot, axis=0).reshape(-1)  # sum over obstacles, shape=(nx,)
         assert dhdx.shape == (self.nx,), f"dhdx shape must match the input dimension, {dhdx.shape=}, {self.nx=}"
         return [h_x], [list(dhdx) + [1.0] * self.nh]
 
