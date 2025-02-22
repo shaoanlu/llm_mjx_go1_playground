@@ -13,12 +13,11 @@ from src.control.state import Go1State
 @dataclass(kw_only=True)
 class SafetyFilterParams(ControllerParams):
     model: ControlAffineSystem = field(default_factory=lambda: Simple2DRobot())
-    max_output: Tuple = field(default=(1.2, 0.5))
-    min_output: Tuple = field(default=(-1.2, -0.5))
+    max_output: Tuple = field(default=(1.2, 0.7))
+    min_output: Tuple = field(default=(-1.2, -0.7))
     cbf_alpha: float = field(default=1.0)
     cbf_slack_penalty: float = field(default=10.0)
     cbf_kappa: float = field(default=0.5)
-    cbf_dist_buffer: float = field(default=0.15)  # meters
     algorithm_type: str = field(default="safety_filter")
 
     def __post_init__(self):
@@ -80,6 +79,10 @@ class SafetyFilter(HighLevelController):
 
         Returns:
             The safety filtered command.
+
+        NOTE: approximate [v, w] to [v_linear, v_lateral] for Go1 robot
+            v_linear = v
+            v_lateral = w * self.model.a
         """
         if len(obstacle_positions) == 0:
             return SafeCommand(command=command, info=None)
@@ -141,7 +144,7 @@ class SafetyFilter(HighLevelController):
 
         # Calculate the barrier term
         # safety filter introduces an extra buffer to the barrier to avoid collision
-        hi_x = self.model.h(x=pos, obs_x=obs_pos) - self.config.cbf_dist_buffer**2  # shape=(nh,)
+        hi_x = self.model.h(x=pos, obs_x=obs_pos)  # shape=(nh,)
         h_x = -1 / self.config.cbf_kappa * logsumexp(-self.config.cbf_kappa * hi_x)  # compisite hi(x) to shape=(1,)
         assert hi_x.shape == (len(obs_pos),), (
             f"hi_x shape must match the number of obstacles, {hi_x.shape=}, {obs_pos.shape=}"

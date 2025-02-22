@@ -14,8 +14,8 @@ class TestSimple2DRobotParams(unittest.TestCase):
     def test_default_initialization(self):
         """Test that the config initializes with expected default values"""
         config = Simple2DRobotParams()
-        self.assertEqual(config.a, 0.41)
-        self.assertEqual(config.b, 0.24)
+        self.assertEqual(config.a, 0.45)
+        self.assertEqual(config.b, 0.3)
         self.assertEqual(config.x_dim, 2)
         self.assertEqual(config.u_dim, 2)
         self.assertIsInstance(config, ControlAffineSystemParams)
@@ -101,8 +101,8 @@ class TestSimple2DRobot(unittest.TestCase):
     def test_initialization(self):
         """Test robot initialization and inheritance"""
         self.assertIsInstance(self.robot, ControlAffineSystem)
-        self.assertEqual(self.robot.config.a, 0.41)
-        self.assertEqual(self.robot.config.b, 0.24)
+        self.assertEqual(self.robot.config.a, 0.45)
+        self.assertEqual(self.robot.config.b, 0.3)
         self.assertEqual(self.robot.config.x_dim, 2)
         self.assertEqual(self.robot.config.u_dim, 2)
 
@@ -153,8 +153,8 @@ class TestSimple2DRobot(unittest.TestCase):
         # Verify the mock was called correctly
         mock_calc_closest.assert_called_once()
         np.testing.assert_array_equal(mock_calc_closest.call_args[1]["center"], robot_pos)
-        self.assertEqual(mock_calc_closest.call_args[1]["a"], 0.41)
-        self.assertEqual(mock_calc_closest.call_args[1]["b"], 0.24)
+        self.assertEqual(mock_calc_closest.call_args[1]["a"], 0.45)
+        self.assertEqual(mock_calc_closest.call_args[1]["b"], 0.3)
         np.testing.assert_array_equal(mock_calc_closest.call_args[1]["x"], obstacle_pos)
 
         # Check result
@@ -170,8 +170,8 @@ class TestSimple2DRobot(unittest.TestCase):
         result = self.robot.h(robot_pos, obstacle_pos)
 
         # Expected: ||obstacle - robot||^2 - ||ellipse_point - robot||^2
-        # Ellipse point on x-axis would be (0.41, 0) since a=0.41
-        expected = 1**2 - 0.41**2
+        # Ellipse point on x-axis would be (0.45, 0) since a=0.45
+        expected = 1**2 - 0.45**2
         self.assertAlmostEqual(result, expected, places=5)
 
     def test_h_dot(self):
@@ -196,12 +196,12 @@ class TestSimple2DRobot(unittest.TestCase):
         self.assertEqual(result.shape, (3,))
 
         # First obstacle (on x-axis)
-        # Ellipse point would be at (0.41, 0)
-        expected1 = 1**2 - 0.41**2
+        # Ellipse point would be at (0.45, 0)
+        expected1 = 1**2 - 0.45**2
 
         # Second obstacle (on y-axis)
-        # Ellipse point would be at (0, 0.24)
-        expected2 = 1**2 - 0.24**2
+        # Ellipse point would be at (0, 0.3)
+        expected2 = 1**2 - 0.3**2
 
         # Third obstacle (diagonal)
         # Distance calculation is more complex, but we can verify it's positive

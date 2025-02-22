@@ -20,7 +20,6 @@ class TestSafetyFilter(unittest.TestCase):
             cbf_alpha=10,
             cbf_slack_penalty=10.0,
             cbf_kappa=0.5,
-            cbf_dist_buffer=0.3,
         )
         self.safety_filter = SafetyFilter(config=self.config)
 

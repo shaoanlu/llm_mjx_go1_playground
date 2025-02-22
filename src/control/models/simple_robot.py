@@ -8,8 +8,8 @@ from src.control.models.base import ControlAffineSystem, ControlAffineSystemPara
 
 @dataclass(kw_only=True)
 class Simple2DRobotParams(ControlAffineSystemParams):
-    a: float = field(default=0.41)  # ellipse param (in meter) approximating robot collision region in XY plane
-    b: float = field(default=0.24)  # ellipse param (in meter) approximating robot collision region in XY plane
+    a: float = field(default=0.45)  # ellipse param (in meter) approximating robot collision region in XY plane
+    b: float = field(default=0.3)  # ellipse param (in meter) approximating robot collision region in XY plane
     x_dim: int = field(default=2)  # dimension of the state space
     u_dim: int = field(default=2)  # dimension of the control space
 
@@ -37,7 +37,7 @@ class Simple2DRobot(ControlAffineSystem):
     def g_x(self, x: np.ndarray) -> np.ndarray:
         return np.eye(self.config.x_dim)
 
-    def h(self, x: np.ndarray, obs_x: np.ndarray) -> np.ndarray:
+    def h(self, x: np.ndarray, obs_x: np.ndarray, **kwargs) -> np.ndarray:
         """
         Distance between the robot (as an ellipse) and the obstacle
         barrier func is ||x - xr||^2 - dist_collision**2
@@ -50,7 +50,7 @@ class Simple2DRobot(ControlAffineSystem):
         dist_collision = np.linalg.norm(x - intersection_points, axis=1)
         return (np.linalg.norm(x - obs_x, axis=1) ** 2 - dist_collision**2).reshape(-1)  # shape=(N,)
 
-    def h_dot(self, x: np.ndarray, obs_x: np.ndarray) -> np.array:
+    def h_dot(self, x: np.ndarray, obs_x: np.ndarray, **kwargs) -> np.array:
         return 2 * (x - obs_x)
 
 
