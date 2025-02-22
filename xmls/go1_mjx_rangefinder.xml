@@ -357,126 +357,126 @@
     <framepos objtype="site" objname="head" name="head_pos"/>
 
 
-    <rangefinder name="lidar_-60" site="lidar_-60"/>
-    <rangefinder name="lidar_-59" site="lidar_-59"/>
-    <rangefinder name="lidar_-58" site="lidar_-58"/>
-    <rangefinder name="lidar_-57" site="lidar_-57"/>
-    <rangefinder name="lidar_-56" site="lidar_-56"/>
-    <rangefinder name="lidar_-55" site="lidar_-55"/>
-    <rangefinder name="lidar_-54" site="lidar_-54"/>
-    <rangefinder name="lidar_-53" site="lidar_-53"/>
-    <rangefinder name="lidar_-52" site="lidar_-52"/>
-    <rangefinder name="lidar_-51" site="lidar_-51"/>
-    <rangefinder name="lidar_-50" site="lidar_-50"/>
-    <rangefinder name="lidar_-49" site="lidar_-49"/>
-    <rangefinder name="lidar_-48" site="lidar_-48"/>
-    <rangefinder name="lidar_-47" site="lidar_-47"/>
-    <rangefinder name="lidar_-46" site="lidar_-46"/>
-    <rangefinder name="lidar_-45" site="lidar_-45"/>
-    <rangefinder name="lidar_-44" site="lidar_-44"/>
-    <rangefinder name="lidar_-43" site="lidar_-43"/>
-    <rangefinder name="lidar_-42" site="lidar_-42"/>
-    <rangefinder name="lidar_-41" site="lidar_-41"/>
-    <rangefinder name="lidar_-40" site="lidar_-40"/>
-    <rangefinder name="lidar_-39" site="lidar_-39"/>
-    <rangefinder name="lidar_-38" site="lidar_-38"/>
-    <rangefinder name="lidar_-37" site="lidar_-37"/>
-    <rangefinder name="lidar_-36" site="lidar_-36"/>
-    <rangefinder name="lidar_-35" site="lidar_-35"/>
-    <rangefinder name="lidar_-34" site="lidar_-34"/>
-    <rangefinder name="lidar_-33" site="lidar_-33"/>
-    <rangefinder name="lidar_-32" site="lidar_-32"/>
-    <rangefinder name="lidar_-31" site="lidar_-31"/>
-    <rangefinder name="lidar_-30" site="lidar_-30"/>
-    <rangefinder name="lidar_-29" site="lidar_-29"/>
-    <rangefinder name="lidar_-28" site="lidar_-28"/>
-    <rangefinder name="lidar_-27" site="lidar_-27"/>
-    <rangefinder name="lidar_-26" site="lidar_-26"/>
-    <rangefinder name="lidar_-25" site="lidar_-25"/>
-    <rangefinder name="lidar_-24" site="lidar_-24"/>
-    <rangefinder name="lidar_-23" site="lidar_-23"/>
-    <rangefinder name="lidar_-22" site="lidar_-22"/>
-    <rangefinder name="lidar_-21" site="lidar_-21"/>
-    <rangefinder name="lidar_-20" site="lidar_-20"/>
-    <rangefinder name="lidar_-19" site="lidar_-19"/>
-    <rangefinder name="lidar_-18" site="lidar_-18"/>
-    <rangefinder name="lidar_-17" site="lidar_-17"/>
-    <rangefinder name="lidar_-16" site="lidar_-16"/>
-    <rangefinder name="lidar_-15" site="lidar_-15"/>
-    <rangefinder name="lidar_-14" site="lidar_-14"/>
-    <rangefinder name="lidar_-13" site="lidar_-13"/>
-    <rangefinder name="lidar_-12" site="lidar_-12"/>
-    <rangefinder name="lidar_-11" site="lidar_-11"/>
-    <rangefinder name="lidar_-10" site="lidar_-10"/>
-    <rangefinder name="lidar_-9" site="lidar_-9"/>
-    <rangefinder name="lidar_-8" site="lidar_-8"/>
-    <rangefinder name="lidar_-7" site="lidar_-7"/>
-    <rangefinder name="lidar_-6" site="lidar_-6"/>
-    <rangefinder name="lidar_-5" site="lidar_-5"/>
-    <rangefinder name="lidar_-4" site="lidar_-4"/>
-    <rangefinder name="lidar_-3" site="lidar_-3"/>
-    <rangefinder name="lidar_-2" site="lidar_-2"/>
-    <rangefinder name="lidar_-1" site="lidar_-1"/>
-    <rangefinder name="lidar_0" site="lidar_0"/>
-    <rangefinder name="lidar_1" site="lidar_1"/>
-    <rangefinder name="lidar_2" site="lidar_2"/>
-    <rangefinder name="lidar_3" site="lidar_3"/>
-    <rangefinder name="lidar_4" site="lidar_4"/>
-    <rangefinder name="lidar_5" site="lidar_5"/>
-    <rangefinder name="lidar_6" site="lidar_6"/>
-    <rangefinder name="lidar_7" site="lidar_7"/>
-    <rangefinder name="lidar_8" site="lidar_8"/>
-    <rangefinder name="lidar_9" site="lidar_9"/>
-    <rangefinder name="lidar_10" site="lidar_10"/>
-    <rangefinder name="lidar_11" site="lidar_11"/>
-    <rangefinder name="lidar_12" site="lidar_12"/>
-    <rangefinder name="lidar_13" site="lidar_13"/>
-    <rangefinder name="lidar_14" site="lidar_14"/>
-    <rangefinder name="lidar_15" site="lidar_15"/>
-    <rangefinder name="lidar_16" site="lidar_16"/>
-    <rangefinder name="lidar_17" site="lidar_17"/>
-    <rangefinder name="lidar_18" site="lidar_18"/>
-    <rangefinder name="lidar_19" site="lidar_19"/>
-    <rangefinder name="lidar_20" site="lidar_20"/>
-    <rangefinder name="lidar_21" site="lidar_21"/>
-    <rangefinder name="lidar_22" site="lidar_22"/>
-    <rangefinder name="lidar_23" site="lidar_23"/>
-    <rangefinder name="lidar_24" site="lidar_24"/>
-    <rangefinder name="lidar_25" site="lidar_25"/>
-    <rangefinder name="lidar_26" site="lidar_26"/>
-    <rangefinder name="lidar_27" site="lidar_27"/>
-    <rangefinder name="lidar_28" site="lidar_28"/>
-    <rangefinder name="lidar_29" site="lidar_29"/>
-    <rangefinder name="lidar_30" site="lidar_30"/>
-    <rangefinder name="lidar_31" site="lidar_31"/>
-    <rangefinder name="lidar_32" site="lidar_32"/>
-    <rangefinder name="lidar_33" site="lidar_33"/>
-    <rangefinder name="lidar_34" site="lidar_34"/>
-    <rangefinder name="lidar_35" site="lidar_35"/>
-    <rangefinder name="lidar_36" site="lidar_36"/>
-    <rangefinder name="lidar_37" site="lidar_37"/>
-    <rangefinder name="lidar_38" site="lidar_38"/>
-    <rangefinder name="lidar_39" site="lidar_39"/>
-    <rangefinder name="lidar_40" site="lidar_40"/>
-    <rangefinder name="lidar_41" site="lidar_41"/>
-    <rangefinder name="lidar_42" site="lidar_42"/>
-    <rangefinder name="lidar_43" site="lidar_43"/>
-    <rangefinder name="lidar_44" site="lidar_44"/>
-    <rangefinder name="lidar_45" site="lidar_45"/>
-    <rangefinder name="lidar_46" site="lidar_46"/>
-    <rangefinder name="lidar_47" site="lidar_47"/>
-    <rangefinder name="lidar_48" site="lidar_48"/>
-    <rangefinder name="lidar_49" site="lidar_49"/>
-    <rangefinder name="lidar_50" site="lidar_50"/>
-    <rangefinder name="lidar_51" site="lidar_51"/>
-    <rangefinder name="lidar_52" site="lidar_52"/>
-    <rangefinder name="lidar_53" site="lidar_53"/>
-    <rangefinder name="lidar_54" site="lidar_54"/>
-    <rangefinder name="lidar_55" site="lidar_55"/>
-    <rangefinder name="lidar_56" site="lidar_56"/>
-    <rangefinder name="lidar_57" site="lidar_57"/>
-    <rangefinder name="lidar_58" site="lidar_58"/>
-    <rangefinder name="lidar_59" site="lidar_59"/>
-    <rangefinder name="lidar_60" site="lidar_60"/>
+    <rangefinder name="lidar_-60" site="lidar_-60" cutoff="10"/>
+    <rangefinder name="lidar_-59" site="lidar_-59" cutoff="10"/>
+    <rangefinder name="lidar_-58" site="lidar_-58" cutoff="10"/>
+    <rangefinder name="lidar_-57" site="lidar_-57" cutoff="10"/>
+    <rangefinder name="lidar_-56" site="lidar_-56" cutoff="10"/>
+    <rangefinder name="lidar_-55" site="lidar_-55" cutoff="10"/>
+    <rangefinder name="lidar_-54" site="lidar_-54" cutoff="10"/>
+    <rangefinder name="lidar_-53" site="lidar_-53" cutoff="10"/>
+    <rangefinder name="lidar_-52" site="lidar_-52" cutoff="10"/>
+    <rangefinder name="lidar_-51" site="lidar_-51" cutoff="10"/>
+    <rangefinder name="lidar_-50" site="lidar_-50" cutoff="10"/>
+    <rangefinder name="lidar_-49" site="lidar_-49" cutoff="10"/>
+    <rangefinder name="lidar_-48" site="lidar_-48" cutoff="10"/>
+    <rangefinder name="lidar_-47" site="lidar_-47" cutoff="10"/>
+    <rangefinder name="lidar_-46" site="lidar_-46" cutoff="10"/>
+    <rangefinder name="lidar_-45" site="lidar_-45" cutoff="10"/>
+    <rangefinder name="lidar_-44" site="lidar_-44" cutoff="10"/>
+    <rangefinder name="lidar_-43" site="lidar_-43" cutoff="10"/>
+    <rangefinder name="lidar_-42" site="lidar_-42" cutoff="10"/>
+    <rangefinder name="lidar_-41" site="lidar_-41" cutoff="10"/>
+    <rangefinder name="lidar_-40" site="lidar_-40" cutoff="10"/>
+    <rangefinder name="lidar_-39" site="lidar_-39" cutoff="10"/>
+    <rangefinder name="lidar_-38" site="lidar_-38" cutoff="10"/>
+    <rangefinder name="lidar_-37" site="lidar_-37" cutoff="10"/>
+    <rangefinder name="lidar_-36" site="lidar_-36" cutoff="10"/>
+    <rangefinder name="lidar_-35" site="lidar_-35" cutoff="10"/>
+    <rangefinder name="lidar_-34" site="lidar_-34" cutoff="10"/>
+    <rangefinder name="lidar_-33" site="lidar_-33" cutoff="10"/>
+    <rangefinder name="lidar_-32" site="lidar_-32" cutoff="10"/>
+    <rangefinder name="lidar_-31" site="lidar_-31" cutoff="10"/>
+    <rangefinder name="lidar_-30" site="lidar_-30" cutoff="10"/>
+    <rangefinder name="lidar_-29" site="lidar_-29" cutoff="10"/>
+    <rangefinder name="lidar_-28" site="lidar_-28" cutoff="10"/>
+    <rangefinder name="lidar_-27" site="lidar_-27" cutoff="10"/>
+    <rangefinder name="lidar_-26" site="lidar_-26" cutoff="10"/>
+    <rangefinder name="lidar_-25" site="lidar_-25" cutoff="10"/>
+    <rangefinder name="lidar_-24" site="lidar_-24" cutoff="10"/>
+    <rangefinder name="lidar_-23" site="lidar_-23" cutoff="10"/>
+    <rangefinder name="lidar_-22" site="lidar_-22" cutoff="10"/>
+    <rangefinder name="lidar_-21" site="lidar_-21" cutoff="10"/>
+    <rangefinder name="lidar_-20" site="lidar_-20" cutoff="10"/>
+    <rangefinder name="lidar_-19" site="lidar_-19" cutoff="10"/>
+    <rangefinder name="lidar_-18" site="lidar_-18" cutoff="10"/>
+    <rangefinder name="lidar_-17" site="lidar_-17" cutoff="10"/>
+    <rangefinder name="lidar_-16" site="lidar_-16" cutoff="10"/>
+    <rangefinder name="lidar_-15" site="lidar_-15" cutoff="10"/>
+    <rangefinder name="lidar_-14" site="lidar_-14" cutoff="10"/>
+    <rangefinder name="lidar_-13" site="lidar_-13" cutoff="10"/>
+    <rangefinder name="lidar_-12" site="lidar_-12" cutoff="10"/>
+    <rangefinder name="lidar_-11" site="lidar_-11" cutoff="10"/>
+    <rangefinder name="lidar_-10" site="lidar_-10" cutoff="10"/>
+    <rangefinder name="lidar_-9" site="lidar_-9" cutoff="10"/>
+    <rangefinder name="lidar_-8" site="lidar_-8" cutoff="10"/>
+    <rangefinder name="lidar_-7" site="lidar_-7" cutoff="10"/>
+    <rangefinder name="lidar_-6" site="lidar_-6" cutoff="10"/>
+    <rangefinder name="lidar_-5" site="lidar_-5" cutoff="10"/>
+    <rangefinder name="lidar_-4" site="lidar_-4" cutoff="10"/>
+    <rangefinder name="lidar_-3" site="lidar_-3" cutoff="10"/>
+    <rangefinder name="lidar_-2" site="lidar_-2" cutoff="10"/>
+    <rangefinder name="lidar_-1" site="lidar_-1" cutoff="10"/>
+    <rangefinder name="lidar_0" site="lidar_0" cutoff="10"/>
+    <rangefinder name="lidar_1" site="lidar_1" cutoff="10"/>
+    <rangefinder name="lidar_2" site="lidar_2" cutoff="10"/>
+    <rangefinder name="lidar_3" site="lidar_3" cutoff="10"/>
+    <rangefinder name="lidar_4" site="lidar_4" cutoff="10"/>
+    <rangefinder name="lidar_5" site="lidar_5" cutoff="10"/>
+    <rangefinder name="lidar_6" site="lidar_6" cutoff="10"/>
+    <rangefinder name="lidar_7" site="lidar_7" cutoff="10"/>
+    <rangefinder name="lidar_8" site="lidar_8" cutoff="10"/>
+    <rangefinder name="lidar_9" site="lidar_9" cutoff="10"/>
+    <rangefinder name="lidar_10" site="lidar_10" cutoff="10"/>
+    <rangefinder name="lidar_11" site="lidar_11" cutoff="10"/>
+    <rangefinder name="lidar_12" site="lidar_12" cutoff="10"/>
+    <rangefinder name="lidar_13" site="lidar_13" cutoff="10"/>
+    <rangefinder name="lidar_14" site="lidar_14" cutoff="10"/>
+    <rangefinder name="lidar_15" site="lidar_15" cutoff="10"/>
+    <rangefinder name="lidar_16" site="lidar_16" cutoff="10"/>
+    <rangefinder name="lidar_17" site="lidar_17" cutoff="10"/>
+    <rangefinder name="lidar_18" site="lidar_18" cutoff="10"/>
+    <rangefinder name="lidar_19" site="lidar_19" cutoff="10"/>
+    <rangefinder name="lidar_20" site="lidar_20" cutoff="10"/>
+    <rangefinder name="lidar_21" site="lidar_21" cutoff="10"/>
+    <rangefinder name="lidar_22" site="lidar_22" cutoff="10"/>
+    <rangefinder name="lidar_23" site="lidar_23" cutoff="10"/>
+    <rangefinder name="lidar_24" site="lidar_24" cutoff="10"/>
+    <rangefinder name="lidar_25" site="lidar_25" cutoff="10"/>
+    <rangefinder name="lidar_26" site="lidar_26" cutoff="10"/>
+    <rangefinder name="lidar_27" site="lidar_27" cutoff="10"/>
+    <rangefinder name="lidar_28" site="lidar_28" cutoff="10"/>
+    <rangefinder name="lidar_29" site="lidar_29" cutoff="10"/>
+    <rangefinder name="lidar_30" site="lidar_30" cutoff="10"/>
+    <rangefinder name="lidar_31" site="lidar_31" cutoff="10"/>
+    <rangefinder name="lidar_32" site="lidar_32" cutoff="10"/>
+    <rangefinder name="lidar_33" site="lidar_33" cutoff="10"/>
+    <rangefinder name="lidar_34" site="lidar_34" cutoff="10"/>
+    <rangefinder name="lidar_35" site="lidar_35" cutoff="10"/>
+    <rangefinder name="lidar_36" site="lidar_36" cutoff="10"/>
+    <rangefinder name="lidar_37" site="lidar_37" cutoff="10"/>
+    <rangefinder name="lidar_38" site="lidar_38" cutoff="10"/>
+    <rangefinder name="lidar_39" site="lidar_39" cutoff="10"/>
+    <rangefinder name="lidar_40" site="lidar_40" cutoff="10"/>
+    <rangefinder name="lidar_41" site="lidar_41" cutoff="10"/>
+    <rangefinder name="lidar_42" site="lidar_42" cutoff="10"/>
+    <rangefinder name="lidar_43" site="lidar_43" cutoff="10"/>
+    <rangefinder name="lidar_44" site="lidar_44" cutoff="10"/>
+    <rangefinder name="lidar_45" site="lidar_45" cutoff="10"/>
+    <rangefinder name="lidar_46" site="lidar_46" cutoff="10"/>
+    <rangefinder name="lidar_47" site="lidar_47" cutoff="10"/>
+    <rangefinder name="lidar_48" site="lidar_48" cutoff="10"/>
+    <rangefinder name="lidar_49" site="lidar_49" cutoff="10"/>
+    <rangefinder name="lidar_50" site="lidar_50" cutoff="10"/>
+    <rangefinder name="lidar_51" site="lidar_51" cutoff="10"/>
+    <rangefinder name="lidar_52" site="lidar_52" cutoff="10"/>
+    <rangefinder name="lidar_53" site="lidar_53" cutoff="10"/>
+    <rangefinder name="lidar_54" site="lidar_54" cutoff="10"/>
+    <rangefinder name="lidar_55" site="lidar_55" cutoff="10"/>
+    <rangefinder name="lidar_56" site="lidar_56" cutoff="10"/>
+    <rangefinder name="lidar_57" site="lidar_57" cutoff="10"/>
+    <rangefinder name="lidar_58" site="lidar_58" cutoff="10"/>
+    <rangefinder name="lidar_59" site="lidar_59" cutoff="10"/>
+    <rangefinder name="lidar_60" site="lidar_60" cutoff="10"/>
   </sensor>
 </mujoco>

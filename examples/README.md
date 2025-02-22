@@ -36,3 +36,5 @@ plt.show()
   - In the xml, we have to separately define new sites w/ proper rotations in body section and then attach rangefinder to it in the sensor section
   - lift the rangefinder a little bit (+0.1) in z-axis (to avoid self-detection?)
   - MJX does not support collision between box and cylinder atm (which is used in the navigation example)
+  - much slower simulation when attaching rangefinder sensor
+  - the rangefinder sensor does not return meaningfule distance (or returns a cutoff value) to cylinder (despite it seems to detect it in rendering)
