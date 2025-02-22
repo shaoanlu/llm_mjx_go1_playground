@@ -24,6 +24,8 @@ class Simple2DRobot(ControlAffineSystem):
     where x is the state (XY position), u is the control input (of dim 2), and x_dot is the velocity of the robot.
 
     In addition, the shape of the robot is approximated as a ellipse with a given width and height.
+        (x - xc)^2 / a^ + (y - yc)^2 / b^2 = 1
+    where (xc, yc) is the center of the ellipse, a is the semi-major axis, and b is the semi-minor
     """
 
     def __init__(self, config: Simple2DRobotConfig, **kwargs) -> None:
