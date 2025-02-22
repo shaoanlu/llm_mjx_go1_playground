@@ -1,10 +1,11 @@
 import unittest
-import numpy as np
-from numpy.testing import assert_array_almost_equal, assert_array_equal
 from unittest.mock import Mock, patch
 
-from src.control.safety_filter import SafetyFilter, SafetyFilterParams, SafeCommand
+import numpy as np
+from numpy.testing import assert_array_equal
+
 from src.control.models import Simple2DRobot
+from src.control.safety_filter import SafeCommand, SafetyFilter, SafetyFilterParams
 from src.control.state import Go1State
 
 

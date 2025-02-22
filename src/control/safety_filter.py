@@ -5,7 +5,7 @@ import numpy as np
 from scipy.special import logsumexp
 
 from src.control.algorithms.base import ControllerParams, HighLevelController
-from src.control.algorithms.cbfqp_problem import CBFQPProblem, QPProblemData, CBFQPSolution
+from src.control.algorithms.cbfqp_problem import CBFQPProblem, CBFQPSolution, QPProblemData
 from src.control.models import ControlAffineSystem, Simple2DRobot
 from src.control.state import Go1State
 

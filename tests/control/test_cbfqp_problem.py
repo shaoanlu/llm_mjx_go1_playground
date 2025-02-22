@@ -1,8 +1,6 @@
 import unittest
+
 import numpy as np
-from scipy import sparse
-from dataclasses import dataclass
-from typing import List, Optional, Tuple
 
 from src.control.algorithms.cbfqp_problem import CBFQPProblem
 
