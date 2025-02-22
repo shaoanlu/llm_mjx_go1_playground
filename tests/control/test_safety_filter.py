@@ -1,0 +1,148 @@
+import unittest
+import numpy as np
+from numpy.testing import assert_array_almost_equal, assert_array_equal
+from unittest.mock import Mock, patch
+
+from src.control.safety_filter import SafetyFilter, SafetyFilterParams, SafeCommand
+from src.control.models import Simple2DRobot
+from src.control.state import Go1State
+
+
+class TestSafetyFilter(unittest.TestCase):
+    def setUp(self):
+        """Set up test fixtures before each test method."""
+        self.config = SafetyFilterParams(
+            model=Simple2DRobot(),
+            max_output=(1.2, 0.5),
+            min_output=(-1.2, -0.5),
+            cbf_alpha=0.1,
+            cbf_slack_penalty=10.0,
+            cbf_kappa=0.5,
+            cbf_dist_buffer=15,
+        )
+        self.safety_filter = SafetyFilter(config=self.config)
+
+        # Common test inputs
+        self.state = Mock(spec=Go1State)
+        self.state.position = np.array([0.0, 0.0, 0.0])  # Only XY coords used
+        self.nominal_command = np.array([0.5, 0.3])
+
+    def test_initialization(self):
+        """Test proper initialization of SafetyFilter."""
+        self.assertEqual(self.safety_filter.nx, 2)  # 2D control input
+        self.assertEqual(self.safety_filter.nh, 1)  # Single composite barrier
+        assert_array_equal(self.safety_filter.max_control, np.array([1.2, 0.5]))
+        assert_array_equal(self.safety_filter.min_control, np.array([-1.2, -0.5]))
+
+    def test_invalid_config(self):
+        """Test that invalid configurations raise appropriate errors."""
+        with self.assertRaises(AssertionError):
+            SafetyFilterParams(cbf_alpha=-1.0)  # Invalid alpha
+
+        with self.assertRaises(AssertionError):
+            SafetyFilterParams(max_output=(1.0,), min_output=(-1.0, -0.5))  # Mismatched dimensions
+
+        with self.assertRaises(AssertionError):
+            SafetyFilterParams(max_output=(1.0, 0.5), min_output=(2.0, 1.0))  # Min greater than max
+
+    def test_compute_command_no_obstacles(self):
+        """Test behavior when no obstacles are present."""
+        result = self.safety_filter.compute_command(
+            state=self.state, command=self.nominal_command, obstacle_positions=[]
+        )
+
+        self.assertIsInstance(result, SafeCommand)
+        assert_array_equal(result.command, self.nominal_command)
+        self.assertIsNone(result.info)
+
+    def test_compute_command_with_obstacles(self):
+        """Test safety filter behavior with obstacles present."""
+        obstacles = [np.array([5.0, 0.0]), np.array([0.0, 5.0])]  # Obstacle ahead  # Obstacle to the right
+
+        result = self.safety_filter.compute_command(
+            state=self.state, command=self.nominal_command, obstacle_positions=obstacles
+        )
+
+        self.assertIsInstance(result, SafeCommand)
+        self.assertIsNotNone(result.command)
+        self.assertIsNotNone(result.info)
+
+        # Verify command bounds
+        eps = 1e-7
+        self.assertTrue(
+            np.all(result.command - eps <= self.config.max_output), msg=f"{result.command=}, {self.config.max_output=}"
+        )
+        self.assertTrue(
+            np.all(result.command + eps >= self.config.min_output), msg=f"{result.command=}, {self.config.min_output=}"
+        )
+
+    def test_composite_cbf_calculation(self):
+        """Test the calculation of composite barrier function coefficients."""
+        pos = np.array([0.0, 0.0])
+        obstacles = np.array([[5.0, 0.0], [0.0, 5.0]])
+
+        h, dhdx = self.safety_filter._calculate_composite_cbf_coeffs(pos, obstacles)
+
+        # Check output shapes and types
+        self.assertEqual(len(h), 1)  # Single composite barrier value
+        self.assertEqual(len(dhdx), 1)  # Single row of derivatives
+        self.assertEqual(len(dhdx[0]), 3)  # 2 state derivatives + 1 slack variable
+
+        # Verify h is scalar and negative (unsafe) when too close to obstacles
+        close_obstacles = np.array([[0.1, 0.1]])
+        h_close, _ = self.safety_filter._calculate_composite_cbf_coeffs(pos, close_obstacles)
+        self.assertLess(h_close[0], 0)
+
+        # Verify h is positive (safe) when far from obstacles
+        far_obstacles = np.array([[100.0, 100.0]])
+        h_far, _ = self.safety_filter._calculate_composite_cbf_coeffs(pos, far_obstacles)
+        self.assertGreater(h_far[0], 0)
+
+    def test_input_validation(self):
+        """Test input validation for compute_command."""
+        invalid_state = Mock(spec=Go1State)
+        invalid_state.position = np.array([0.0])  # Wrong dimension
+
+        with self.assertRaises(AssertionError):
+            self.safety_filter.compute_command(
+                state=invalid_state, command=self.nominal_command, obstacle_positions=[np.array([5.0, 0.0])]
+            )
+
+        with self.assertRaises(AssertionError):
+            self.safety_filter.compute_command(
+                state=self.state,
+                command=np.array([0.5]),  # Wrong control dimension
+                obstacle_positions=[np.array([5.0, 0.0])],
+            )
+
+        with self.assertRaises(AssertionError):
+            self.safety_filter.compute_command(
+                state=self.state,
+                command=self.nominal_command,
+                obstacle_positions=[np.array([5.0])],  # Wrong obstacle dimension
+            )
+
+    @patch("src.control.safety_filter.CBFQPProblem")
+    def test_qp_problem_setup(self, mock_qp_problem):
+        """Test proper setup of the QP problem."""
+        mock_qp_instance = Mock()
+        mock_qp_problem.return_value = mock_qp_instance
+        mock_qp_instance.solve.return_value = Mock(u=self.nominal_command)
+
+        obstacles = [np.array([5.0, 0.0])]
+        self.safety_filter.compute_command(
+            state=self.state, command=self.nominal_command, obstacle_positions=obstacles
+        )
+
+        # Verify QP problem was created with correct dimensions
+        mock_qp_problem.assert_called_once_with(nx=2, nh=1)
+
+        # Verify create_matrices was called
+        self.assertTrue(mock_qp_instance.create_matrices.called)
+
+        # Verify solve was called
+        self.assertTrue(mock_qp_instance.solve.called)
+
+
+if __name__ == "__main__":
+    unittest.main()
