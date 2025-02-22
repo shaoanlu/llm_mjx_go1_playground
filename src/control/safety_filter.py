@@ -15,10 +15,10 @@ class SafetyFilterParams(ControllerParams):
     model: ControlAffineSystem = field(default_factory=lambda: Simple2DRobot())
     max_output: Tuple = field(default=(1.2, 0.5))
     min_output: Tuple = field(default=(-1.2, -0.5))
-    cbf_alpha: float = field(default=0.1)
+    cbf_alpha: float = field(default=1.0)
     cbf_slack_penalty: float = field(default=10.0)
     cbf_kappa: float = field(default=0.5)
-    cbf_dist_buffer: float = field(default=15)
+    cbf_dist_buffer: float = field(default=0.15)  # meters
     algorithm_type: str = field(default="safety_filter")
 
     def __post_init__(self):

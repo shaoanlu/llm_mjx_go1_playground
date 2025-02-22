@@ -5,15 +5,15 @@ import numpy as np
 
 # Import the modules to test - adjust import path as needed
 from src.control.models.base import ControlAffineSystem, ControlAffineSystemParams
-from src.control.models.simple_robot import Simple2DRobot, Simple2DRobotConfig, _calculate_ellipse_closest_point
+from src.control.models.simple_robot import Simple2DRobot, Simple2DRobotParams, _calculate_ellipse_closest_point
 
 
-class TestSimple2DRobotConfig(unittest.TestCase):
-    """Tests for the Simple2DRobotConfig dataclass"""
+class TestSimple2DRobotParams(unittest.TestCase):
+    """Tests for the Simple2DRobotParams dataclass"""
 
     def test_default_initialization(self):
         """Test that the config initializes with expected default values"""
-        config = Simple2DRobotConfig()
+        config = Simple2DRobotParams()
         self.assertEqual(config.a, 41.0)
         self.assertEqual(config.b, 24.0)
         self.assertEqual(config.x_dim, 2)
@@ -22,7 +22,7 @@ class TestSimple2DRobotConfig(unittest.TestCase):
 
     def test_custom_initialization(self):
         """Test that the config can be initialized with custom values"""
-        config = Simple2DRobotConfig(a=10.0, b=5.0, x_dim=3, u_dim=1)
+        config = Simple2DRobotParams(a=10.0, b=5.0, x_dim=3, u_dim=1)
         self.assertEqual(config.a, 10.0)
         self.assertEqual(config.b, 5.0)
         self.assertEqual(config.x_dim, 3)
@@ -95,7 +95,7 @@ class TestSimple2DRobot(unittest.TestCase):
 
     def setUp(self):
         """Setup for each test with default configuration"""
-        self.config = Simple2DRobotConfig()
+        self.config = Simple2DRobotParams()
         self.robot = Simple2DRobot(config=self.config)
 
     def test_initialization(self):
@@ -115,7 +115,7 @@ class TestSimple2DRobot(unittest.TestCase):
         np.testing.assert_array_equal(result, expected)
 
         # Test with different x_dim
-        custom_config = Simple2DRobotConfig(x_dim=3)
+        custom_config = Simple2DRobotParams(x_dim=3)
         custom_robot = Simple2DRobot(config=custom_config)
         result = custom_robot.f_x(np.array([1.0, 2.0, 3.0]))
         expected = np.zeros((3, 3))
@@ -130,7 +130,7 @@ class TestSimple2DRobot(unittest.TestCase):
         np.testing.assert_array_equal(result, expected)
 
         # Test with different x_dim
-        custom_config = Simple2DRobotConfig(x_dim=4)
+        custom_config = Simple2DRobotParams(x_dim=4)
         custom_robot = Simple2DRobot(config=custom_config)
         result = custom_robot.g_x(np.array([1.0, 2.0, 3.0, 4.0]))
         expected = np.eye(4)
@@ -215,12 +215,12 @@ class TestSimple2DRobotEdgeCases(unittest.TestCase):
     """Tests for edge cases and special conditions"""
 
     def setUp(self):
-        self.config = Simple2DRobotConfig()
+        self.config = Simple2DRobotParams()
         self.robot = Simple2DRobot(config=self.config)
 
     def test_zero_sized_ellipse(self):
         """Test behavior with a zero-sized ellipse (a=b=0)"""
-        zero_config = Simple2DRobotConfig(a=0.0, b=0.0)
+        zero_config = Simple2DRobotParams(a=0.0, b=0.0)
         zero_robot = Simple2DRobot(config=zero_config)
 
         robot_pos = np.array([0, 0])
@@ -245,7 +245,7 @@ class TestSimple2DRobotEdgeCases(unittest.TestCase):
 
     def test_circular_robot(self):
         """Test with a circular robot (a=b)"""
-        circle_config = Simple2DRobotConfig(a=10.0, b=10.0)  # a circle
+        circle_config = Simple2DRobotParams(a=10.0, b=10.0)  # a circle
         circle_robot = Simple2DRobot(config=circle_config)
 
         robot_pos = np.array([0, 0])

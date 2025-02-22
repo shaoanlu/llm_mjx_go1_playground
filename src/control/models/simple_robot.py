@@ -7,9 +7,9 @@ from src.control.models.base import ControlAffineSystem, ControlAffineSystemPara
 
 
 @dataclass(kw_only=True)
-class Simple2DRobotConfig(ControlAffineSystemParams):
-    a: float = field(default=41.0)  # ellipse param approximating robot collision region in XY plane
-    b: float = field(default=24.0)  # ellipse param approximating robot collision region in XY plane
+class Simple2DRobotParams(ControlAffineSystemParams):
+    a: float = field(default=0.41)  # ellipse param (in meter) approximating robot collision region in XY plane
+    b: float = field(default=0.24)  # ellipse param (in meter) approximating robot collision region in XY plane
     x_dim: int = field(default=2)  # dimension of the state space
     u_dim: int = field(default=2)  # dimension of the control space
 
@@ -28,7 +28,7 @@ class Simple2DRobot(ControlAffineSystem):
     where (xc, yc) is the center of the ellipse, a is the semi-major axis, and b is the semi-minor
     """
 
-    def __init__(self, config: Simple2DRobotConfig = Simple2DRobotConfig(), **kwargs) -> None:
+    def __init__(self, config: Simple2DRobotParams = Simple2DRobotParams(), **kwargs) -> None:
         super().__init__(config=config, **kwargs)
 
     def f_x(self, x: np.ndarray) -> np.ndarray:
