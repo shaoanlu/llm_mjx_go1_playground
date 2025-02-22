@@ -5,6 +5,7 @@ import numpy as np
 from numpy.testing import assert_array_equal
 
 from src.control.models import Simple2DRobot
+from src.control.models.simple_robot import Simple2DRobotParams
 from src.control.safety_filter import SafeCommand, SafetyFilter, SafetyFilterParams
 from src.control.state import Go1State
 
@@ -13,13 +14,13 @@ class TestSafetyFilter(unittest.TestCase):
     def setUp(self):
         """Set up test fixtures before each test method."""
         self.config = SafetyFilterParams(
-            model=Simple2DRobot(),
+            model=Simple2DRobot(Simple2DRobotParams(a=1.0, b=1.0)),  # robot shape as a circle of radius 1m
             max_output=(1.2, 0.5),
             min_output=(-1.2, -0.5),
-            cbf_alpha=0.1,
+            cbf_alpha=10,
             cbf_slack_penalty=10.0,
             cbf_kappa=0.5,
-            cbf_dist_buffer=15,
+            cbf_dist_buffer=0.3,
         )
         self.safety_filter = SafetyFilter(config=self.config)
 
@@ -56,7 +57,7 @@ class TestSafetyFilter(unittest.TestCase):
         assert_array_equal(result.command, self.nominal_command)
         self.assertIsNone(result.info)
 
-    def test_compute_command_with_obstacles(self):
+    def test_compute_command_with_obstacles_and_zero_input(self):
         """Test safety filter behavior with obstacles present."""
         obstacles = [np.array([5.0, 0.0]), np.array([0.0, 5.0])]  # Obstacle ahead  # Obstacle to the right
 
@@ -69,12 +70,49 @@ class TestSafetyFilter(unittest.TestCase):
         self.assertIsNotNone(result.info)
 
         # Verify command bounds
-        eps = 1e-7
         self.assertTrue(
-            np.all(result.command - eps <= self.config.max_output), msg=f"{result.command=}, {self.config.max_output=}"
+            np.all(result.command <= self.config.max_output), msg=f"{result.command=}, {self.config.max_output=}"
         )
         self.assertTrue(
-            np.all(result.command + eps >= self.config.min_output), msg=f"{result.command=}, {self.config.min_output=}"
+            np.all(result.command >= self.config.min_output), msg=f"{result.command=}, {self.config.min_output=}"
+        )
+
+    def test_compute_command_with_obstacles_and_safe_input(self):
+        """
+        Test safety filter behavior with obstacles present.
+        Input try to move away from the obstacle.
+        """
+        obstacles = [np.array([1.3, 0.0])]  # obstacle is 0.3m away from the robot
+        nominal_command = np.array([-1.0, 0.0])  # Move away from obstacle
+
+        result = self.safety_filter.compute_command(
+            state=self.state, command=nominal_command, obstacle_positions=obstacles
+        )
+
+        # Verify command: expect CBF not modify the command
+        np.testing.assert_allclose(
+            result.command, nominal_command, rtol=1e-5, err_msg=f"{result.command=}, {nominal_command=}"
+        )
+
+    def test_compute_command_with_obstacles_and_adversarial_input(self):
+        """
+        Test safety filter behavior with obstacles present.
+        Input try to move towards the obstacle.
+        """
+        obstacles = [np.array([0.7, 0.0])]  # obstacle is 0m away from the robot
+        nominal_command = np.array([1.0, 0.0])  # Move toward obstacle
+
+        result = self.safety_filter.compute_command(
+            state=self.state, command=nominal_command, obstacle_positions=obstacles
+        )
+
+        # Verify command: expect cbf to stop robot from moving in x-axis with max negative output
+        expected_safe_command = np.array([self.config.min_output[0], nominal_command[1]])
+        np.testing.assert_allclose(
+            result.command,
+            expected_safe_command,
+            rtol=1e-5,
+            err_msg=f"{result.command=}, {expected_safe_command=}",
         )
 
     def test_composite_cbf_calculation(self):
