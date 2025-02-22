@@ -48,7 +48,7 @@ def load_dataclass_from_dict(dataclass, data_dict, convert_list_to_array=False):
 def download_go1_assets_from_mujoco_menagerie():
     BASE_URL = "https://raw.githubusercontent.com/google-deepmind/mujoco_menagerie/refs/heads/main/unitree_go1/assets/"
     STL_FNS = ["calf.stl", "hip.stl", "thigh.stl", "thigh_mirror.stl", "trunk.stl"]
-    BASE_OUTPUT_PATH = "examples/xmls/assets/"
+    BASE_OUTPUT_PATH = "xmls/assets/"
     os.makedirs(os.path.dirname(BASE_OUTPUT_PATH), exist_ok=True)  # Ensure directory exists
 
     for fn in STL_FNS:
