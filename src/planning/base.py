@@ -21,3 +21,15 @@ class Planner(Protocol):
 
     @abstractmethod
     def plan(self, **kwargs) -> Any: ...
+
+
+class FixedWaypointsPlanner:
+    """
+    A simple planner that plans a fixed set of waypoints.
+    """
+
+    def __init__(self, waypoints: List[Any]):
+        self.waypoints = waypoints
+
+    def plan(self, **kwargs) -> NavigationPlan:
+        return NavigationPlan(waypoints=self.waypoints, trajectory=[])

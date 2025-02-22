@@ -5,7 +5,7 @@ import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
-from src.control.algorithms.base import ControllerParams
+from src.control.algorithms.base import ControllerParams, HighLevelController
 from src.control.algorithms.seq_pos_control import SequentialControllerParams
 from src.control.controller_factory import ConfigFactory, ControllerFactory
 from src.control.state import Go1State
@@ -48,7 +48,7 @@ class PositionCommand:
     info: PositionCommandInfo
 
 
-class PositionController:
+class PositionController(HighLevelController):
     """
     Position controller for the Go1 robot that generate velocity command to go to target XY position
     """
