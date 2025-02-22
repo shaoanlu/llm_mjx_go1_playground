@@ -159,7 +159,7 @@ class TestSimple2DRobot(unittest.TestCase):
 
         # Check result
         expected = 50 - 8
-        self.assertAlmostEqual(result, expected, places=5)
+        np.testing.assert_almost_equal(result, expected, decimal=5, err_msg=f"{result=}, {expected=}")
 
     def test_h_integration(self):
         """Integration test for h method with actual _calculate_ellipse_closest_point"""

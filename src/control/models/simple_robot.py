@@ -28,7 +28,7 @@ class Simple2DRobot(ControlAffineSystem):
     where (xc, yc) is the center of the ellipse, a is the semi-major axis, and b is the semi-minor
     """
 
-    def __init__(self, config: Simple2DRobotConfig, **kwargs) -> None:
+    def __init__(self, config: Simple2DRobotConfig = Simple2DRobotConfig(), **kwargs) -> None:
         super().__init__(config=config, **kwargs)
 
     def f_x(self, x: np.ndarray) -> np.ndarray:
@@ -37,15 +37,18 @@ class Simple2DRobot(ControlAffineSystem):
     def g_x(self, x: np.ndarray) -> np.ndarray:
         return np.eye(self.config.x_dim)
 
-    def h(self, x: np.ndarray, obs_x: np.ndarray) -> np.array:
+    def h(self, x: np.ndarray, obs_x: np.ndarray) -> np.ndarray:
         """
         Distance between the robot (as an ellipse) and the obstacle
         barrier func is ||x - xr||^2 - dist_collision**2
         where dist_collision is the distance between the center of the ellipse and intersection point on the ellipse
+
+        Returns:
+            The value of the barrier function. shape=(N,)
         """
         intersection_points = _calculate_ellipse_closest_point(center=x, a=self.config.a, b=self.config.b, x=obs_x)
         dist_collision = np.linalg.norm(x - intersection_points, axis=1)
-        return (np.linalg.norm(x - obs_x, axis=1) ** 2 - dist_collision**2).squeeze()
+        return (np.linalg.norm(x - obs_x, axis=1) ** 2 - dist_collision**2).reshape(-1)  # shape=(N,)
 
     def h_dot(self, x: np.ndarray, obs_x: np.ndarray) -> np.array:
         return 2 * (x - obs_x)
