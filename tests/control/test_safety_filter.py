@@ -98,14 +98,14 @@ class TestSafetyFilter(unittest.TestCase):
         Test safety filter behavior with obstacles present.
         Input try to move towards the obstacle.
         """
-        obstacles = [np.array([0.7, 0.0])]  # obstacle is 0m away from the robot
+        obstacles = [np.array([0.7, 0.0])]  # obstacle collides with the robot
         nominal_command = np.array([1.0, 0.0])  # Move toward obstacle
 
         result = self.safety_filter.compute_command(
             state=self.state, command=nominal_command, obstacle_positions=obstacles
         )
 
-        # Verify command: expect cbf to stop robot from moving in x-axis with max negative output
+        # Verify command: expect cbf to drive robot away from the obstacle with max negative command
         expected_safe_command = np.array([self.config.min_output[0], nominal_command[1]])
         np.testing.assert_allclose(
             result.command,

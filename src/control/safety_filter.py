@@ -143,7 +143,6 @@ class SafetyFilter(HighLevelController):
         """
 
         # Calculate the barrier term
-        # safety filter introduces an extra buffer to the barrier to avoid collision
         hi_x = self.model.h(x=pos, obs_x=obs_pos)  # shape=(nh,)
         h_x = -1 / self.config.cbf_kappa * logsumexp(-self.config.cbf_kappa * hi_x)  # compisite hi(x) to shape=(1,)
         assert hi_x.shape == (len(obs_pos),), (

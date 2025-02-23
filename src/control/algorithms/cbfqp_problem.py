@@ -3,16 +3,15 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 import proxsuite
-from scipy import sparse
 
 
 @dataclass(kw_only=True)
 class QPProblemData:
     """Data structure for Quadratic Programming problem matrices and vectors."""
 
-    P: sparse.csc_matrix  # Quadratic cost matrix
+    P: np.ndarray  # Quadratic cost matrix
     q: np.ndarray  # Linear cost vector
-    A: sparse.csc_matrix  # Constraint matrix
+    A: np.ndarray  # Constraint matrix
     l: np.ndarray  # Lower bounds vector
     u: np.ndarray  # Upper bounds vector
 
@@ -120,7 +119,7 @@ class CBFQPProblem:
         opt_slack = res.x[self.nx :]
         return CBFQPSolution(u=opt_u, slack=opt_slack, qpproblem=data)
 
-    def _create_cost_matrix(self, slack_penalty: float) -> sparse.csc_matrix:
+    def _create_cost_matrix(self, slack_penalty: float) -> np.ndarray:
         """
         Create the quadratic cost matrix P.
 
@@ -128,7 +127,7 @@ class CBFQPProblem:
             slack_penalty (float): Penalty coefficient for slack variables
 
         Returns:
-            sparse.csc_matrix: Sparse matrix P of shape (nx + nh, nx + nh)
+            Matrix P of shape (nx + nh, nx + nh)
         """
         P = np.eye(self.nx + self.nh)
         P[self.nx :, self.nx :] = P[self.nx :, self.nx :] * slack_penalty  # Penalize slack variables
@@ -146,7 +145,7 @@ class CBFQPProblem:
         """
         return np.hstack([-nominal_control, np.zeros(self.nh)])  # Minimize deviation from nominal control
 
-    def _create_constraint_matrix(self, coeffs_dhdx: List[List[float]]) -> sparse.csc_matrix:
+    def _create_constraint_matrix(self, coeffs_dhdx: List[List[float]]) -> np.ndarray:
         """
         Create the constraint matrix A.
 
@@ -154,7 +153,7 @@ class CBFQPProblem:
             coeffs_dhdx (List[List[float]]): Coefficients of barrier function derivatives ∇h(x)
 
         Returns:
-            sparse.csc_matrix: Matrix A of shape (nh + nx + nh, nh + nx)
+            Matrix A of shape (nh + nx + nh, nh + nx)
         """
         cbf_constraint_matrix = np.array(coeffs_dhdx)
         control_slack_constraints_matrix = np.eye(self.nx + self.nh)
