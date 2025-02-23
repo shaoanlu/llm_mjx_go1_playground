@@ -93,127 +93,127 @@
       <body name="head_dummy" pos="0.5 0.0 0.12">
       </body>
       
-      <site name="lidar_-60" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.5 -0.866 0"/>
-      <site name="lidar_-59" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.515 -0.857 0"/>
-      <site name="lidar_-58" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.53 -0.848 0"/>
-      <site name="lidar_-57" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.545 -0.839 0"/>
-      <site name="lidar_-56" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.559 -0.829 0"/>
-      <site name="lidar_-55" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.574 -0.819 0"/>
-      <site name="lidar_-54" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.588 -0.809 0"/>
-      <site name="lidar_-53" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.602 -0.799 0"/>
-      <site name="lidar_-52" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.616 -0.788 0"/>
-      <site name="lidar_-51" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.629 -0.777 0"/>
-      <site name="lidar_-50" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.643 -0.766 0"/>
-      <site name="lidar_-49" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.656 -0.755 0"/>
-      <site name="lidar_-48" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.669 -0.743 0"/>
-      <site name="lidar_-47" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.682 -0.731 0"/>
-      <site name="lidar_-46" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.695 -0.719 0"/>
-      <site name="lidar_-45" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.707 -0.707 0"/>
-      <site name="lidar_-44" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.719 -0.695 0"/>
-      <site name="lidar_-43" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.731 -0.682 0"/>
-      <site name="lidar_-42" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.743 -0.669 0"/>
-      <site name="lidar_-41" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.755 -0.656 0"/>
-      <site name="lidar_-40" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.766 -0.643 0"/>
-      <site name="lidar_-39" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.777 -0.629 0"/>
-      <site name="lidar_-38" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.788 -0.616 0"/>
-      <site name="lidar_-37" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.799 -0.602 0"/>
-      <site name="lidar_-36" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.809 -0.588 0"/>
-      <site name="lidar_-35" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.819 -0.574 0"/>
-      <site name="lidar_-34" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.829 -0.559 0"/>
-      <site name="lidar_-33" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.839 -0.545 0"/>
-      <site name="lidar_-32" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.848 -0.53 0"/>
-      <site name="lidar_-31" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.857 -0.515 0"/>
-      <site name="lidar_-30" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.866 -0.5 0"/>
-      <site name="lidar_-29" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.875 -0.485 0"/>
-      <site name="lidar_-28" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.883 -0.469 0"/>
-      <site name="lidar_-27" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.891 -0.454 0"/>
-      <site name="lidar_-26" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.899 -0.438 0"/>
-      <site name="lidar_-25" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.906 -0.423 0"/>
-      <site name="lidar_-24" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.914 -0.407 0"/>
-      <site name="lidar_-23" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.921 -0.391 0"/>
-      <site name="lidar_-22" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.927 -0.375 0"/>
-      <site name="lidar_-21" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.934 -0.358 0"/>
-      <site name="lidar_-20" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.94 -0.342 0"/>
-      <site name="lidar_-19" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.946 -0.326 0"/>
-      <site name="lidar_-18" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.951 -0.309 0"/>
-      <site name="lidar_-17" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.956 -0.292 0"/>
-      <site name="lidar_-16" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.961 -0.276 0"/>
-      <site name="lidar_-15" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.966 -0.259 0"/>
-      <site name="lidar_-14" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.97 -0.242 0"/>
-      <site name="lidar_-13" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.974 -0.225 0"/>
-      <site name="lidar_-12" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.978 -0.208 0"/>
-      <site name="lidar_-11" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.982 -0.191 0"/>
-      <site name="lidar_-10" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.985 -0.174 0"/>
-      <site name="lidar_-9" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.988 -0.156 0"/>
-      <site name="lidar_-8" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.99 -0.139 0"/>
-      <site name="lidar_-7" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.993 -0.122 0"/>
-      <site name="lidar_-6" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.995 -0.105 0"/>
-      <site name="lidar_-5" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.996 -0.087 0"/>
-      <site name="lidar_-4" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.998 -0.07 0"/>
-      <site name="lidar_-3" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.999 -0.052 0"/>
-      <site name="lidar_-2" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.999 -0.035 0"/>
-      <site name="lidar_-1" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="1.0 -0.017 0"/>
-      <site name="lidar_0" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="1.0 0.0 0"/>
-      <site name="lidar_1" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="1.0 0.017 0"/>
-      <site name="lidar_2" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.999 0.035 0"/>
-      <site name="lidar_3" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.999 0.052 0"/>
-      <site name="lidar_4" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.998 0.07 0"/>
-      <site name="lidar_5" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.996 0.087 0"/>
-      <site name="lidar_6" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.995 0.105 0"/>
-      <site name="lidar_7" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.993 0.122 0"/>
-      <site name="lidar_8" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.99 0.139 0"/>
-      <site name="lidar_9" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.988 0.156 0"/>
-      <site name="lidar_10" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.985 0.174 0"/>
-      <site name="lidar_11" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.982 0.191 0"/>
-      <site name="lidar_12" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.978 0.208 0"/>
-      <site name="lidar_13" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.974 0.225 0"/>
-      <site name="lidar_14" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.97 0.242 0"/>
-      <site name="lidar_15" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.966 0.259 0"/>
-      <site name="lidar_16" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.961 0.276 0"/>
-      <site name="lidar_17" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.956 0.292 0"/>
-      <site name="lidar_18" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.951 0.309 0"/>
-      <site name="lidar_19" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.946 0.326 0"/>
-      <site name="lidar_20" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.94 0.342 0"/>
-      <site name="lidar_21" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.934 0.358 0"/>
-      <site name="lidar_22" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.927 0.375 0"/>
-      <site name="lidar_23" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.921 0.391 0"/>
-      <site name="lidar_24" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.914 0.407 0"/>
-      <site name="lidar_25" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.906 0.423 0"/>
-      <site name="lidar_26" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.899 0.438 0"/>
-      <site name="lidar_27" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.891 0.454 0"/>
-      <site name="lidar_28" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.883 0.469 0"/>
-      <site name="lidar_29" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.875 0.485 0"/>
-      <site name="lidar_30" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.866 0.5 0"/>
-      <site name="lidar_31" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.857 0.515 0"/>
-      <site name="lidar_32" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.848 0.53 0"/>
-      <site name="lidar_33" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.839 0.545 0"/>
-      <site name="lidar_34" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.829 0.559 0"/>
-      <site name="lidar_35" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.819 0.574 0"/>
-      <site name="lidar_36" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.809 0.588 0"/>
-      <site name="lidar_37" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.799 0.602 0"/>
-      <site name="lidar_38" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.788 0.616 0"/>
-      <site name="lidar_39" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.777 0.629 0"/>
-      <site name="lidar_40" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.766 0.643 0"/>
-      <site name="lidar_41" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.755 0.656 0"/>
-      <site name="lidar_42" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.743 0.669 0"/>
-      <site name="lidar_43" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.731 0.682 0"/>
-      <site name="lidar_44" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.719 0.695 0"/>
-      <site name="lidar_45" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.707 0.707 0"/>
-      <site name="lidar_46" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.695 0.719 0"/>
-      <site name="lidar_47" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.682 0.731 0"/>
-      <site name="lidar_48" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.669 0.743 0"/>
-      <site name="lidar_49" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.656 0.755 0"/>
-      <site name="lidar_50" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.643 0.766 0"/>
-      <site name="lidar_51" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.629 0.777 0"/>
-      <site name="lidar_52" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.616 0.788 0"/>
-      <site name="lidar_53" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.602 0.799 0"/>
-      <site name="lidar_54" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.588 0.809 0"/>
-      <site name="lidar_55" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.574 0.819 0"/>
-      <site name="lidar_56" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.559 0.829 0"/>
-      <site name="lidar_57" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.545 0.839 0"/>
-      <site name="lidar_58" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.53 0.848 0"/>
-      <site name="lidar_59" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.515 0.857 0"/>
-      <site name="lidar_60" type="box" size="0.1 0.1 0.1" pos="0 0 0.1" rgba="0 1 0 0" zaxis="0.5 0.866 0"/>
+      <site name="lidar_-60" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.5 -0.866 0" group="5"/>
+      <site name="lidar_-59" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.515 -0.857 0" group="5"/>
+      <site name="lidar_-58" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.53 -0.848 0" group="5"/>
+      <site name="lidar_-57" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.545 -0.839 0" group="5"/>
+      <site name="lidar_-56" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.559 -0.829 0" group="5"/>
+      <site name="lidar_-55" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.574 -0.819 0" group="5"/>
+      <site name="lidar_-54" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.588 -0.809 0" group="5"/>
+      <site name="lidar_-53" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.602 -0.799 0" group="5"/>
+      <site name="lidar_-52" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.616 -0.788 0" group="5"/>
+      <site name="lidar_-51" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.629 -0.777 0" group="5"/>
+      <site name="lidar_-50" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.643 -0.766 0" group="5"/>
+      <site name="lidar_-49" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.656 -0.755 0" group="5"/>
+      <site name="lidar_-48" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.669 -0.743 0" group="5"/>
+      <site name="lidar_-47" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.682 -0.731 0" group="5"/>
+      <site name="lidar_-46" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.695 -0.719 0" group="5"/>
+      <site name="lidar_-45" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.707 -0.707 0" group="5"/>
+      <site name="lidar_-44" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.719 -0.695 0" group="5"/>
+      <site name="lidar_-43" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.731 -0.682 0" group="5"/>
+      <site name="lidar_-42" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.743 -0.669 0" group="5"/>
+      <site name="lidar_-41" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.755 -0.656 0" group="5"/>
+      <site name="lidar_-40" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.766 -0.643 0" group="5"/>
+      <site name="lidar_-39" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.777 -0.629 0" group="5"/>
+      <site name="lidar_-38" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.788 -0.616 0" group="5"/>
+      <site name="lidar_-37" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.799 -0.602 0" group="5"/>
+      <site name="lidar_-36" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.809 -0.588 0" group="5"/>
+      <site name="lidar_-35" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.819 -0.574 0" group="5"/>
+      <site name="lidar_-34" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.829 -0.559 0" group="5"/>
+      <site name="lidar_-33" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.839 -0.545 0" group="5"/>
+      <site name="lidar_-32" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.848 -0.53 0" group="5"/>
+      <site name="lidar_-31" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.857 -0.515 0" group="5"/>
+      <site name="lidar_-30" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.866 -0.5 0" group="5"/>
+      <site name="lidar_-29" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.875 -0.485 0" group="5"/>
+      <site name="lidar_-28" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.883 -0.469 0" group="5"/>
+      <site name="lidar_-27" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.891 -0.454 0" group="5"/>
+      <site name="lidar_-26" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.899 -0.438 0" group="5"/>
+      <site name="lidar_-25" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.906 -0.423 0" group="5"/>
+      <site name="lidar_-24" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.914 -0.407 0" group="5"/>
+      <site name="lidar_-23" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.921 -0.391 0" group="5"/>
+      <site name="lidar_-22" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.927 -0.375 0" group="5"/>
+      <site name="lidar_-21" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.934 -0.358 0" group="5"/>
+      <site name="lidar_-20" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.94 -0.342 0" group="5"/>
+      <site name="lidar_-19" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.946 -0.326 0" group="5"/>
+      <site name="lidar_-18" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.951 -0.309 0" group="5"/>
+      <site name="lidar_-17" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.956 -0.292 0" group="5"/>
+      <site name="lidar_-16" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.961 -0.276 0" group="5"/>
+      <site name="lidar_-15" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.966 -0.259 0" group="5"/>
+      <site name="lidar_-14" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.97 -0.242 0" group="5"/>
+      <site name="lidar_-13" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.974 -0.225 0" group="5"/>
+      <site name="lidar_-12" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.978 -0.208 0" group="5"/>
+      <site name="lidar_-11" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.982 -0.191 0" group="5"/>
+      <site name="lidar_-10" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.985 -0.174 0" group="5"/>
+      <site name="lidar_-9" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.988 -0.156 0" group="5"/>
+      <site name="lidar_-8" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.99 -0.139 0" group="5"/>
+      <site name="lidar_-7" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.993 -0.122 0" group="5"/>
+      <site name="lidar_-6" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.995 -0.105 0" group="5"/>
+      <site name="lidar_-5" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.996 -0.087 0" group="5"/>
+      <site name="lidar_-4" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.998 -0.07 0" group="5"/>
+      <site name="lidar_-3" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.999 -0.052 0" group="5"/>
+      <site name="lidar_-2" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.999 -0.035 0" group="5"/>
+      <site name="lidar_-1" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="1.0 -0.017 0" group="5"/>
+      <site name="lidar_0" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="1.0 0.0 0" group="5"/>
+      <site name="lidar_1" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="1.0 0.017 0" group="5"/>
+      <site name="lidar_2" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.999 0.035 0" group="5"/>
+      <site name="lidar_3" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.999 0.052 0" group="5"/>
+      <site name="lidar_4" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.998 0.07 0" group="5"/>
+      <site name="lidar_5" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.996 0.087 0" group="5"/>
+      <site name="lidar_6" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.995 0.105 0" group="5"/>
+      <site name="lidar_7" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.993 0.122 0" group="5"/>
+      <site name="lidar_8" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.99 0.139 0" group="5"/>
+      <site name="lidar_9" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.988 0.156 0" group="5"/>
+      <site name="lidar_10" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.985 0.174 0" group="5"/>
+      <site name="lidar_11" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.982 0.191 0" group="5"/>
+      <site name="lidar_12" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.978 0.208 0" group="5"/>
+      <site name="lidar_13" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.974 0.225 0" group="5"/>
+      <site name="lidar_14" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.97 0.242 0" group="5"/>
+      <site name="lidar_15" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.966 0.259 0" group="5"/>
+      <site name="lidar_16" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.961 0.276 0" group="5"/>
+      <site name="lidar_17" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.956 0.292 0" group="5"/>
+      <site name="lidar_18" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.951 0.309 0" group="5"/>
+      <site name="lidar_19" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.946 0.326 0" group="5"/>
+      <site name="lidar_20" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.94 0.342 0" group="5"/>
+      <site name="lidar_21" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.934 0.358 0" group="5"/>
+      <site name="lidar_22" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.927 0.375 0" group="5"/>
+      <site name="lidar_23" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.921 0.391 0" group="5"/>
+      <site name="lidar_24" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.914 0.407 0" group="5"/>
+      <site name="lidar_25" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.906 0.423 0" group="5"/>
+      <site name="lidar_26" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.899 0.438 0" group="5"/>
+      <site name="lidar_27" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.891 0.454 0" group="5"/>
+      <site name="lidar_28" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.883 0.469 0" group="5"/>
+      <site name="lidar_29" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.875 0.485 0" group="5"/>
+      <site name="lidar_30" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.866 0.5 0" group="5"/>
+      <site name="lidar_31" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.857 0.515 0" group="5"/>
+      <site name="lidar_32" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.848 0.53 0" group="5"/>
+      <site name="lidar_33" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.839 0.545 0" group="5"/>
+      <site name="lidar_34" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.829 0.559 0" group="5"/>
+      <site name="lidar_35" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.819 0.574 0" group="5"/>
+      <site name="lidar_36" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.809 0.588 0" group="5"/>
+      <site name="lidar_37" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.799 0.602 0" group="5"/>
+      <site name="lidar_38" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.788 0.616 0" group="5"/>
+      <site name="lidar_39" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.777 0.629 0" group="5"/>
+      <site name="lidar_40" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.766 0.643 0" group="5"/>
+      <site name="lidar_41" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.755 0.656 0" group="5"/>
+      <site name="lidar_42" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.743 0.669 0" group="5"/>
+      <site name="lidar_43" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.731 0.682 0" group="5"/>
+      <site name="lidar_44" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.719 0.695 0" group="5"/>
+      <site name="lidar_45" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.707 0.707 0" group="5"/>
+      <site name="lidar_46" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.695 0.719 0" group="5"/>
+      <site name="lidar_47" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.682 0.731 0" group="5"/>
+      <site name="lidar_48" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.669 0.743 0" group="5"/>
+      <site name="lidar_49" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.656 0.755 0" group="5"/>
+      <site name="lidar_50" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.643 0.766 0" group="5"/>
+      <site name="lidar_51" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.629 0.777 0" group="5"/>
+      <site name="lidar_52" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.616 0.788 0" group="5"/>
+      <site name="lidar_53" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.602 0.799 0" group="5"/>
+      <site name="lidar_54" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.588 0.809 0" group="5"/>
+      <site name="lidar_55" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.574 0.819 0" group="5"/>
+      <site name="lidar_56" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.559 0.829 0" group="5"/>
+      <site name="lidar_57" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.545 0.839 0" group="5"/>
+      <site name="lidar_58" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.53 0.848 0" group="5"/>
+      <site name="lidar_59" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.515 0.857 0" group="5"/>
+      <site name="lidar_60" type="box" size="0.1 0.1 0.1" pos="0 0 0.3" rgba="0 1 0 0" zaxis="0.5 0.866 0" group="5"/>
       <body name="FR_hip" pos="0.1881 -0.04675 0">
         <inertial pos="-0.0049166 0.00762615 -8.865e-05" quat="0.507341 0.514169 0.495027 0.482891" mass="0.68"
           diaginertia="0.000734064 0.000468438 0.000398719"/>
