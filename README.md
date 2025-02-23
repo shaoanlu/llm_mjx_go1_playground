@@ -24,9 +24,17 @@ Leveraging the trained locomotion policy, this demo further enhance its autonomy
 
 ![](examples/gifs/Go1_LLM_Navigation_fog.gif)
 
+### 3. Collision avoidance using a safety filter [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/shaoanlu/llm_mjx_go1_playground/blob/main/examples/cbf_safety_filter.ipynb)
+
+A safety filter is introduced between the high-level velocity command generator and the low-level MLP policy. The safety filter is based on the control barrier function (CBF) method and is used to ensure that the robot does not collide with obstacles while following the velocity command.
+
+![](/examples/gifs/Go1_Collision_Avoidance_Comb.gif)
+- Left: w/o safety fillter
+- Right: w/ safety fillter
+
 
 ## Learning Notes
-- Each Go robot task uses a different environmental configuration (including noise parameters, mojoco model, initial poses, randomization settings, actuation calculations, etc.). Policies trained for one task generally don't perform well when applied to different task environments.
+- Each Go1 robot task uses a different environmental configuration (including noise parameters, mojoco model, initial poses, randomization settings, actuation calculations, etc.). Policies trained for one task generally don't perform well when applied to different task environments.
   - I was a little bit surprised as I expect RL policies be more robust.
   - Joystick XML: `FEET_ONLY_FLAT_TERRAIN_XML` (only feet-ground collision is enabled, also diff trunk collision geometry)
   - Handstand XML: `FULL_FLAT_TERRAIN_XML`
