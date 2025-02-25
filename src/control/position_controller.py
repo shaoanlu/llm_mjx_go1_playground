@@ -91,7 +91,7 @@ class PositionController(HighLevelController):
         if self.prev_command is None:
             self.prev_command = jax.numpy.zeros(3)
 
-        if isinstance(state, mjx_env.State):
+        if not isinstance(state, Go1State):
             state = Go1State.from_mjx_state(state)
 
         state, ref_state = self._calculate_reference_state(state, target_position)
