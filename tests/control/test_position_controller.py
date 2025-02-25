@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 import jax.numpy as jnp
 import numpy as np
+from mujoco_playground._src import mjx_env
 
 from src.control.algorithms.base import Controller, ControllerParams
 from src.control.algorithms.polar_coord_control import PolarCoordinateControllerParams
@@ -14,6 +15,7 @@ from src.control.position_controller import (
     PositionController,
     PositionControllerParams,
 )
+from src.control.state import Go1State
 from src.utils import load_yaml
 
 
@@ -113,7 +115,8 @@ class TestPositionController(unittest.TestCase):
 
     def test_compute_command_arrival(self):
         """Test command computation when robot has arrived at target"""
-        state = MagicMock()
+        state = MagicMock(spec=mjx_env.State)
+        state.data = MagicMock()
         state.data.qpos = np.zeros(19)  # 7 base DOFs + 12 joint DOFs
         state.data.site_xmat = np.stack([np.eye(3)] * 6, axis=0)
         state.data.site_xpos = np.zeros((6, 3))
@@ -123,10 +126,20 @@ class TestPositionController(unittest.TestCase):
         np.testing.assert_array_equal(result.command, jnp.zeros(3), err_msg=f"{result.command=}")
         self.assertTrue(result.info.is_arrived)
 
+        # Test with Go1State
+        go1_state = MagicMock(spec=Go1State)
+        go1_state.position = np.zeros(3)
+        go1_state.yaw = 0.0
+
+        result = self.controller.compute_command(go1_state, target_position)
+        np.testing.assert_array_equal(result.command, jnp.zeros(3), err_msg=f"{result.command=}")
+        self.assertTrue(result.info.is_arrived)
+
     @patch.object(PositionController, "_primary_control")
     def test_compute_command_primary_control(self, mock_primary):
         """Test command computation using primary controller"""
-        state = MagicMock()
+        state = MagicMock(spec=mjx_env.State)
+        state.data = MagicMock()
         state.data.qpos = np.zeros(19)
         state.data.site_xmat = np.stack([np.eye(3)] * 6, axis=0)
         state.data.site_xpos = np.zeros((6, 3))
@@ -138,15 +151,39 @@ class TestPositionController(unittest.TestCase):
         self.assertTrue(mock_primary.called)
         np.testing.assert_array_almost_equal(result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}")
 
+        # Test with Go1State
+        go1_state = MagicMock(spec=Go1State)
+        go1_state.position = np.zeros(3)
+        go1_state.yaw = 0.0
+
+        mock_primary.return_value = np.array([1.0, 0.0, 0.5])
+        result = self.controller.compute_command(state, target_position)
+
+        self.assertTrue(mock_primary.called)
+        np.testing.assert_array_almost_equal(result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}")
+
     @patch.object(PositionController, "_primary_control", side_effect=Exception)
     @patch.object(PositionController, "_fallback_control")
     def test_compute_command_fallback(self, mock_fallback, mock_primary):
         """Test fallback to secondary controller when primary fails"""
-        state = MagicMock()
+        state = MagicMock(spec=mjx_env.State)
+        state.data = MagicMock()
         state.data.qpos = np.zeros(19)
         state.data.site_xmat = np.stack([np.eye(3)] * 6, axis=0)
         state.data.site_xpos = np.zeros((6, 3))
         target_position = np.array([1.0, 1.0])
+
+        mock_fallback.return_value = np.array([0.5, 0.0, 0.3])
+        result = self.controller.compute_command(state, target_position)
+
+        self.assertTrue(mock_primary.called)
+        self.assertTrue(mock_fallback.called)
+        np.testing.assert_array_almost_equal(result.command, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.command=}")
+
+        # Test with Go1State
+        go1_state = MagicMock(spec=Go1State)
+        go1_state.position = np.zeros(3)
+        go1_state.yaw = 0.0
 
         mock_fallback.return_value = np.array([0.5, 0.0, 0.3])
         result = self.controller.compute_command(state, target_position)

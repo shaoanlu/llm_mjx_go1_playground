@@ -76,7 +76,7 @@ class PositionController(HighLevelController):
                 # Simple but unsafe dynamic attributiuon. No type safety and validation
                 setattr(self, key, value)
 
-    def compute_command(self, state: mjx_env.State, target_position: np.ndarray) -> PositionCommand:
+    def compute_command(self, state: mjx_env.State | Go1State, target_position: np.ndarray) -> PositionCommand:
         """
         Compute the velocity command [v_x, v_y, v_yaw] to reach the target position
 
@@ -91,7 +91,9 @@ class PositionController(HighLevelController):
         if self.prev_command is None:
             self.prev_command = jax.numpy.zeros(3)
 
-        state = Go1State.from_mjx_state(state)
+        if isinstance(state, mjx_env.State):
+            state = Go1State.from_mjx_state(state)
+
         state, ref_state = self._calculate_reference_state(state, target_position)
         dist = self._compute_distance(state, ref_state)
 
