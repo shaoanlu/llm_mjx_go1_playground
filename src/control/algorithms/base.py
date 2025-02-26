@@ -5,6 +5,7 @@ from typing import Any
 import jax
 import numpy as np
 
+from src.control.state import Go1Command
 from src.utils import load_dataclass_from_dict
 
 
@@ -36,10 +37,13 @@ class HighlevelControllerInfo:
     info_type: str = "default"
 
 
-@dataclass(kw_only=True, frozen=True)
+@dataclass(kw_only=True)
 class HighLevelCommand:
-    value: np.ndarray | jax.Array
+    value: np.ndarray | jax.Array  # X, Y, yaw
     info: HighlevelControllerInfo
+
+    def as_go1_command(self) -> Go1Command:
+        return Go1Command(value=self.value)
 
 
 class HighLevelController(ABC):

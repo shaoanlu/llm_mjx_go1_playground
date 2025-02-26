@@ -78,3 +78,8 @@ class ControlAffineSystem(ABC):
     def postprocess_go1_command(self, control: np.ndarray, default_value: np.ndarray | None, **kwargs) -> Go1Command:
         # Convert the control of shape (u_dim) into unified Go1Command interface
         raise NotImplementedError
+
+    @abstractmethod
+    def preprocess_go1_command(self, command: Go1Command) -> np.ndarray:
+        # Convert the Go1Command to control of shape (u_dim) for the ControlAffineSystem
+        raise NotImplementedError

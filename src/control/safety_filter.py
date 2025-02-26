@@ -82,9 +82,9 @@ class SafetyFilter(HighLevelController):
             return HighLevelCommand(value=command, info=None)
 
         # Preprocess and validate the input
-        command = np.array(command)
-        obstacle_positions = np.array(obstacle_positions)
-        state = self.model.preprocess_go1_state(state)
+        obstacle_positions: np.ndarray = np.array(obstacle_positions)
+        state: np.ndarray = self.model.preprocess_go1_state(state)
+        command: np.ndarray = self.model.preprocess_go1_command(command)
         self._validate_input(state=state, command=command, obstacle_positions=obstacle_positions)
 
         # Calculate the barrier function and its derivative coefficients
@@ -103,6 +103,8 @@ class SafetyFilter(HighLevelController):
             disturbance_h_dot=self._estimate_disturbance(),
         )
         sol: CBFQPSolution = prob.solve(qp_data)
+
+        # Post-process
         command: Go1Command = self.model.postprocess_go1_command(sol.u, default_value=command)
 
         return HighLevelCommand(value=command.value, info=sol)
