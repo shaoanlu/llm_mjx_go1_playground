@@ -7,13 +7,13 @@ from mujoco_playground._src import mjx_env
 
 from src.control.algorithms.base import (
     ControllerParams,
+    HighLevelCommand,
     HighLevelController,
     HighlevelControllerInfo,
-    HighLevelCommand,
 )
 from src.control.algorithms.seq_pos_control import SequentialControllerParams
 from src.control.controller_factory import ConfigFactory, ControllerFactory
-from src.control.state import Go1State, Go1Command
+from src.control.state import Go1Command, Go1State
 from src.utils import load_dataclass_from_dict
 
 

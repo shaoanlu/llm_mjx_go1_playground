@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 

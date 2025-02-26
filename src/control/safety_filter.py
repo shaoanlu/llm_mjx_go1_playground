@@ -4,10 +4,10 @@ from typing import List, Tuple
 import numpy as np
 from scipy.special import logsumexp
 
-from src.control.algorithms.base import ControllerParams, HighLevelController, HighLevelCommand
+from src.control.algorithms.base import ControllerParams, HighLevelCommand, HighLevelController
 from src.control.algorithms.cbfqp_problem import CBFQPProblem, CBFQPSolution, QPProblemData
 from src.control.models import ControlAffineSystem, Simple2DRobot
-from src.control.state import Go1State, Go1Command
+from src.control.state import Go1Command, Go1State
 
 
 @dataclass(kw_only=True)
@@ -82,6 +82,7 @@ class SafetyFilter(HighLevelController):
             return HighLevelCommand(value=command, info=None)
 
         # Preprocess and validate the input
+        command = np.array(command)
         obstacle_positions = np.array(obstacle_positions)
         state = self.model.preprocess_go1_state(state)
         self._validate_input(state=state, command=command, obstacle_positions=obstacle_positions)

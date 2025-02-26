@@ -4,11 +4,11 @@ from unittest.mock import Mock, patch
 import numpy as np
 from numpy.testing import assert_array_equal
 
+from src.control.algorithms.base import HighLevelCommand
 from src.control.models import Simple2DRobot
 from src.control.models.simple_robot import Simple2DRobotParams
 from src.control.safety_filter import SafetyFilter, SafetyFilterParams
 from src.control.state import Go1State
-from src.control.algorithms.base import HighLevelCommand
 
 
 class TestSafetyFilter(unittest.TestCase):

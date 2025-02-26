@@ -4,7 +4,7 @@ from typing import Tuple
 import numpy as np
 
 from src.control.models.base import ControlAffineSystem, ControlAffineSystemParams
-from src.control.state import Go1State, Go1Command
+from src.control.state import Go1Command, Go1State
 
 
 @dataclass(kw_only=True)
