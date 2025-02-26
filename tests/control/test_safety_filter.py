@@ -8,7 +8,7 @@ from src.control.algorithms.base import HighLevelCommand
 from src.control.models import Simple2DRobot
 from src.control.models.simple_robot import Simple2DRobotParams
 from src.control.safety_filter import SafetyFilter, SafetyFilterParams
-from src.control.state import Go1State
+from src.control.state import Go1State, Go1Command
 
 
 class TestSafetyFilter(unittest.TestCase):
@@ -27,7 +27,7 @@ class TestSafetyFilter(unittest.TestCase):
         # Common test inputs
         self.state = Mock(spec=Go1State)
         self.state.position = np.array([0.0, 0.0, 0.0])  # Only XY coords used
-        self.nominal_command = np.array([0.5, 0.3])
+        self.nominal_command = Go1Command(value=np.array([0.5, 0.3]))
 
     def test_initialization(self):
         """Test proper initialization of SafetyFilter."""
@@ -50,11 +50,11 @@ class TestSafetyFilter(unittest.TestCase):
     def test_compute_command_no_obstacles(self):
         """Test behavior when no obstacles are present."""
         result = self.safety_filter.compute_command(
-            state=self.state, command=self.nominal_command, obstacle_positions=[]
+            state=self.state, nominal_command=self.nominal_command, obstacle_positions=[]
         )
 
         self.assertIsInstance(result, HighLevelCommand)
-        assert_array_equal(result.value, self.nominal_command)
+        assert_array_equal(result.value, self.nominal_command.value)
         self.assertIsNone(result.info)
 
     def test_compute_command_with_obstacles_and_zero_input(self):
@@ -62,7 +62,7 @@ class TestSafetyFilter(unittest.TestCase):
         obstacles = [np.array([5.0, 0.0]), np.array([0.0, 5.0])]  # Obstacle ahead  # Obstacle to the right
 
         result = self.safety_filter.compute_command(
-            state=self.state, command=self.nominal_command, obstacle_positions=obstacles
+            state=self.state, nominal_command=self.nominal_command, obstacle_positions=obstacles
         )
 
         self.assertIsInstance(result, HighLevelCommand)
@@ -83,15 +83,15 @@ class TestSafetyFilter(unittest.TestCase):
         Input try to move away from the obstacle.
         """
         obstacles = [np.array([1.3, 0.0])]  # obstacle is 0.3m away from the robot
-        nominal_command = np.array([-1.0, 0.0])  # Move away from obstacle
+        nominal_command = Go1Command(value=np.array([-1.0, 0.0]))  # Move away from obstacle
 
         result = self.safety_filter.compute_command(
-            state=self.state, command=nominal_command, obstacle_positions=obstacles
+            state=self.state, nominal_command=nominal_command, obstacle_positions=obstacles
         )
 
         # Verify command: expect CBF not modify the command
         np.testing.assert_allclose(
-            result.value, nominal_command, rtol=1e-5, err_msg=f"{result.value=}, {nominal_command=}"
+            result.value, nominal_command.value, rtol=1e-5, err_msg=f"{result.value=}, {nominal_command.value=}"
         )
 
     def test_compute_command_with_obstacles_and_adversarial_input(self):
@@ -100,14 +100,14 @@ class TestSafetyFilter(unittest.TestCase):
         Input try to move towards the obstacle.
         """
         obstacles = [np.array([0.7, 0.0])]  # obstacle collides with the robot
-        nominal_command = np.array([1.0, 0.0])  # Move toward obstacle
+        nominal_command = Go1Command(np.array([1.0, 0.0]))  # Move toward obstacle
 
         result = self.safety_filter.compute_command(
-            state=self.state, command=nominal_command, obstacle_positions=obstacles
+            state=self.state, nominal_command=nominal_command, obstacle_positions=obstacles
         )
 
         # Verify command: expect cbf to drive robot away from the obstacle with max negative command
-        expected_safe_command = np.array([self.config.min_output[0], nominal_command[1]])
+        expected_safe_command = np.array([self.config.min_output[0], nominal_command.value[1]])
         np.testing.assert_allclose(
             result.value,
             expected_safe_command,
@@ -144,20 +144,20 @@ class TestSafetyFilter(unittest.TestCase):
 
         with self.assertRaises(AssertionError):
             self.safety_filter.compute_command(
-                state=invalid_state, command=self.nominal_command, obstacle_positions=[np.array([5.0, 0.0])]
+                state=invalid_state, nominal_command=self.nominal_command, obstacle_positions=[np.array([5.0, 0.0])]
             )
 
         with self.assertRaises(AssertionError):
             self.safety_filter.compute_command(
                 state=self.state,
-                command=np.array([0.5]),  # Wrong control dimension
+                nominal_command=Go1Command(np.array([0.5])),  # Wrong control dimension
                 obstacle_positions=[np.array([5.0, 0.0])],
             )
 
         with self.assertRaises(AssertionError):
             self.safety_filter.compute_command(
                 state=self.state,
-                command=self.nominal_command,
+                nominal_command=self.nominal_command,
                 obstacle_positions=[np.array([5.0])],  # Wrong obstacle dimension
             )
 
@@ -166,11 +166,11 @@ class TestSafetyFilter(unittest.TestCase):
         """Test proper setup of the QP problem."""
         mock_qp_instance = Mock()
         mock_qp_problem.return_value = mock_qp_instance
-        mock_qp_instance.solve.return_value = Mock(u=self.nominal_command)
+        mock_qp_instance.solve.return_value = Mock(u=self.nominal_command.value)
 
         obstacles = [np.array([5.0, 0.0])]
         self.safety_filter.compute_command(
-            state=self.state, command=self.nominal_command, obstacle_positions=obstacles
+            state=self.state, nominal_command=self.nominal_command, obstacle_positions=obstacles
         )
 
         # Verify QP problem was created with correct dimensions

@@ -75,7 +75,7 @@ class UnicycleRobot(ControlAffineSystem):
         return command
 
     def preprocess_go1_command(self, command: Go1Command) -> np.ndarray:
-        return np.array([command[0], command[2]])
+        return np.array([command.value[0], command.value[2]])
 
 
 def _calculate_ellipse_closest_point(center: Tuple | np.ndarray, a: float, b: float, x: np.ndarray) -> np.ndarray:

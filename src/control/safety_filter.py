@@ -62,7 +62,7 @@ class SafetyFilter(HighLevelController):
         return np.array(self.config.max_output), np.array(self.config.min_output)
 
     def compute_command(
-        self, state: Go1State, command: np.ndarray, obstacle_positions: List[np.ndarray], **kwargs
+        self, state: Go1State, nominal_command: Go1Command, obstacle_positions: List[np.ndarray], **kwargs
     ) -> HighLevelCommand:
         """
         Compute the safety filter command that does minimal modifications to the nominal command while ensuring safety.
@@ -79,12 +79,12 @@ class SafetyFilter(HighLevelController):
             v_lateral = w * self.model.a
         """
         if len(obstacle_positions) == 0:
-            return HighLevelCommand(value=command, info=None)
+            return HighLevelCommand(value=nominal_command.value, info=None)
 
         # Preprocess and validate the input
         obstacle_positions: np.ndarray = np.array(obstacle_positions)
         state: np.ndarray = self.model.preprocess_go1_state(state)
-        command: np.ndarray = self.model.preprocess_go1_command(command)
+        command: np.ndarray = self.model.preprocess_go1_command(nominal_command)
         self._validate_input(state=state, command=command, obstacle_positions=obstacle_positions)
 
         # Calculate the barrier function and its derivative coefficients
@@ -105,7 +105,7 @@ class SafetyFilter(HighLevelController):
         sol: CBFQPSolution = prob.solve(qp_data)
 
         # Post-process
-        command: Go1Command = self.model.postprocess_go1_command(sol.u, default_value=command)
+        command: Go1Command = self.model.postprocess_go1_command(sol.u, default_value=nominal_command.value)
 
         return HighLevelCommand(value=command.value, info=sol)
 

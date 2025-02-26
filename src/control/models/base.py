@@ -68,6 +68,9 @@ class ControlAffineSystem(ABC):
         # R^n -> R^n*m
         raise NotImplementedError
 
+    # NOTE: At the moment, preprocessing and postprocessing are explicitly defined in this class. In the future,
+    # consider abstract them into a different processing pipeline class whe more robots are added
+
     @abstractmethod
     def preprocess_go1_state(self, state: Go1State, **kwargs) -> np.ndarray:
         # Extract necessary info from the Go1State and return a numpy array of shape (x_dim,)
