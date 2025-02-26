@@ -45,7 +45,7 @@ class HighLevelCommand:
     def __post_init__(self):
         # Enforce value as jax array
         if isinstance(self.value, np.ndarray):
-            self.value = jax.numpy.array(self.value)
+            self.value = jax.numpy.asarray(self.value)
 
     def as_go1_command(self) -> Go1Command:
         # Go1Command expect value attr as np.ndarray
