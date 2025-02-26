@@ -42,8 +42,14 @@ class HighLevelCommand:
     value: np.ndarray | jax.Array  # X, Y, yaw
     info: HighlevelControllerInfo
 
+    def __post_init__(self):
+        # Enforce value as jax array
+        if isinstance(self.value, np.ndarray):
+            self.value = jax.numpy.array(self.value)
+
     def as_go1_command(self) -> Go1Command:
-        return Go1Command(value=self.value)
+        # Go1Command expect value attr as np.ndarray
+        return Go1Command(value=np.array(self.value))
 
 
 class HighLevelController(ABC):

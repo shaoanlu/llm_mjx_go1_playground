@@ -8,7 +8,7 @@ from src.control.algorithms.base import HighLevelCommand
 from src.control.models import Simple2DRobot
 from src.control.models.simple_robot import Simple2DRobotParams
 from src.control.safety_filter import SafetyFilter, SafetyFilterParams
-from src.control.state import Go1State, Go1Command
+from src.control.state import Go1Command, Go1State
 
 
 class TestSafetyFilter(unittest.TestCase):
@@ -54,7 +54,7 @@ class TestSafetyFilter(unittest.TestCase):
         )
 
         self.assertIsInstance(result, HighLevelCommand)
-        assert_array_equal(result.value, self.nominal_command.value)
+        np.testing.assert_allclose(result.value, self.nominal_command.value)
         self.assertIsNone(result.info)
 
     def test_compute_command_with_obstacles_and_zero_input(self):
@@ -71,10 +71,10 @@ class TestSafetyFilter(unittest.TestCase):
 
         # Verify command bounds
         self.assertTrue(
-            np.all(result.value <= self.config.max_output), msg=f"{result.value=}, {self.config.max_output=}"
+            np.all(result.value <= np.array(self.config.max_output)), msg=f"{result.value=}, {self.config.max_output=}"
         )
         self.assertTrue(
-            np.all(result.value >= self.config.min_output), msg=f"{result.value=}, {self.config.min_output=}"
+            np.all(result.value >= np.array(self.config.min_output)), msg=f"{result.value=}, {self.config.min_output=}"
         )
 
     def test_compute_command_with_obstacles_and_safe_input(self):
