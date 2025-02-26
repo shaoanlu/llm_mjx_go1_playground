@@ -4,6 +4,7 @@ from typing import Tuple
 import numpy as np
 
 from src.control.models.base import ControlAffineSystem, ControlAffineSystemParams
+from src.control.state import Go1State
 
 
 @dataclass(kw_only=True)
@@ -52,6 +53,9 @@ class Simple2DRobot(ControlAffineSystem):
 
     def h_dot(self, x: np.ndarray, obs_x: np.ndarray, **kwargs) -> np.array:
         return 2 * (x - obs_x)
+
+    def preprocess_go1_state(self, state: Go1State) -> np.ndarray:
+        return state.position[:2].copy()  # XY position
 
 
 def _calculate_ellipse_closest_point(center: Tuple | np.ndarray, a: float, b: float, x: np.ndarray) -> np.ndarray:

@@ -4,6 +4,7 @@ from typing import Tuple
 import numpy as np
 
 from src.control.models.base import ControlAffineSystem, ControlAffineSystemParams
+from src.control.state import Go1State
 
 
 @dataclass(kw_only=True)
@@ -63,6 +64,9 @@ class UnicycleRobot(ControlAffineSystem):
 
         trans = np.array([[np.cos(theta), np.sin(theta)], [-l * np.sin(theta), l * np.cos(theta)]]).T
         return 2 * new_x @ trans
+
+    def preprocess_go1_state(self, state: Go1State, **kwargs) -> np.ndarray:
+        return np.array([state.position[0], state.position[1], state.yaw])  # XY position and yaw angle
 
 
 def _calculate_ellipse_closest_point(center: Tuple | np.ndarray, a: float, b: float, x: np.ndarray) -> np.ndarray:

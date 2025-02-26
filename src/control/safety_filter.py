@@ -89,7 +89,7 @@ class SafetyFilter(HighLevelController):
 
         # Preprocess and validate the input
         obstacle_positions = np.array(obstacle_positions)
-        state = state.position[:2]  # XY position
+        state = self.model.preprocess_go1_state(state)
         self._validate_input(state=state, command=command, obstacle_positions=obstacle_positions)
 
         # Calculate the barrier function and its derivative coefficients

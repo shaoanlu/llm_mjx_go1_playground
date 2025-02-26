@@ -4,6 +4,8 @@ from typing import Any
 
 import numpy as np
 
+from src.control.state import Go1State
+
 
 @dataclass(kw_only=True)
 class ControlAffineSystemParams:
@@ -64,4 +66,10 @@ class ControlAffineSystem(ABC):
     def g_x(self, x: Any) -> Any:
         # g(x) of a control affine system: x_dot = f(x) + g(x) * u
         # R^n -> R^n*m
+        raise NotImplementedError
+
+    @abstractmethod
+    def preprocess_go1_state(self, state: Go1State, **kwargs) -> np.ndarray:
+        # Extract necessary info from the Go1State and return a numpy array of shape (x_dim,)
+        # which should be able to be passed to the argument x of the member functions
         raise NotImplementedError
