@@ -58,7 +58,7 @@ class Simple2DRobot(ControlAffineSystem):
         return state.position[:2].copy()  # XY position
 
     def postprocess_go1_command(self, control: np.ndarray, default_value: np.ndarray | None, **kwargs) -> Go1Command:
-        command = Go1Command(value=np.zeros(3) if default_value is None else default_value)
+        command = Go1Command() if default_value is None else Go1Command(value=default_value)
         command.value[0] = control[0]
         command.value[1] = control[1]
         return command

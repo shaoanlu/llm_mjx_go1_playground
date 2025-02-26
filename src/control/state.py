@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 from mujoco_playground._src import mjx_env
@@ -48,4 +48,4 @@ class Go1State:
 
 @dataclass
 class Go1Command:
-    value: np.ndarray  # X, Y, yaw
+    value: np.ndarray = field(default_factory=lambda: np.zeros(3))  # X, Y, yaw velocity
