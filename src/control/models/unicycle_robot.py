@@ -4,7 +4,7 @@ from typing import Tuple
 import numpy as np
 
 from src.control.models.base import ControlAffineSystem, ControlAffineSystemParams
-from src.control.state import Go1State
+from src.control.state import Go1State, Go1Command
 
 
 @dataclass(kw_only=True)
@@ -67,6 +67,12 @@ class UnicycleRobot(ControlAffineSystem):
 
     def preprocess_go1_state(self, state: Go1State, **kwargs) -> np.ndarray:
         return np.array([state.position[0], state.position[1], state.yaw])  # XY position and yaw angle
+
+    def postprocess_go1_command(self, control: np.ndarray, default_value: np.ndarray | None, **kwargs) -> Go1Command:
+        command = Go1Command(value=np.zeros(3) if default_value is None else default_value)
+        command.value[0] = control[0]
+        command.value[2] = control[2]
+        return command
 
 
 def _calculate_ellipse_closest_point(center: Tuple | np.ndarray, a: float, b: float, x: np.ndarray) -> np.ndarray:

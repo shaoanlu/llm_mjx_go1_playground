@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Any
 
+import jax
 import numpy as np
 
 from src.utils import load_dataclass_from_dict
@@ -29,6 +31,17 @@ class Controller(ABC):
         return self.init_control_params
 
 
+@dataclass(kw_only=True, frozen=True)
+class HighlevelControllerInfo:
+    info_type: str = "default"
+
+
+@dataclass(kw_only=True, frozen=True)
+class HighLevelCommand:
+    value: np.ndarray | jax.Array
+    info: HighlevelControllerInfo
+
+
 class HighLevelController(ABC):
     """
     Interface for a high-level controller that generates a command for a low-level command follower.
@@ -41,5 +54,5 @@ class HighLevelController(ABC):
     def build_controller(self, **kwargs) -> None:
         raise NotImplementedError
 
-    def compute_command(self, state: np.ndarray, **kwargs) -> np.ndarray:
+    def compute_command(self, state: Any, **kwargs) -> HighLevelCommand:
         raise NotImplementedError

@@ -4,10 +4,10 @@ from typing import List, Tuple
 import numpy as np
 from scipy.special import logsumexp
 
-from src.control.algorithms.base import ControllerParams, HighLevelController
+from src.control.algorithms.base import ControllerParams, HighLevelController, HighLevelCommand
 from src.control.algorithms.cbfqp_problem import CBFQPProblem, CBFQPSolution, QPProblemData
 from src.control.models import ControlAffineSystem, Simple2DRobot
-from src.control.state import Go1State
+from src.control.state import Go1State, Go1Command
 
 
 @dataclass(kw_only=True)
@@ -31,12 +31,6 @@ class SafetyFilterParams(ControllerParams):
         assert np.all(self.min_output <= self.max_output), (
             f"Min output must be less than max output, {self.min_output=}, {self.max_output=}"
         )
-
-
-@dataclass(kw_only=True)
-class SafeCommand:
-    command: np.ndarray | None
-    info: CBFQPSolution | None  # None if no need to compute safe command when there are no obstacles
 
 
 class SafetyFilter(HighLevelController):
@@ -69,7 +63,7 @@ class SafetyFilter(HighLevelController):
 
     def compute_command(
         self, state: Go1State, command: np.ndarray, obstacle_positions: List[np.ndarray], **kwargs
-    ) -> SafeCommand:
+    ) -> HighLevelCommand:
         """
         Compute the safety filter command that does minimal modifications to the nominal command while ensuring safety.
         Args:
@@ -85,7 +79,7 @@ class SafetyFilter(HighLevelController):
             v_lateral = w * self.model.a
         """
         if len(obstacle_positions) == 0:
-            return SafeCommand(command=command, info=None)
+            return HighLevelCommand(value=command, info=None)
 
         # Preprocess and validate the input
         obstacle_positions = np.array(obstacle_positions)
@@ -108,8 +102,9 @@ class SafetyFilter(HighLevelController):
             disturbance_h_dot=self._estimate_disturbance(),
         )
         sol: CBFQPSolution = prob.solve(qp_data)
+        command: Go1Command = self.model.postprocess_go1_command(sol.u, default_value=command)
 
-        return SafeCommand(command=sol.u, info=sol)
+        return HighLevelCommand(value=command.value, info=sol)
 
     def _validate_input(self, state: np.ndarray, command: np.ndarray, obstacle_positions: np.ndarray):
         assert state.shape == (self.model.x_dim,), (

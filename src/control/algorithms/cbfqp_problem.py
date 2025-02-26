@@ -4,6 +4,8 @@ from typing import List, Optional, Tuple
 import numpy as np
 import proxsuite
 
+from src.control.algorithms.base import HighlevelControllerInfo
+
 
 @dataclass(kw_only=True)
 class QPProblemData:
@@ -16,13 +18,14 @@ class QPProblemData:
     u: np.ndarray  # Upper bounds vector
 
 
-@dataclass(kw_only=True)
-class CBFQPSolution:
+@dataclass(kw_only=True, frozen=True)
+class CBFQPSolution(HighlevelControllerInfo):
     """Data structure for the solution of a Quadratic Programming problem for Control Barrier Functions (CBF)."""
 
     u: np.ndarray | None  # Optimal control input
     slack: np.ndarray | None  # Optimal slack variable
     qpproblem: QPProblemData  # Original QP problem data
+    info_type: str = "cbf_solution"
 
 
 class CBFQPProblem:

@@ -4,7 +4,7 @@ from typing import Any
 
 import numpy as np
 
-from src.control.state import Go1State
+from src.control.state import Go1State, Go1Command
 
 
 @dataclass(kw_only=True)
@@ -72,4 +72,9 @@ class ControlAffineSystem(ABC):
     def preprocess_go1_state(self, state: Go1State, **kwargs) -> np.ndarray:
         # Extract necessary info from the Go1State and return a numpy array of shape (x_dim,)
         # which should be able to be passed to the argument x of the member functions
+        raise NotImplementedError
+
+    @abstractmethod
+    def postprocess_go1_command(self, control: np.ndarray, default_value: np.ndarray | None, **kwargs) -> Go1Command:
+        # Convert the control of shape (u_dim) into unified Go1Command interface
         raise NotImplementedError

@@ -123,7 +123,7 @@ class TestPositionController(unittest.TestCase):
         target_position = np.array([0.05, 0.05])  # Within arrival threshold
 
         result = self.controller.compute_command(state, target_position)
-        np.testing.assert_array_equal(result.command, jnp.zeros(3), err_msg=f"{result.command=}")
+        np.testing.assert_array_equal(result.value, jnp.zeros(3), err_msg=f"{result.value=}")
         self.assertTrue(result.info.is_arrived)
 
         # Test with Go1State
@@ -132,7 +132,7 @@ class TestPositionController(unittest.TestCase):
         go1_state.yaw = 0.0
 
         result = self.controller.compute_command(go1_state, target_position)
-        np.testing.assert_array_equal(result.command, jnp.zeros(3), err_msg=f"{result.command=}")
+        np.testing.assert_array_equal(result.value, jnp.zeros(3), err_msg=f"{result.value=}")
         self.assertTrue(result.info.is_arrived)
 
     @patch.object(PositionController, "_primary_control")
@@ -149,7 +149,7 @@ class TestPositionController(unittest.TestCase):
         result = self.controller.compute_command(state, target_position)
 
         self.assertTrue(mock_primary.called)
-        np.testing.assert_array_almost_equal(result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}")
+        np.testing.assert_array_almost_equal(result.value, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.value=}")
 
         # Test with Go1State
         go1_state = MagicMock(spec=Go1State)
@@ -160,7 +160,7 @@ class TestPositionController(unittest.TestCase):
         result = self.controller.compute_command(state, target_position)
 
         self.assertTrue(mock_primary.called)
-        np.testing.assert_array_almost_equal(result.command, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.command=}")
+        np.testing.assert_array_almost_equal(result.value, jnp.array([1.0, 0.0, 0.5]), err_msg=f"{result.value=}")
 
     @patch.object(PositionController, "_primary_control", side_effect=Exception)
     @patch.object(PositionController, "_fallback_control")
@@ -178,7 +178,7 @@ class TestPositionController(unittest.TestCase):
 
         self.assertTrue(mock_primary.called)
         self.assertTrue(mock_fallback.called)
-        np.testing.assert_array_almost_equal(result.command, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.command=}")
+        np.testing.assert_array_almost_equal(result.value, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.value=}")
 
         # Test with Go1State
         go1_state = MagicMock(spec=Go1State)
@@ -190,15 +190,15 @@ class TestPositionController(unittest.TestCase):
 
         self.assertTrue(mock_primary.called)
         self.assertTrue(mock_fallback.called)
-        np.testing.assert_array_almost_equal(result.command, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.command=}")
+        np.testing.assert_array_almost_equal(result.value, jnp.array([0.5, 0.0, 0.3]), err_msg=f"{result.value=}")
 
     def test_post_process_command(self):
         """Test command post-processing (clipping)"""
         command = np.array([2.0, 0.0, 2.0])  # Exceeds max velocities
-        processed = self.controller._post_process_command(command)
+        processed_command = self.controller._post_process_command(command)
 
         np.testing.assert_array_almost_equal(
-            processed,
+            processed_command.value,
             jnp.array([1.5, 0.0, np.pi / 2]),  # Should be clipped to max values
         )
 

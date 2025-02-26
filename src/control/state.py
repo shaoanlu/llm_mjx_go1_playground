@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
@@ -44,3 +45,8 @@ class Go1State:
         if not isinstance(scalar, (int, float)):
             return NotImplemented
         return Go1State(self.position / scalar, self.yaw / scalar)
+
+
+@dataclass
+class Go1Command:
+    value: np.ndarray  # X, Y, yaw

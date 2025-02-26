@@ -95,7 +95,7 @@ class TestQuadrupedNavigation(unittest.TestCase):
             # Get next action
             target_pos = waypoints[waypoint_idx] + 0.5
             pos_command = self.command_generator.compute_command(state, target_pos)
-            state.info["command"] = pos_command.command
+            state.info["command"] = pos_command.value
 
             # Step environment
             action = self.command_follower.control(state.obs["state"])

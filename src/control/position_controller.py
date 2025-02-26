@@ -5,10 +5,15 @@ import jax
 import numpy as np
 from mujoco_playground._src import mjx_env
 
-from src.control.algorithms.base import ControllerParams, HighLevelController
+from src.control.algorithms.base import (
+    ControllerParams,
+    HighLevelController,
+    HighlevelControllerInfo,
+    HighLevelCommand,
+)
 from src.control.algorithms.seq_pos_control import SequentialControllerParams
 from src.control.controller_factory import ConfigFactory, ControllerFactory
-from src.control.state import Go1State
+from src.control.state import Go1State, Go1Command
 from src.utils import load_dataclass_from_dict
 
 
@@ -36,16 +41,11 @@ class PositionControllerParams(ControllerParams):
 
 
 @dataclass(kw_only=True, frozen=True)
-class PositionCommandInfo:
+class PositionCommandInfo(HighlevelControllerInfo):
     pos: np.ndarray
     target_pos: np.ndarray
     is_arrived: bool
-
-
-@dataclass(kw_only=True, frozen=True)
-class PositionCommand:
-    command: jax.Array
-    info: PositionCommandInfo
+    info_type: str = "position_controller"
 
 
 class PositionController(HighLevelController):
@@ -76,7 +76,7 @@ class PositionController(HighLevelController):
                 # Simple but unsafe dynamic attributiuon. No type safety and validation
                 setattr(self, key, value)
 
-    def compute_command(self, state: mjx_env.State | Go1State, target_position: np.ndarray) -> PositionCommand:
+    def compute_command(self, state: mjx_env.State | Go1State, target_position: np.ndarray) -> HighLevelCommand:
         """
         Compute the velocity command [v_x, v_y, v_yaw] to reach the target position
 
@@ -100,16 +100,16 @@ class PositionController(HighLevelController):
         if self._check_arrival(dist):
             command = jax.numpy.zeros(self.command_dim)
             info = self._create_return_info(state, ref_state, is_arrived=True)
-            return PositionCommand(command=command, info=info)
+            return HighLevelCommand(value=command, info=info)
 
         try:
             command = self._primary_control(state, ref_state)
         except Exception:
             command = self._fallback_control(state, ref_state)
 
-        command = self._post_process_command(command)
+        command: Go1Command = self._post_process_command(command)
         info = self._create_return_info(state, ref_state, is_arrived=False)
-        return PositionCommand(command=command, info=info)
+        return HighLevelCommand(value=command.value, info=info)
 
     def _primary_control(self, state: Go1State, ref_state: Go1State) -> np.ndarray:
         return self._controllers["primary_controller"].control(state, ref_state)
@@ -148,13 +148,15 @@ class PositionController(HighLevelController):
         state.yaw = current_yaw
         return state, Go1State(position=np.array([target_pos[0], target_pos[1], state.position[2]]), yaw=target_yaw)
 
-    def _post_process_command(self, command: np.ndarray) -> jax.numpy.array:
-        return jax.numpy.array(
-            [
-                np.clip(command[0], -self.max_linear_velocity, self.max_linear_velocity),
-                0,
-                np.clip(command[2], -self.max_angular_velocity, self.max_angular_velocity),
-            ]
+    def _post_process_command(self, command: np.ndarray) -> Go1Command:
+        return Go1Command(
+            value=jax.numpy.array(
+                [
+                    np.clip(command[0], -self.max_linear_velocity, self.max_linear_velocity),
+                    0,
+                    np.clip(command[2], -self.max_angular_velocity, self.max_angular_velocity),
+                ]
+            )
         )
 
 
