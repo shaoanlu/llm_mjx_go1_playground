@@ -6,6 +6,7 @@ import numpy as np
 from mujoco_playground._src import mjx_env
 
 from src.control.algorithms.base import (
+    Controller,
     ControllerParams,
     HighLevelCommand,
     HighLevelController,
@@ -20,10 +21,10 @@ from src.utils import load_dataclass_from_dict
 @dataclass(kw_only=True)
 class PositionControllerParams(ControllerParams):
     command_dim: int = field(default=3)
-    primary_controller: ControllerParams = field(
+    primary_controller: ControllerParams | Controller = field(
         default_factory=lambda: SequentialControllerParams()  # or PolarCoordinateControllerParams()
     )
-    fallback_controller: ControllerParams = field(default_factory=lambda: SequentialControllerParams())
+    fallback_controller: ControllerParams | Controller = field(default_factory=lambda: SequentialControllerParams())
     arrival_threshold: float = field(default=0.1)
     max_linear_velocity: float = field(default=1.5)
     max_angular_velocity: float = field(default=np.pi / 2)
@@ -72,6 +73,8 @@ class PositionController(HighLevelController):
             key, value = f.name, getattr(config, f.name)
             if issubclass(type(value), ControllerParams):
                 self._controllers[key] = self.factory.build(value)
+            elif issubclass(type(value), Controller):
+                self._controllers[key] = value
             else:
                 # Simple but unsafe dynamic attributiuon. No type safety and validation
                 setattr(self, key, value)
