@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Callable, Dict
 
 import numpy as np
+from scipy.special import expit
 
 from src.control.algorithms.base import Controller, ControllerParams
 from src.utils import load_dataclass_from_dict
@@ -77,7 +78,7 @@ class MLPPolicy(Controller):
             for i in range(params.nn_num_layers):
                 x = params.nn_params[f"hidden_{i}"]["kernel"].T @ x + params.nn_params[f"hidden_{i}"]["bias"]
                 if i < (params.nn_num_layers - 1):
-                    x = x / (1 + np.exp(-1 * x))  # brax PPO training defaults to swish as the activation func
+                    x = x * expit(x)  # brax PPO training defaults to swish as the activation func
 
             # output tanh activation
             x, _ = np.split(x, 2, axis=-1)  # split into loc and scale of a normal distribution
