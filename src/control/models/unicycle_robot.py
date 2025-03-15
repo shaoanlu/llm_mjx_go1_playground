@@ -53,8 +53,8 @@ class UnicycleRobot(ControlAffineSystem):
             The value of the barrier function. shape=(N,)
         """
         l = self.config.offset_l
-        theta = x[2]
-        new_x = np.array([l * np.cos(theta), l * np.sin(theta)]) - obs_x
+        pos_x, pos_y, theta = x
+        new_x = np.array([pos_x + l * np.cos(theta), pos_y + l * np.sin(theta)]) - obs_x
 
         intersection_points = _calculate_ellipse_closest_point(center=x, a=self.config.a, b=self.config.b, x=obs_x)
         dist_collision = np.linalg.norm(x - intersection_points, axis=1)
@@ -62,8 +62,8 @@ class UnicycleRobot(ControlAffineSystem):
 
     def h_dot(self, x: np.ndarray, obs_x: np.ndarray, **kwargs) -> np.array:
         l = self.config.offset_l
-        theta = x[2]
-        new_x = np.array([l * np.cos(theta), l * np.sin(theta)]) - obs_x
+        pos_x, pos_y, theta = x[2]
+        new_x = np.array([pos_x + l * np.cos(theta), pos_y + l * np.sin(theta)]) - obs_x
 
         trans = np.array([[np.cos(theta), np.sin(theta)], [-l * np.sin(theta), l * np.cos(theta)]]).T
         return 2 * new_x @ trans
