@@ -13,6 +13,9 @@ class UnicycleRobotParams(ControlAffineSystemParams):
     b: float = field(default=0.3)  # ellipse param (in meter) approximating robot collision region in XY plane
     x_dim: int = field(default=3)  # dimension of the state space (x, y, theta)
     u_dim: int = field(default=2)  # dimension of the control space (v, omega)
+    offset_l: float = field(
+        default=0.2
+    )  # distance between the rear axle axis and the center of the robot (might need ellipse approx for collision if large)
 
 
 class UnicycleRobot(ControlAffineSystem):
@@ -49,8 +52,8 @@ class UnicycleRobot(ControlAffineSystem):
         Returns:
             The value of the barrier function. shape=(N,)
         """
-        l = np.linalg.norm(x)
-        theta = np.arctan2(x[1], x[0])
+        l = self.config.offset_l
+        theta = x[2]
         new_x = np.array([l * np.cos(theta), l * np.sin(theta)]) - obs_x
 
         intersection_points = _calculate_ellipse_closest_point(center=x, a=self.config.a, b=self.config.b, x=obs_x)
@@ -58,8 +61,8 @@ class UnicycleRobot(ControlAffineSystem):
         return np.linalg.norm(new_x, axis=1) ** 2 - dist_collision**2  # shape=(N,)
 
     def h_dot(self, x: np.ndarray, obs_x: np.ndarray, **kwargs) -> np.array:
-        l = np.linalg.norm(x)
-        theta = np.arctan2(x[1], x[0])
+        l = self.config.offset_l
+        theta = x[2]
         new_x = np.array([l * np.cos(theta), l * np.sin(theta)]) - obs_x
 
         trans = np.array([[np.cos(theta), np.sin(theta)], [-l * np.sin(theta), l * np.cos(theta)]]).T
